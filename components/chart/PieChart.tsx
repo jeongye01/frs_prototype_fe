@@ -11,27 +11,7 @@ function PieChart() {
       legend: {
         show: false,
       },
-      chart: {
-        events: {
-          animationEnd: null,
-          beforeMount: null,
-          mounted: null,
-          updated: null,
-          mouseMove: null,
-          mouseLeave: null,
-          click: null,
-          legendClick: null,
-          markerClick: null,
-          selection: null,
-          dataPointSelection: null,
-          dataPointMouseEnter: null,
-          dataPointMouseLeave: null,
-          beforeZoom: null,
-          beforeResetZoom: null,
-          zoomed: null,
-          scrolled: null,
-        },
-      },
+
       plotOptions: {
         pie: {
           expandOnClick: false,

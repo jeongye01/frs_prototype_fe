@@ -39,7 +39,19 @@ function PieChart() {
       },
       labels: ['인증 요청', '인증 성공', '인증 실패'],
       dataLabels: {
-        enabled: false,
+        enabled: true,
+        formatter: function (
+          value: number,
+          { seriesIndex, dataPointIndex, w }: any,
+        ) {
+          return w.config.series[seriesIndex];
+        },
+        style: {
+          fontSize: '16px',
+
+          fontWeight: 'bold',
+          colors: ['#fff'],
+        },
       },
 
       responsive: [

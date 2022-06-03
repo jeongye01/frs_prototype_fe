@@ -5,7 +5,12 @@ import BarChart from 'components/chart/BarChart';
 import PieChart from 'components/chart/PieChart';
 import Table from 'components/Table';
 const Home: NextPage = () => {
-  return <div></div>;
+  return (
+    <>
+      <BarChart />
+      <PieChart />
+    </>
+  );
 };
 
 export default Home;

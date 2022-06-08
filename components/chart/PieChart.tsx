@@ -37,20 +37,22 @@ function PieChart() {
           },
         },
       },
+
+      stroke: {
+        width: 0,
+      },
+
       labels: ['인증 요청', '인증 성공', '인증 실패'],
       dataLabels: {
         enabled: true,
         formatter: function (
-          value: number,
+          value: any,
           { seriesIndex, dataPointIndex, w }: any,
         ) {
           return w.config.series[seriesIndex];
         },
-        style: {
-          fontSize: '16px',
-
-          fontWeight: 'bold',
-          colors: ['#fff'],
+        dropShadow: {
+          enabled: false,
         },
       },
 
@@ -67,11 +69,21 @@ function PieChart() {
           },
         },
       ],
+      tooltip: {
+        enabled: false,
+      },
+      states: {
+        hover: {
+          filter: {
+            type: 'none',
+          },
+        },
+      },
     },
   };
 
   return (
-    <div>
+    <div className="relative w-fit pointer-events-none">
       <ReactApexChart
         type="donut"
         series={state.series}

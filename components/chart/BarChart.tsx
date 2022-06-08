@@ -67,6 +67,16 @@ function BarChart() {
           },
         },
       },
+      tooltip: {
+        enabled: false,
+      },
+      states: {
+        hover: {
+          filter: {
+            type: 'none',
+          },
+        },
+      },
     },
   };
 

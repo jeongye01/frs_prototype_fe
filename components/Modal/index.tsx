@@ -1,6 +1,10 @@
 import React from 'react';
-
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { decrement, increment } from 'store/slice/testSlice';
 export default function GoalAddModal() {
+  // The `state` arg is correctly typed as `RootState` already
+  const count = useAppSelector(state => state.counter.value);
+  const dispatch = useAppDispatch();
   const className = {
     // size: 'pc:max-w-[890px] pc:max-h-[90vh] max-w-[320px] max-h-[470px]',
     size: 'pc:w-[890px] max-w-[90vw] pc:max-h-[80vh] w-[320px] max-h-[424px]',

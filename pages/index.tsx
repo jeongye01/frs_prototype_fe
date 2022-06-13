@@ -34,12 +34,38 @@ const values = [
 ];
 const Home: NextPage = () => {
   return (
-    <>
-      <BarChart />
-      <PieChart />
-      <Table fields={fields} values={values} />
-      <User />
-    </>
+    <div className="px-32 grid grid-cols-3 gap-8 mt-12 bg-[#f5f7fc] ">
+      <div className=" shadow-md  w-full rounded-lg bg-white">
+        <h2 className=" p-3 text-base  block border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] text-white font-sans">
+          금일 얼굴인증현황(1:1&1:N)
+        </h2>
+        <BarChart
+          data={[33, 33, 0]}
+          categories={['인증 요청', '인증 성공', '인증 실패']}
+          colors={['#662e8f', '#2e368f', '#5c7fd6']}
+        />
+      </div>
+      <div className=" shadow-md  w-full rounded-lg bg-white">
+        <h2 className=" p-3 text-base  block border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] text-white font-sans">
+          금일 얼굴인증현황(1:1&1:N)
+        </h2>
+        <BarChart
+          data={[33, 33, 0]}
+          categories={['인증 요청', '인증 성공', '인증 실패']}
+          colors={['#662e8f', '#2e368f', '#5c7fd6']}
+        />
+      </div>
+      <div className=" shadow-md  w-full rounded-lg bg-white">
+        <h2 className=" p-3 text-base  block border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] text-white font-sans">
+          금일 얼굴인증현황(1:1&1:N)
+        </h2>
+        <BarChart
+          data={[33, 33, 0]}
+          categories={['인증 요청', '인증 성공', '인증 실패']}
+          colors={['#662e8f', '#2e368f', '#5c7fd6']}
+        />
+      </div>
+    </div>
   );
 };
 

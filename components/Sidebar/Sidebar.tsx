@@ -10,7 +10,7 @@ import UserDropdown from 'components/Dropdowns/UserDropdown';
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <nav className="fixed z-50 top-0 bottom-0 left-0 overflow-y-auto py-4 px-3 bg-[#3b75e3]">
+    <nav className="w-[250px]  min-w-[250px] h-screen z-50 top-0 bottom-0 left-0 overflow-y-auto py-4 px-3 bg-[#3b75e3]">
       <div className="p-5">
         <Link href="/">
           <a>
@@ -52,8 +52,8 @@ export default function Sidebar() {
                 strokeWidth="2"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M19 9l-7 7-7-7"
                 />
               </svg>

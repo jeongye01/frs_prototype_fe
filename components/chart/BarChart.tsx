@@ -4,11 +4,18 @@ import dynamic from 'next/dynamic';
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 });
-function BarChart() {
+
+interface Props {
+  data: number[];
+  colors: string[];
+  categories: string[];
+}
+
+function BarChart({ data, colors, categories }: Props) {
   const state = {
     series: [
       {
-        data: [33, 33, 0],
+        data,
       },
     ],
     options: {
@@ -26,9 +33,7 @@ function BarChart() {
           },
         },
       },
-      column: {
-        colors: ['#662e8f', '#2e368f', '#5c7fd6'],
-      },
+
       dataLabels: {
         enabled: true,
         position: 'top',
@@ -36,12 +41,12 @@ function BarChart() {
 
         style: {
           fontSize: '16px',
-          colors: ['#662e8f', '#2e368f', '#5c7fd6'],
+          colors, // *
         },
       },
 
       xaxis: {
-        categories: ['인증 요청', '인증 성공', '인증 실패'],
+        categories, // *
         axisBorder: {
           show: false,
         },
@@ -53,7 +58,7 @@ function BarChart() {
         show: false,
       },
       fill: {
-        colors: ['#662e8f', '#2e368f', '#5c7fd6'],
+        colors, // *
         opacity: 1,
       },
       legend: {
@@ -81,15 +86,20 @@ function BarChart() {
   };
 
   return (
-    <div>
-      <ReactApexChart
-        type="bar"
-        series={state.series}
-        options={state.options}
-        width="30%"
-        height="200px"
-      />
-    </div>
+    <>
+      {data?.length === colors?.length &&
+        colors?.length === categories?.length && (
+          <div>
+            <ReactApexChart
+              type="bar"
+              series={state.series}
+              options={state.options}
+              width="30%"
+              height="200px"
+            />
+          </div>
+        )}
+    </>
   );
 }
 export default BarChart;

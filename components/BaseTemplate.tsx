@@ -2,7 +2,7 @@
 import React from 'react';
 import Modal from 'components/Modal';
 import { useSelector } from 'react-redux';
-import { RootState } from 'store/slices';
+import { RootState } from 'store';
 
 interface TemplateProps {
   children: React.ReactNode;

@@ -89,12 +89,12 @@ function BarChart({ data, colors, categories }: Props) {
     <>
       {data?.length === colors?.length &&
         colors?.length === categories?.length && (
-          <div>
+          <div className="w-full">
             <ReactApexChart
               type="bar"
               series={state.series}
               options={state.options}
-              width="30%"
+              width="100%"
               height="200px"
             />
           </div>

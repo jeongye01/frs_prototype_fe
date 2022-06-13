@@ -83,12 +83,12 @@ function PieChart() {
   };
 
   return (
-    <div className="relative w-fit pointer-events-none">
+    <div className="pointer-events-none">
       <ReactApexChart
         type="donut"
         series={state.series}
         options={state.options}
-        width="400px"
+        width="100%"
       />
     </div>
   );

@@ -34,37 +34,32 @@ const values = [
 ];
 const Home: NextPage = () => {
   return (
-    <div className="px-32 grid grid-cols-3 gap-8 mt-12 bg-[#f5f7fc] ">
-      <div className=" shadow-md  w-full rounded-lg bg-white">
-        <h2 className=" p-3 text-base  block border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] text-white font-sans">
-          금일 얼굴인증현황(1:1&1:N)
-        </h2>
-        <BarChart
-          data={[33, 33, 0]}
-          categories={['인증 요청', '인증 성공', '인증 실패']}
-          colors={['#662e8f', '#2e368f', '#5c7fd6']}
-        />
-      </div>
-      <div className=" shadow-md  w-full rounded-lg bg-white">
-        <h2 className=" p-3 text-base  block border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] text-white font-sans">
-          금일 얼굴인증현황(1:1&1:N)
-        </h2>
-        <BarChart
-          data={[33, 33, 0]}
-          categories={['인증 요청', '인증 성공', '인증 실패']}
-          colors={['#662e8f', '#2e368f', '#5c7fd6']}
-        />
-      </div>
-      <div className=" shadow-md  w-full rounded-lg bg-white">
-        <h2 className=" p-3 text-base  block border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] text-white font-sans">
-          금일 얼굴인증현황(1:1&1:N)
-        </h2>
-        <BarChart
-          data={[33, 33, 0]}
-          categories={['인증 요청', '인증 성공', '인증 실패']}
-          colors={['#662e8f', '#2e368f', '#5c7fd6']}
-        />
-      </div>
+    <div className="px-32 flex items-center space-x-6 justify-between mt-12 bg-[#f5f7fc] ">
+      {[1, 1, 1].map((_, idx) => (
+        <div className="flex flex-col items-center shadow-md min-w-[250px]  w-full rounded-lg bg-white">
+          <div className="flex items-center p-3 w-full text-base   border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-1 text-white"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
+            </svg>
+            <h2 className="text-white">금일 얼굴인증현황(1:1&1:N)</h2>
+          </div>
+          <BarChart
+            data={[33, 33, 0]}
+            categories={['인증 요청', '인증 성공', '인증 실패']}
+            colors={['#662e8f', '#2e368f', '#5c7fd6']}
+          />
+          <div className="border-t  w-[90%] border-dashed border-t-slate-400" />
+          <div className="mt-4 py-6  w-[70%] ">
+            <PieChart />
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

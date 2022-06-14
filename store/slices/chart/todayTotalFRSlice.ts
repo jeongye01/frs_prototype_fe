@@ -3,11 +3,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import TodayFRChart from 'typeDefs/TodayFEChart';
 
 export interface InitialState {
-  todayTotalFRChartData: TodayFRChart;
+  data: TodayFRChart;
 }
 
 const initialState: InitialState = {
-  todayTotalFRChartData: {} as TodayFRChart,
+  data: {} as TodayFRChart,
 };
 
 export const todayTotalFRCSlice = createSlice({
@@ -19,8 +19,8 @@ export const todayTotalFRCSlice = createSlice({
       state,
       { payload }: PayloadAction<TodayFRChart>,
     ) => {
-      state.todayTotalFRChartData = {
-        ...state.todayTotalFRChartData,
+      state.data = {
+        ...state.data,
         ...payload,
       };
     },

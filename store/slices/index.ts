@@ -1,8 +1,12 @@
 import { combineReducers } from '@reduxjs/toolkit';
-// import authSlice from 'store/slices/authSlice';
+import loadingSlice from './loadingSlice';
+import resultSlice from './resultSlice';
+import todayTotalFRSlice from './chart/todayTotalFRSlice';
 
 const rootReducer = combineReducers({
-  // goal: goalSlice.reducer,
+  loading: loadingSlice.reducer,
+  result: resultSlice.reducer,
+  todayTotalFR: todayTotalFRSlice.reducer,
 });
 
 export default rootReducer;

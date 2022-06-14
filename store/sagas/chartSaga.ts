@@ -1,23 +1,42 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { all, call, put, takeEvery, fork } from 'redux-saga/effects';
 import * as chartAPI from 'api/chart';
+import todayTotalFRCSlice from 'store/slices/chart/todayTotalFRSlice';
+import resultSlice from 'store/slices/resultSlice';
+import loadingSlice from 'store/slices/loadingSlice';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { AxiosResponse } from 'axios';
 
+const { loadTodayTodalFRData, updateTodayTodalFRState } =
+  todayTotalFRCSlice.actions;
+const { getResult } = resultSlice.actions;
+const { startLoading, finishLoading } = loadingSlice.actions;
 
-
-function* todayTotalFaceAuthSaga() {
+function* todayTotalFaceAuthSaga(action: PayloadAction) {
+  yield put(startLoading(action.type));
   try {
-    const data: = yield call(chartAPI.todayTotalFaceAuthChart, a);
-    yield put({ type: 'USER_FETCH_SUCCEEDED', user: user });
-  } catch (e) {
-    yield put({ type: 'USER_FETCH_FAILED', message: e.message });
+    const result: AxiosResponse<chartAPI.TodayFRResponse> = yield call(
+      chartAPI.todayTotalFaceAuth,
+    );
+    yield put(updateTodayTodalFRState({ ...result.data }));
+    yield put(getResult({ isSuccess: true, actionType: action.type }));
+  } catch (error) {
+    yield put(
+      getResult({
+        isSuccess: false,
+        actionType: action.type,
+        errorMsg: String(error),
+      }),
+    );
   }
+  yield put(finishLoading(action.type));
 }
 
-/*
-  Starts fetchUser on each dispatched `USER_FETCH_REQUESTED` action.
-  Allows concurrent fetches of user.
-*/
-function* mySaga() {
-  yield takeEvery('USER_FETCH_REQUESTED', fetchUser);
+function* watchTodayTotalFaceAuthSaga() {
+  yield takeEvery(loadTodayTodalFRData, todayTotalFaceAuthSaga);
 }
 
-export default mySaga;
+export default function* chartSaga() {
+  yield all([fork(watchTodayTotalFaceAuthSaga)]);
+}
+
+

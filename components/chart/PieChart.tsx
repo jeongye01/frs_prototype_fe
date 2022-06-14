@@ -4,9 +4,16 @@ import dynamic from 'next/dynamic';
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 });
-function PieChart() {
+
+interface Props {
+  data: number[];
+  labels: string[];
+  colors: string[];
+  isEmpty?: boolean;
+}
+function PieChart({ data, labels, colors, isEmpty }: Props) {
   const state = {
-    series: [33, 33, 0],
+    series: data, //^
     options: {
       legend: {
         show: false,
@@ -25,7 +32,6 @@ function PieChart() {
                 show: true,
                 fontSize: '16px',
                 fontFamily: 'Helvetica, Arial, sans-serif',
-                color: undefined,
                 offsetY: 0,
               },
               total: {
@@ -41,15 +47,15 @@ function PieChart() {
       stroke: {
         width: 0,
       },
-
-      labels: ['인증 요청', '인증 성공', '인증 실패'],
+      colors,
+      labels, //^
       dataLabels: {
         enabled: true,
         formatter: function (
           value: any,
           { seriesIndex, dataPointIndex, w }: any,
         ) {
-          return w.config.series[seriesIndex];
+          return `${isEmpty ? 0 : w.config.series[seriesIndex]}`;
         },
         dropShadow: {
           enabled: false,
@@ -72,6 +78,7 @@ function PieChart() {
       tooltip: {
         enabled: false,
       },
+
       states: {
         hover: {
           filter: {
@@ -83,14 +90,18 @@ function PieChart() {
   };
 
   return (
-    <div className="pointer-events-none">
-      <ReactApexChart
-        type="donut"
-        series={state.series}
-        options={state.options}
-        width="100%"
-      />
-    </div>
+    <>
+      {data?.length === colors?.length && colors?.length === labels?.length && (
+        <div className="pointer-events-none">
+          <ReactApexChart
+            type="donut"
+            series={state.series}
+            options={state.options}
+            width="100%"
+          />
+        </div>
+      )}
+    </>
   );
 }
 export default PieChart;

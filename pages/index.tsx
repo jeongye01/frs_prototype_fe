@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import { useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import BarChart from 'components/chart/BarChart';
@@ -7,6 +8,9 @@ import Table, { BaseTbodyRowStyle } from 'components/Table';
 import dynamic from 'next/dynamic';
 import User from 'components/User';
 import Modal from 'components/Modal';
+import useGetActionState from 'hooks/useGetActionState';
+import todayTotalFRCSlice from 'store/slices/chart/todayTotalFRSlice';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
 
 const fields = [
   '순번',
@@ -33,138 +37,67 @@ const values = [
   },
 ];
 const Home: NextPage = () => {
+  const dispatch = useAppDispatch();
+  const { data: todayTotalFRData } = useAppSelector(
+    state => state.todayTotalFR,
+  );
+  const [loading, result] = useGetActionState(
+    todayTotalFRCSlice.actions.loadTodayTodalFRData.type,
+  );
+
+  useEffect(() => {
+    if (loading) return;
+    dispatch(todayTotalFRCSlice.actions.loadTodayTodalFRData());
+  }, [dispatch]);
+  useEffect(() => {
+    console.log(todayTotalFRData);
+  }, [todayTotalFRData]);
   return (
-    <div className="px-32 flex items-center space-x-6 justify-between mt-12 bg-[#f5f7fc] ">
-      {[1, 1, 1].map((_, idx) => (
-        <div className="flex flex-col items-center shadow-md min-w-[250px]  w-full rounded-lg bg-white">
-          <div className="flex items-center p-3 w-full text-base   border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-1 text-white"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-            </svg>
-            <h2 className="text-white">금일 얼굴인증현황(1:1&1:N)</h2>
-          </div>
-          <BarChart
-            data={[33, 33, 0]}
-            categories={['인증 요청', '인증 성공', '인증 실패']}
-            colors={['#662e8f', '#2e368f', '#5c7fd6']}
-          />
-          <div className="border-t  w-[90%] border-dashed border-t-slate-400" />
-          <div className="mt-4 py-6  w-[70%] ">
-            <PieChart />
-          </div>
+    <>
+      {result?.isSuccess ? (
+        <div className="px-32 flex items-center space-x-6 justify-between mt-12 bg-[#f5f7fc] ">
+          {[1, 1, 1].map((_, idx) => (
+            <div className="flex flex-col items-center shadow-md min-w-[250px]  w-full rounded-lg bg-white">
+              <div className="flex items-center p-3 w-full text-base   border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] ">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-1 text-white"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
+                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
+                </svg>
+                <h2 className="text-white">금일 얼굴인증현황(1:1&1:N)</h2>
+              </div>
+              <BarChart
+                data={[
+                  todayTotalFRData.cfTotCnt,
+                  todayTotalFRData.cfPassCnt,
+                  todayTotalFRData.cfFailCnt,
+                ]}
+                categories={['인증 요청', '인증 성공', '인증 실패']}
+                colors={['#662e8f', '#2e368f', '#5c7fd6']}
+              />
+              <div className="border-t  w-[90%] border-dashed border-t-slate-400" />
+              <div className="mt-4 py-6  w-[70%] ">
+                <PieChart
+                  data={[
+                    todayTotalFRData.cfPassRate,
+                    todayTotalFRData.cfFailRate,
+                  ]}
+                  colors={['#2e368f', '#5c7fd6']}
+                  labels={['인증 성공률', '인증 실패률']}
+                />
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      ) : (
+        <>Loading...</>
+      )}
+    </>
   );
 };
 
 export default Home;
-
-/*
-
-
-import React from 'react';
-import OptionButton from 'components/Button/ObtionButton';
-import TextInput from 'components/Input/TextInput';
-import SubmitButton from 'components/Button/SubmitButton';
-
-export default function GoalAddModal() {
-	const className = {
-		// size: 'pc:max-w-[890px] pc:max-h-[90vh] max-w-[320px] max-h-[470px]',
-		size: 'pc:w-[890px] max-w-[90vw] pc:max-h-[80vh] w-[320px] max-h-[424px]',
-		translate: '-translate-y-1/2 -translate-x-1/2',
-	};
-
-	return (
-		<div
-			className={`${className.size} ${className.translate} text-left pc:p-[72px] p-[26px] rounded-2xl relative  bg-modalGray overflow-auto`}
-		>
-			<div className="pc:mb-[52px] mb-[16px]">
-				<div className="pc:mb-[30px] mb-[8px] font-[600]">인증 사진</div>
-				<button
-					type="button"
-					className="pc:w-[230px] pc:h-[150px] w-[108px] h-[90px] border-2 rounded-xl flex items-center p-0 bg-primaryWhite"
-				>
-					<label htmlFor="profile_image" className="flex items-center w-full h-full cursor-pointer">
-						<img className="m-auto max-w-[25px]" src="./image/icon/camera.svg" alt="img-camera" />
-						<input id="profile_image" type="file" className="hidden" />
-					</label>
-				</button>
-			</div>
-			<div className="pc:mb-[52px] mb-[16px]">
-				<div className="pc:mb-[30px] mb-[8px] font-[600]">카테고리 선택</div>
-				<div className="category-wrap">
-					<ul className="grid pc:gap-[16px] gap-[6px] grid-flow-col overflow-auto">
-						<li>
-							<OptionButton size="medium" label="# 운동" isSelected onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton size="medium" label="# 운동" isSelected={false} onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton size="medium" label="# 운동" isSelected={false} onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton size="medium" label="# 공부" isSelected={false} onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton size="medium" label="# 습관" isSelected={false} onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton size="medium" label="# 취미" isSelected={false} onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton size="medium" label="# 기타" isSelected={false} onClick={() => {}} />
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div className="pc:mb-[52px] mb-[16px]">
-				<div className="pc:mb-[30px] mb-[8px] font-[600]">목표 선택</div>
-				<div className="option-wrap">
-					<ul className="grid pc:gap-[16px] gap-[6px] grid-flow-col overflow-auto">
-						<li>
-							<OptionButton label="목표인증 텍스트asdadsfdsfsdas" size="medium" isSelected={false} onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton label="목표인증 텍스트" size="medium" isSelected={false} onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton size="medium" isSelected={false} onClick={() => {}}>
-								<div className="text-primaryOrange-200">목표인증텍스트</div>
-								<div className="text-primaryOrange-200">📅 4.1</div>
-							</OptionButton>
-						</li>
-						<li>
-							<OptionButton label="목표인증 텍스트" size="medium" isSelected={false} onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton label="목표인증 텍스트" size="medium" isSelected={false} onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton label="목표인증 텍스트" size="medium" isSelected={false} onClick={() => {}} />
-						</li>
-						<li>
-							<OptionButton label="목표인증 텍스트" size="medium" isSelected={false} onClick={() => {}} />
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div className="pc:mb-[52px] mb-[16px]">
-				<div className="pc:mb-[30px] mb-[8px] font-[600]">인증내용</div>
-				<TextInput placeholder="목표 인증 게시글에 올릴 상세 내용을 작성하세요." onChange={() => {}} />
-			</div>
-			<div>
-				<SubmitButton label="등록하기" onClick={() => {}} btnState="active" />
-			</div>
-		</div>
-	);
-}
-
-*/

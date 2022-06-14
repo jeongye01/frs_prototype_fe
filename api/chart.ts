@@ -8,6 +8,7 @@ export interface TodayFRResponse {
   cfFailRate: number;
 }
 
+
 // 금일 얼굴인증현황(1:1&1:N)
 export const todayTotalFaceAuth = () => {
   return client.get('/chart/history/today');

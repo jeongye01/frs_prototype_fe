@@ -38,3 +38,5 @@ function* watchTodayTotalFaceAuthSaga() {
 export default function* chartSaga() {
   yield all([fork(watchTodayTotalFaceAuthSaga)]);
 }
+
+

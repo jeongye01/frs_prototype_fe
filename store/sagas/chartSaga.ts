@@ -64,6 +64,12 @@ function* watchHistoryDailyFRSaga() {
   yield takeEvery(loadHistoryDailyFRData, historyDailyFRSaga);
 }
 
+
+function* watchTodayTotalFRSaga() {
+  yield takeEvery(loadTodayTodalFRData, todayTotalFRSaga);
+}
+
 export default function* chartSaga() {
   yield all([fork(watchTodayTotalFRSaga), fork(watchHistoryDailyFRSaga)]);
+
 }

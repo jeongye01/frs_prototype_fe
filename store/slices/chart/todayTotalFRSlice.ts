@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import TodayFRChart from 'typeDefs/TodayFEChart';
+import { TodayFRType } from 'typeDefs/Chart';
 
 export interface InitialState {
-  data: TodayFRChart;
+  data: TodayFRType;
 }
 
 const initialState: InitialState = {
-  data: {} as TodayFRChart,
+  data: {} as TodayFRType,
 };
 
 export const todayTotalFRCSlice = createSlice({
@@ -17,7 +17,7 @@ export const todayTotalFRCSlice = createSlice({
     loadTodayTodalFRData: state => {},
     updateTodayTodalFRState: (
       state,
-      { payload }: PayloadAction<TodayFRChart>,
+      { payload }: PayloadAction<TodayFRType>,
     ) => {
       state.data = {
         ...state.data,

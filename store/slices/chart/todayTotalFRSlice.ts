@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import TodayFRChart from 'typeDefs/TodayFEChart';
+import { TodayFRChart } from 'typeDefs/Chart';
 
 export interface InitialState {
   data: TodayFRChart;

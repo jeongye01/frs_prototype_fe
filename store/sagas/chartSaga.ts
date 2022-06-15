@@ -11,7 +11,7 @@ const { loadTodayTodalFRData, updateTodayTodalFRState } =
 const { getResult } = resultSlice.actions;
 const { startLoading, finishLoading } = loadingSlice.actions;
 
-function* todayTotalFaceAuthSaga(action: PayloadAction) {
+function* todayTotalFRSaga(action: PayloadAction) {
   yield put(startLoading(action.type));
   try {
     const result: AxiosResponse = yield call(chartAPI.todayTotalFaceAuth);
@@ -30,10 +30,10 @@ function* todayTotalFaceAuthSaga(action: PayloadAction) {
   yield put(finishLoading(action.type));
 }
 
-function* watchTodayTotalFaceAuthSaga() {
-  yield takeEvery(loadTodayTodalFRData, todayTotalFaceAuthSaga);
+function* watchTodayTotalFRSaga() {
+  yield takeEvery(loadTodayTodalFRData, todayTotalFRSaga);
 }
 
 export default function* chartSaga() {
-  yield all([fork(watchTodayTotalFaceAuthSaga)]);
+  yield all([fork(watchTodayTotalFRSaga)]);
 }

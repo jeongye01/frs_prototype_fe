@@ -6,4 +6,10 @@ export interface TodayFRChart {
   cfFailRate: number;
 }
 
-export default TodayFRChart;
+export interface HistoryDailyFRChart {
+  statDe: string;
+  reqeustCnt: number;
+  succesCnt: number;
+  failrCnt: number;
+  crttCl: null;
+}

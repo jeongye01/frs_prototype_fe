@@ -14,5 +14,5 @@ export const todayTotalFR = () => {
 };
 // 일별 얼굴 인증현황
 export const historyDailyFR = (day: number) => {
-  return client.get(`/chart/identification/daily/${day}`);
+  return client.get(`/chart/history/daily/${day}`);
 };

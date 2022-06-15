@@ -13,6 +13,7 @@ import todayTotalFRCSlice from 'store/slices/chart/todayTotalFRSlice';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 
 import TodayTotalFRChart from 'components/ChartBoard/todayTotalFRChart';
+import HistoryDailyFRChart from 'components/ChartBoard/HistoryDailyFRChart';
 
 const fields = [
   '순번',
@@ -42,6 +43,7 @@ const Home: NextPage = () => {
   return (
     <div className="px-32 flex items-center space-x-6 justify-between mt-12 bg-[#f5f7fc] ">
       <TodayTotalFRChart />
+      <HistoryDailyFRChart />
     </div>
   );
 };

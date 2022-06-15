@@ -26,7 +26,7 @@ function TodayTotalFRChart() {
     <>
       {result?.isSuccess ? (
         <div className="flex flex-col items-center shadow-md min-w-[250px]  w-full rounded-lg bg-white">
-          <div className="flex items-center p-3 w-full text-base   border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] ">
+          <div className="flex items-center p-3 w-full text-base    border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 mr-1 text-white"

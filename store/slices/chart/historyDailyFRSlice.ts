@@ -1,28 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HistoryDailyFRChart } from 'typeDefs/Chart';
+import { HistoryDailyFRType } from 'typeDefs/Chart';
 
 export interface InitialState {
-  data: HistoryDailyFRChart[];
+  statDes: string[];
+  reqeustCnts: number[];
+  succesCnts: number[];
+  failrCnts: number[];
+  crttCls: null;
 }
-
 const initialState: InitialState = {
-  data: [] as HistoryDailyFRChart[],
+  statDes: [],
+  reqeustCnts: [],
+  succesCnts: [],
+  failrCnts: [],
+  crttCls: null,
 };
 
 export const historyDailyFRSlice = createSlice({
-  name: 'historyDailyFRChartData',
+  name: 'historyDailyFRTypeData',
   initialState,
   reducers: {
     loadHistoryDailyFRData: (state, action: PayloadAction<number>) => {},
     updateHistoryDailyFRState: (
       state,
-      { payload }: PayloadAction<HistoryDailyFRChart>,
+      { payload }: PayloadAction<HistoryDailyFRType[]>,
     ) => {
-      state.data = {
-        ...state.data,
-        ...payload,
-      };
+      console.log('히스토리', Object.values(payload));
+
+      state.statDes = [...Object.values(payload).map(data => data.statDe)];
+      state.failrCnts = [...Object.values(payload).map(data => data.failrCnt)];
+      state.reqeustCnts = [
+        ...Object.values(payload).map(data => data.reqeustCnt),
+      ];
+      state.succesCnts = [
+        ...Object.values(payload).map(data => data.succesCnt),
+      ];
     },
   },
 });

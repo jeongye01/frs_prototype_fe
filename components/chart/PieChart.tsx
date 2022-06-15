@@ -9,9 +9,8 @@ interface Props {
   data: number[];
   labels: string[];
   colors: string[];
-  isEmpty?: boolean;
 }
-function PieChart({ data, labels, colors, isEmpty }: Props) {
+function PieChart({ data, labels, colors }: Props) {
   const state = {
     series: data, //^
     options: {
@@ -55,7 +54,7 @@ function PieChart({ data, labels, colors, isEmpty }: Props) {
           value: any,
           { seriesIndex, dataPointIndex, w }: any,
         ) {
-          return `${isEmpty ? 0 : w.config.series[seriesIndex]}`;
+          return w.config.series[seriesIndex];
         },
         dropShadow: {
           enabled: false,

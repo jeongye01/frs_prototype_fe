@@ -1,15 +1,23 @@
-export interface TodayFRChart {
+export interface TodayFRType {
   cfTotCnt: number;
   cfPassCnt: number;
   cfFailCnt: number;
   cfPassRate: number;
   cfFailRate: number;
 }
-
-export interface HistoryDailyFRChart {
+export interface HistoryDailyFRType {
   statDe: string;
   reqeustCnt: number;
   succesCnt: number;
   failrCnt: number;
-  crttCl: null;
+  crttCls: null;
 }
+/*
+export interface HistoryDailyFRForChartType {
+  statDes: string[];
+  reqeustCnts: number[];
+  succesCnts: number[];
+  failrCnts: number[];
+  crttCls: null;
+}
+*/

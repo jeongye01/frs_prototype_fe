@@ -40,8 +40,9 @@ function* historyDailyFRSaga(action: PayloadAction<number>) {
   yield put(startLoading(action.type));
   try {
     const result: AxiosResponse = yield call(chartAPI.historyDailyFR, day);
-
+    console.log(result);
     yield put(updateHistoryDailyFRState({ ...result.data.data }));
+    console.log(123);
     yield put(getResult({ isSuccess: true, actionType: action.type }));
   } catch (error) {
     yield put(

@@ -25,7 +25,7 @@ export default function Sidebar() {
         <li className="space-y-2 ">
           <a
             href="#"
-            className="flex items-center justify-between  p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 "
+            className="flex items-center justify-between  p-2 text-base font-normal  rounded-lg text-white "
           >
             <div className="flex">
               <svg
@@ -37,7 +37,7 @@ export default function Sidebar() {
                 <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                 <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
               </svg>
-              <span className="ml-3">Dashboard</span>
+              <span className="ml-3">💻 작업 중 🚧 👷</span>
             </div>
             <button onClick={() => setIsOpen(prev => !prev)}>
               <svg
@@ -59,28 +59,34 @@ export default function Sidebar() {
 
           <ul className="  space-y-2">
             <li>
-              <a
-                href="#"
-                className="flex items-center p-1 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              >
-                Products
-              </a>
+              <Link href="/">
+                <a
+                  href="#"
+                  className="flex items-center p-1 pl-11 w-full text-base font-normal  rounded-lg transition duration-75 group text-white "
+                >
+                  차트
+                </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
-                className="flex items-center p-1 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              >
-                Products
-              </a>
+              <Link href="/history">
+                <a
+                  href="#"
+                  className="flex items-center p-1 pl-11 w-full text-base font-normal rounded-lg transition duration-75 group text-white "
+                >
+                  이력조회
+                </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
-                className="flex items-center p-1 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              >
-                Products
-              </a>
+              <Link href="/admin">
+                <a
+                  href="#"
+                  className="flex items-center p-1 pl-11 w-full text-base font-normal  rounded-lg transition duration-75 group  text-white "
+                >
+                  사용자 관리
+                </a>
+              </Link>
             </li>
           </ul>
         </li>

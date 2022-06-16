@@ -19,7 +19,7 @@ const { startLoading, finishLoading } = loadingSlice.actions;
 function* todayTotalFRSaga(action: PayloadAction) {
   yield put(startLoading(action.type));
   try {
-    const result: AxiosResponse = yield call(chartAPI.todayTotalFR);
+    const result: AxiosResponse = yield call(chartAPI.getTodayTotalFR);
 
     yield put(updateTodayTodalFRState({ ...result.data.data }));
     yield put(getResult({ isSuccess: true, actionType: action.type }));
@@ -39,7 +39,7 @@ function* historyDailyFRSaga(action: PayloadAction<number>) {
   const day = action.payload;
   yield put(startLoading(action.type));
   try {
-    const result: AxiosResponse = yield call(chartAPI.historyDailyFR, day);
+    const result: AxiosResponse = yield call(chartAPI.getHistoryDailyFR, day);
     console.log(result);
     yield put(updateHistoryDailyFRState({ ...result.data.data }));
     console.log(123);

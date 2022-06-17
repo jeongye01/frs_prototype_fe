@@ -12,11 +12,13 @@ const { getResult } = resultSlice.actions;
 const { startLoading, finishLoading } = loadingSlice.actions;
 
 function* hitoryFRSaga(action: PayloadAction<historyAPI.HistoryFRListQuery>) {
-  const { countPerPage, page, searchDateFrom, searchDateTo } = action.payload;
+  const { pageSize, resultCd, page, searchDateFrom, searchDateTo } =
+    action.payload;
   yield put(startLoading(action.type));
   try {
     const result: AxiosResponse = yield call(historyAPI.getHistoryFR, {
-      countPerPage,
+      pageSize,
+      resultCd,
       page,
       searchDateFrom,
       searchDateTo,

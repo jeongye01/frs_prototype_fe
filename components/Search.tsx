@@ -1,14 +1,110 @@
+import React, { ChangeEvent, useEffect, useReducer } from 'react';
+
+import useGetActionState from 'hooks/useGetActionState';
+import historyFRSlice from 'store/slices/historyFRSlice';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+
+export interface IFormState {
+  pageSize: number | null;
+  page: number | null;
+  searchDateFrom: string | null;
+  searchDateTo: string | null;
+  resultCd: 1 | 0 | null;
+}
+export interface Action {
+  type:
+    | 'countPerPage'
+    | 'page'
+    | 'searchDateFrom'
+    | 'searchDateTo'
+    | 'resultCd';
+  payload: string | number | null;
+}
+const initialState: IFormState = {
+  pageSize: 20,
+  page: 0,
+  searchDateFrom: null,
+  searchDateTo: null,
+  resultCd: null,
+};
+function formReducer(state: IFormState, action: Action) {
+  return { ...state, [action.type]: action.payload };
+}
+
 function Search() {
+  const dispatch = useAppDispatch();
+  const [formState, formDispatch] = useReducer(formReducer, initialState);
+  const { data: historyFRData } = useAppSelector(state => state.historyFR);
+  const [loading, result] = useGetActionState(
+    historyFRSlice.actions.loadHistoryFRData.type,
+  );
+
+  const onSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    if (loading) return;
+    const { pageSize, page, searchDateFrom, searchDateTo, resultCd } =
+      formState;
+    console.log(formState);
+    if (!searchDateFrom?.trim || !searchDateTo?.trim()) return;
+
+    dispatch(
+      historyFRSlice.actions.loadHistoryFRData({
+        pageSize: 20,
+        page: 0,
+        searchDateFrom,
+        searchDateTo,
+        resultCd: resultCd === '',
+      }),
+    );
+  };
+  useEffect(() => {
+    console.log(result?.isSuccess, historyFRData);
+  }, [result]);
   return (
     <div className="px-2 rounded shadow bg-white">
-      <form className="flex py-2 px-4 items-center">
+      <form onSubmit={onSubmit} className="flex py-2 px-4 items-center">
         <span className="mr-3">인증요청일자</span>
-        <DateInput />
+        <div className="relative">
+          <input
+            type="date"
+            className="block px-5 py-2 outline-0  text-sm text-gray-900 bg-[#F9F9F9] rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
+            required
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              formDispatch({
+                type: 'searchDateFrom',
+                payload: event.currentTarget.value,
+              })
+            }
+            value={formState.searchDateFrom ?? undefined}
+          />
+        </div>
         <span className="mx-3 text-xl">~</span>
-        <DateInput />
+        <div className="relative">
+          <input
+            type="date"
+            className="block px-5 py-2 outline-0  text-sm text-gray-900 bg-[#F9F9F9] rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
+            required
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              formDispatch({
+                type: 'searchDateTo',
+                payload: event.currentTarget.value,
+              })
+            }
+            value={formState.searchDateTo ?? undefined}
+          />
+        </div>
         <span className="ml-5 mr-3">인증결과</span>
 
-        <select className="px-2 py-2 outline-0 text-sm  text-gray-900 bg-[#F9F9F9] rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+        <select
+          onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+            formDispatch({
+              type: 'resultCd',
+              payload: event.currentTarget.value,
+            })
+          }
+          value={formState.resultCd ?? undefined}
+          className="px-2 py-2 outline-0 text-sm  text-gray-900 bg-[#F9F9F9] rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+        >
           <option selected>전체</option>
           <option value={1}>성공</option>
           <option value={0}>실패</option>
@@ -48,28 +144,10 @@ function DateInput() {
   return (
     <div className="relative">
       <input
-        type="search"
-        id="default-search"
-        className="block pl-5 py-2 outline-0  text-sm text-gray-900 bg-[#F9F9F9] rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
-        placeholder="ex) 2022-01-01"
+        type="date"
+        className="block px-5 py-2 outline-0  text-sm text-gray-900 bg-[#F9F9F9] rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
         required
       />
-      <div className="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 text-blue-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-          />
-        </svg>
-      </div>
     </div>
   );
 }

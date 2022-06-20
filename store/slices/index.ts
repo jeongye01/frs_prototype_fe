@@ -6,6 +6,7 @@ import historyDailyFRSlice from './chart/historyDailyFRSlice';
 import historyFRSlice from './historyFRSlice';
 import modalSlice from './modalSlice';
 import userListSlice from './userListSlice';
+import userSlice from './userSlice';
 
 const rootReducer = combineReducers({
   loading: loadingSlice.reducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   historyFR: historyFRSlice.reducer,
   modal: modalSlice.reducer,
   userList: userListSlice.reducer,
+  user: userSlice.reducer,
 });
 
 export default rootReducer;

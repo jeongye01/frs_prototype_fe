@@ -27,7 +27,6 @@ export const userListSlice = createSlice({
           pwFailrCnt,
           lastConectDt,
           registDt,
-
           useYn,
         } = row;
         return {
@@ -40,7 +39,6 @@ export const userListSlice = createSlice({
           pwFailrCnt,
           lastConectDt,
           registDt,
-
           useYn,
         };
       });

@@ -1,27 +1,27 @@
 import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
-import React, { useReducer } from 'react';
+import React, { ChangeEvent, useEffect, useReducer } from 'react';
 
 import useGetActionState from 'hooks/useGetActionState';
-import historyFRSlice from 'store/slices/historyFRSlice';
+import userSlice from 'store/slices/userSlice';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 
 export interface IForm {
-  authorNm: string; // 권한 이름
+  authorCd: string; // 권한 코드
   userId: string; //사용자 아이디
   userNm: string; //사용자 이름
-  password: string;
+  userPw: string;
 }
 export interface Action {
-  type: 'authorNm' | 'userId' | 'userNm' | 'password';
+  type: 'authorCd' | 'userId' | 'userNm' | 'userPw';
 
   payload: string;
 }
 const initialState: IForm = {
-  authorNm: '',
+  authorCd: '',
   userId: '',
   userNm: '',
-  password: '',
+  userPw: '',
 };
 
 function formReducer(state: IForm, action: Action) {
@@ -33,12 +33,37 @@ export default function UserMgtModal() {
   const dispatch = useAppDispatch();
   const [formState, formDispatch] = useReducer(formReducer, initialState);
   //  const { data: historyFRData } = useAppSelector(state => state.user);
-  const [loading, result] = useGetActionState(
-    historyFRSlice.actions.loadHistoryFRData.type,
+  const [loading, result, initResult] = useGetActionState(
+    userSlice.actions.createUser.type,
   );
+  //,
+  const onSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    if (loading) return;
+    const { authorCd, userId, userNm, userPw } = formState;
+    console.log(formState);
+    if (!authorCd.trim() || !userId.trim() || !userNm.trim() || !userPw.trim())
+      return;
+
+    dispatch(
+      userSlice.actions.createUser({
+        authorCd,
+        userId,
+        userNm,
+        userPw,
+      }),
+    );
+  };
+  useEffect(() => {
+    if (result?.isSuccess) {
+      closeUserMgtModal({ name: modalName.UserMgtModal });
+      alert('사용자 등록 완료');
+    }
+    initResult();
+  }, [result]);
   return (
     <div className="w-1/4 -translate-x-1/2 -translate-y-1/2 bg-white text-center border p-10">
-      <form className=" space-y-4">
+      <form onSubmit={onSubmit} className=" space-y-4">
         <div className="flex">
           <span className=" w-1/6 grid place-items-center  text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
             권한 코드
@@ -46,6 +71,13 @@ export default function UserMgtModal() {
           <input
             type="text"
             className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  "
+            value={formState.authorCd}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              formDispatch({
+                type: 'authorCd',
+                payload: event.currentTarget.value,
+              })
+            }
           />
         </div>
         <div className="flex">
@@ -55,6 +87,13 @@ export default function UserMgtModal() {
           <input
             type="text"
             className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  "
+            value={formState.userId}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              formDispatch({
+                type: 'userId',
+                payload: event.currentTarget.value,
+              })
+            }
           />
         </div>
         <div className="flex">
@@ -64,6 +103,13 @@ export default function UserMgtModal() {
           <input
             type="text"
             className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  "
+            value={formState.userNm}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              formDispatch({
+                type: 'userNm',
+                payload: event.currentTarget.value,
+              })
+            }
           />
         </div>
         <div className="flex">
@@ -71,8 +117,15 @@ export default function UserMgtModal() {
             비밀번호
           </span>
           <input
-            type="text"
+            type="password"
             className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  "
+            value={formState.userPw}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              formDispatch({
+                type: 'userPw',
+                payload: event.currentTarget.value,
+              })
+            }
           />
         </div>
 

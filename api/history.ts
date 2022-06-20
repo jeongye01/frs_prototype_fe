@@ -41,7 +41,7 @@ export const getHistoryFR = ({
   );
   return client.get(
     `/history/identification/list?pageSize=${pageSize}&page=${page}${
-      resultCd === null ? `` : `&resultCd=${resultCd}`
+      resultCd === null ? '' : `&resultCd=${resultCd}`
     }&searchDateFrom=${searchDateFrom}&searchDateTo=${searchDateTo}`,
   );
 };

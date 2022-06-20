@@ -9,7 +9,7 @@ export interface IFormState {
   page: number | null;
   searchDateFrom: string | null;
   searchDateTo: string | null;
-  resultCd: 1 | 0 | null;
+  resultCd: 1 | 0 | -1;
 }
 export interface Action {
   type:
@@ -25,7 +25,7 @@ const initialState: IFormState = {
   page: 0,
   searchDateFrom: null,
   searchDateTo: null,
-  resultCd: null,
+  resultCd: -1,
 };
 function formReducer(state: IFormState, action: Action) {
   return { ...state, [action.type]: action.payload };
@@ -44,7 +44,7 @@ function Search() {
     if (loading) return;
     const { pageSize, page, searchDateFrom, searchDateTo, resultCd } =
       formState;
-    console.log(formState);
+    console.log(formState, resultCd, resultCd === -1);
     if (!searchDateFrom?.trim || !searchDateTo?.trim()) return;
 
     dispatch(
@@ -53,7 +53,7 @@ function Search() {
         page: 0,
         searchDateFrom,
         searchDateTo,
-        resultCd: resultCd === '',
+        resultCd: (+resultCd === -1 ? null : resultCd) as 1 | 0 | null,
       }),
     );
   };
@@ -105,7 +105,9 @@ function Search() {
           value={formState.resultCd ?? undefined}
           className="px-2 py-2 outline-0 text-sm  text-gray-900 bg-[#F9F9F9] rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option selected>전체</option>
+          <option value={-1} selected>
+            전체
+          </option>
           <option value={1}>성공</option>
           <option value={0}>실패</option>
         </select>

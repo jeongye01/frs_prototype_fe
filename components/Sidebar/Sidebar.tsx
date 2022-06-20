@@ -79,7 +79,7 @@ export default function Sidebar() {
               </Link>
             </li>
             <li>
-              <Link href="/admin">
+              <Link href="/users">
                 <a
                   href="#"
                   className="flex items-center p-1 pl-11 w-full text-base font-normal  rounded-lg transition duration-75 group  text-white "

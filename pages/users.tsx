@@ -4,6 +4,8 @@ import { useEffect, useReducer } from 'react';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import Table from 'components/Table';
 import Search from 'components/Search';
+import useModal from 'hooks/useModal';
+import { modaltList } from 'utils/importModal';
 
 const fields = [
   '순번',
@@ -23,9 +25,14 @@ const fields = [
 
 const History: NextPage = () => {
   const { data: historyFRData } = useAppSelector(state => state.historyFR);
+  const [openUserMgtModal] = useModal();
   return (
     <div className=" px-4 flex flex-col   items-start  mt-12 bg-[#f5f7fc] ">
-      <Search />
+      <button
+        onClick={() => openUserMgtModal({ name: modaltList.UserMgtModal })}
+      >
+        추가
+      </button>
       <div className="mb-10" />
       <Table fields={fields} rows={historyFRData} />
     </div>

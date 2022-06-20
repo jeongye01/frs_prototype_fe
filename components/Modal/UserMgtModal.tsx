@@ -1,19 +1,36 @@
-import React, { ChangeEvent, useEffect, useReducer } from 'react';
+import useModal from 'hooks/useModal';
+import { modalName } from 'utils/importModal';
 
-import useGetActionState from 'hooks/useGetActionState';
-import historyFRSlice from 'store/slices/historyFRSlice';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
-export interface IForm {}
-export interface Action {
-  type: 'temp';
-  payload: null;
+export interface IForm {
+  pageSize: number | null;
+  page: number | null;
+  searchDateFrom: string | null;
+  searchDateTo: string | null;
+  resultCd: 1 | 0 | -1;
 }
-const initialState: IForm = {};
+export interface Action {
+  type:
+    | 'countPerPage'
+    | 'page'
+    | 'searchDateFrom'
+    | 'searchDateTo'
+    | 'resultCd';
+  payload: string | number | null;
+}
+const initialState: IForm = {
+  pageSize: 20,
+  page: 0,
+  searchDateFrom: null,
+  searchDateTo: null,
+  resultCd: -1,
+};
+
 function formReducer(state: IForm, action: Action) {
   return { ...state, [action.type]: action.payload };
 }
 
 export default function UserMgtModal() {
+  const [_, closeUserMgtModal] = useModal();
   return (
     <div className="w-1/4 -translate-x-1/2 -translate-y-1/2 bg-white text-center border p-10">
       <form className=" space-y-4">
@@ -46,6 +63,17 @@ export default function UserMgtModal() {
             <option value={1}>운영자</option>
             <option value={0}>관리담당자</option>
           </select>
+        </div>
+        <div className="space-x-3">
+          <button className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
+            저장
+          </button>
+          <button
+            onClick={() => closeUserMgtModal({ name: modalName.UserMgtModal })}
+            className="text-white bg-gray-700 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+          >
+            취소
+          </button>
         </div>
       </form>
     </div>

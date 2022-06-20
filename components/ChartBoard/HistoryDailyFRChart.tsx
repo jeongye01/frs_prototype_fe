@@ -27,8 +27,8 @@ function HistoryDailyFRChart() {
     dispatch(historyDailyFRSlice.actions.loadHistoryDailyFRData(5));
   }, [dispatch]);
   useEffect(() => {
-    console.log({ statDes, reqeustCnts, succesCnts, failrCnts });
-  }, [statDes, reqeustCnts, succesCnts, failrCnts]);
+    console.log(result?.isSuccess);
+  }, [result]);
   return (
     <>
       {result?.isSuccess ? (

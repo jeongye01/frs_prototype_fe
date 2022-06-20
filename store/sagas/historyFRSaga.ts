@@ -11,7 +11,9 @@ const { updateHistoryFRState, loadHistoryFRData } = historyFRSlice.actions;
 const { getResult } = resultSlice.actions;
 const { startLoading, finishLoading } = loadingSlice.actions;
 
-function* hitoryFRSaga(action: PayloadAction<historyAPI.HistoryFRListQuery>) {
+function* loadHitoryFRSaga(
+  action: PayloadAction<historyAPI.HistoryFRListQuery>,
+) {
   const { pageSize, resultCd, page, searchDateFrom, searchDateTo } =
     action.payload;
   yield put(startLoading(action.type));
@@ -39,9 +41,9 @@ function* hitoryFRSaga(action: PayloadAction<historyAPI.HistoryFRListQuery>) {
 }
 
 function* watchHitoryFRSaga() {
-  yield takeEvery(loadHistoryFRData, hitoryFRSaga);
+  yield takeEvery(loadHistoryFRData, loadHitoryFRSaga);
 }
 
-export default function* chartSaga() {
+export default function* hitoryFRSaga() {
   yield all([fork(watchHitoryFRSaga)]);
 }

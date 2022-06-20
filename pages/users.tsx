@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
+import { useEffect, useReducer } from 'react';
 
-import { useAppSelector } from 'hooks/redux';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import Table from 'components/Table';
 import Search from 'components/Search';
 

@@ -56,14 +56,9 @@ function* historyDailyFRSaga(action: PayloadAction<number>) {
   yield put(finishLoading(action.type));
 }
 
-function* watchTodayTotalFRSaga() {
-  yield takeEvery(loadTodayTodalFRData, todayTotalFRSaga);
-}
-
 function* watchHistoryDailyFRSaga() {
   yield takeEvery(loadHistoryDailyFRData, historyDailyFRSaga);
 }
-
 
 function* watchTodayTotalFRSaga() {
   yield takeEvery(loadTodayTodalFRData, todayTotalFRSaga);
@@ -71,5 +66,4 @@ function* watchTodayTotalFRSaga() {
 
 export default function* chartSaga() {
   yield all([fork(watchTodayTotalFRSaga), fork(watchHistoryDailyFRSaga)]);
-
 }

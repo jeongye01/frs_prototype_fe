@@ -6,7 +6,7 @@ import Search from 'components/Search';
 
 const fields = [
   '순번',
-  '인증 요청을',
+  '인증 요청일',
   '얼굴 ID',
   '단말 ID',
   '단말 번호',

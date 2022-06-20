@@ -3,17 +3,16 @@ import Table, { BaseTbodyRowStyle } from 'components/Table';
 
 const fields = [
   '순번',
-  '아이디',
-  '이름',
-  '권한',
-  '마지막접속일시',
-  '암호오류횟수',
-  '암호변경여부',
-  '암호변경경과일수',
+  '사용자 아이디',
+  '사용자 이름',
+  '권한 코드',
+  '권한 이름',
+  '암호 변경 여부',
+  '암호 오류 횟수',
+  '마지막 접속 일시',
   '등록일자',
+  '권한',
   '사용여부',
-  '편집',
-  '비밀번호',
 ];
 
 const values = [
@@ -41,7 +40,19 @@ function UserRow() {
   return (
     <>
       {Object.values(values[0]).map((value, i) => (
-        <td
+        <td>123</td>
+      ))}
+    </>
+  );
+}
+function User() {
+  return <Table fields={fields} rows={} />;
+}
+
+export default User;
+/*
+
+<td
           className={`${BaseTbodyRowStyle} relative ${
             i === 9 || i === 10 ? 'text-blue-800' : ''
           }  ${i === 11 ? 'text-green-800' : ''} `}
@@ -77,12 +88,8 @@ function UserRow() {
             </button>
           )}
         </td>
-      ))}
-    </>
-  );
-}
-function User() {
-  return <Table fields={fields} tbodyRow={<UserRow />} />;
-}
 
-export default User;
+
+
+
+*/

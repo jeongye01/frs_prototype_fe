@@ -1,51 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CreateUserQuery } from 'api/user';
 import { UserType } from 'typeDefs/User';
 
 export interface InitialState {
-  data: UserType[];
+  user: UserType;
 }
 const initialState: InitialState = {
-  data: [] as UserType[],
+  user: {} as UserType,
 };
 
-export const userListSlice = createSlice({
-  name: 'userList',
+export const userSlice = createSlice({
+  name: 'user',
   initialState,
   reducers: {
-    loadUserListData: (state, action: PayloadAction) => {},
-    updateUserListState: (state, { payload }: PayloadAction<UserType[]>) => {
-      console.log(Object.values(payload), payload);
-      state.data = Object.values(payload).map(row => {
-        const {
-          esntl_id,
-          userId,
-          userNm,
-          authorCd,
-          authorNm,
-          pwUpdtYn,
-          pwFailrCnt,
-          lastConectDt,
-          registDt,
-
-          useYn,
-        } = row;
-        return {
-          esntl_id,
-          userId,
-          userNm,
-          authorCd,
-          authorNm,
-          pwUpdtYn,
-          pwFailrCnt,
-          lastConectDt,
-          registDt,
-
-          useYn,
-        };
-      });
-    },
+    createUser: (state, action: PayloadAction<CreateUserQuery>) => {},
   },
 });
 
-export default userListSlice;
+export default userSlice;

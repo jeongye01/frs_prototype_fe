@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 import { ModalIndex } from 'typeDefs/Modal';
-export const modaltList = {
+export const modalName = {
   UserMgtModal: 'UserMgtModal',
 };
 

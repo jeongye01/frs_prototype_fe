@@ -4,7 +4,7 @@ import useGetActionState from 'hooks/useGetActionState';
 import historyFRSlice from 'store/slices/historyFRSlice';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 
-export interface IFormState {
+export interface IForm {
   pageSize: number | null;
   page: number | null;
   searchDateFrom: string | null;
@@ -20,14 +20,14 @@ export interface Action {
     | 'resultCd';
   payload: string | number | null;
 }
-const initialState: IFormState = {
+const initialState: IForm = {
   pageSize: 20,
   page: 0,
   searchDateFrom: null,
   searchDateTo: null,
   resultCd: -1,
 };
-function formReducer(state: IFormState, action: Action) {
+function formReducer(state: IForm, action: Action) {
   return { ...state, [action.type]: action.payload };
 }
 

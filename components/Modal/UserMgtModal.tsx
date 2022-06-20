@@ -1,3 +1,18 @@
+import React, { ChangeEvent, useEffect, useReducer } from 'react';
+
+import useGetActionState from 'hooks/useGetActionState';
+import historyFRSlice from 'store/slices/historyFRSlice';
+import { useAppSelector, useAppDispatch } from 'hooks/redux';
+export interface IForm {}
+export interface Action {
+  type: 'temp';
+  payload: null;
+}
+const initialState: IForm = {};
+function formReducer(state: IForm, action: Action) {
+  return { ...state, [action.type]: action.payload };
+}
+
 export default function UserMgtModal() {
   return (
     <div className="w-1/4 -translate-x-1/2 -translate-y-1/2 bg-white text-center border p-10">

@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import Table from 'components/Table';
@@ -9,7 +9,7 @@ import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
 import User from 'components/User';
 import userListSlice from 'store/slices/userListSlice';
-
+import { BaseTbodyRowStyle } from 'components/Table';
 const fields = [
   '순번',
   '사용자 아이디',
@@ -21,6 +21,8 @@ const fields = [
   '마지막 접속 일시',
   '등록일자',
   '사용여부',
+  '편집',
+  '비밀번호',
 ];
 
 const Users: NextPage = () => {
@@ -47,13 +49,37 @@ const Users: NextPage = () => {
     <div className=" px-4 flex flex-col   items-start  mt-12 bg-[#f5f7fc] ">
       <button
         onClick={() => openUserMgtModal({ name: modalName.UserMgtModal })}
+        className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
       >
-        추가
+        👷 사용자 추가
       </button>
-      <div className="mb-10" />
-      <Table fields={fields} rows={userList} />
+      <div className="mb-5" />
+      <Table fields={fields} tbodyRows={<UserRows />} />
     </div>
   );
 };
 
 export default Users;
+
+function UserRows() {
+  const [isUsed, setIsUsed] = useState(true);
+  const { data: userList } = useAppSelector(store => store.userList);
+  const onUseButtonClick = () => {
+    setIsUsed(prev => !prev);
+  };
+  return (
+    <>
+      {userList.map((user, i) => (
+        <tr className="border-b  odd:bg-white even:bg-[#F9F9F9]">
+          {Object.values(user)
+            .slice(0, -1)
+            .map(value => (
+              <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
+                {value}
+              </td>
+            ))}
+        </tr>
+      ))}
+    </>
+  );
+}

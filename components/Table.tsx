@@ -4,9 +4,9 @@ export const BaseTbodyRowStyle =
 interface Props<T> {
   fields: string[];
   rows?: T[]; //generic으로 바꾸기
-  tbodyRow?: React.ReactNode;
+  tbodyRows?: React.ReactNode;
 }
-function Table<T>({ fields, rows, tbodyRow }: Props<T>) {
+function Table<T>({ fields, rows, tbodyRows }: Props<T>) {
   return (
     <table className=" w-full text-sm shadow rounded-2xl text-left text-black border-collapse border border-[#f2f2f2]  ">
       <thead className=" text-black text-xs  uppercase bg-[#EBEBED]">
@@ -22,16 +22,16 @@ function Table<T>({ fields, rows, tbodyRow }: Props<T>) {
         </tr>
       </thead>
       <tbody>
+        {tbodyRows || null}
         {rows?.map((row: T, idx) => (
           <tr key={idx} className="border-b  odd:bg-white even:bg-[#F9F9F9] ">
-            {tbodyRow ||
-              Object.values(row).map((value, i) => (
-                <td className="text-center  text-sm border border-[#f2f2f2] py-[5px] ">
-                  {value}
-                </td>
-              ))}
+            {Object.values(row).map((value, i) => (
+              <td className="text-center  text-sm border border-[#f2f2f2] py-[5px] ">
+                {value}
+              </td>
+            ))}
           </tr>
-        ))}
+        )) || null}
       </tbody>
     </table>
   );

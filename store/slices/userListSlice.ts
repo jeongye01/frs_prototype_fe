@@ -18,6 +18,7 @@ export const userListSlice = createSlice({
       console.log(Object.values(payload), payload);
       state.data = Object.values(payload).map(row => {
         const {
+          esntlId,
           esntl_id,
           userId,
           userNm,
@@ -30,6 +31,7 @@ export const userListSlice = createSlice({
           useYn,
         } = row;
         return {
+          esntlId,
           esntl_id,
           userId,
           userNm,

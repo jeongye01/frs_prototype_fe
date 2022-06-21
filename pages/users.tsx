@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useEffect, useReducer, useState } from 'react';
-
+import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import Table from 'components/Table';
 import Search from 'components/Search';
@@ -10,6 +10,8 @@ import { modalName } from 'utils/importModal';
 import User from 'components/User';
 import userListSlice from 'store/slices/userListSlice';
 import { BaseTbodyRowStyle } from 'components/Table';
+import Link from 'next/link';
+
 const fields = [
   '순번',
   '사용자 아이디',
@@ -26,7 +28,7 @@ const fields = [
 ];
 
 const Users: NextPage = () => {
-  const [openUserMgtModal] = useModal();
+  const [openUserAddModal] = useModal();
   const [loading, result, initResult] = useGetActionState(
     userListSlice.actions.loadUserListData.type,
   );
@@ -48,7 +50,7 @@ const Users: NextPage = () => {
   return (
     <div className=" px-4 flex flex-col   items-start  mt-12 bg-[#f5f7fc] ">
       <button
-        onClick={() => openUserMgtModal({ name: modalName.UserMgtModal })}
+        onClick={() => openUserAddModal({ name: modalName.UserAddModal })}
         className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
       >
         👷 사용자 추가
@@ -64,32 +66,47 @@ export default Users;
 function UserRows() {
   const [isUsed, setIsUsed] = useState(true);
   const { data: userList } = useAppSelector(store => store.userList);
+  const [openUserEditModal] = useModal();
   const onUseButtonClick = () => {
     setIsUsed(prev => !prev);
   };
+
+  const router = useRouter();
   return (
     <>
       {userList.map((user, i) => (
-        <tr className="border-b   odd:bg-white even:bg-[#F9F9F9]">
+        <tr
+          key={user.esntlId}
+          className="border-b   odd:bg-white even:bg-[#F9F9F9]"
+        >
           {Object.values(user)
-            .slice(0, -1)
+            .slice(1, -1)
             .map(value => (
               <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
                 {value}
               </td>
             ))}
           <td className="text-center  text-sm  border border-[#f2f2f2] py-[5px]">
-            <button className="bg-blue-400 text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2">
+            <button className="bg-blue-500 text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2">
               {Object.values(user).slice(-1)}
             </button>
           </td>
           <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
-            <button className="bg-blue-400 text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2">
-              편집
-            </button>
+            <Link href={`/users/?user=${user.esntlId}`} as={`/users`}>
+              <button
+                onClick={() => {
+                  openUserEditModal({
+                    name: modalName.UserEditModal,
+                  });
+                }}
+                className="bg-blue-500 text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2"
+              >
+                편집
+              </button>
+            </Link>
           </td>
           <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
-            <button className="bg-green-600  text-xs text-white p-1 rounded absolute -translate-x-1/2 -translate-y-1/2">
+            <button className="bg-green-700  text-xs text-white p-1 rounded absolute -translate-x-1/2 -translate-y-1/2">
               초기화
             </button>
           </td>

@@ -28,8 +28,8 @@ function formReducer(state: IForm, action: Action) {
   return { ...state, [action.type]: action.payload };
 }
 
-export default function UserMgtModal() {
-  const [_, closeUserMgtModal] = useModal();
+export default function UserAddModal() {
+  const [_, closeUserAddModal] = useModal();
   const dispatch = useAppDispatch();
   const [formState, formDispatch] = useReducer(formReducer, initialState);
   //  const { data: historyFRData } = useAppSelector(state => state.user);
@@ -56,7 +56,7 @@ export default function UserMgtModal() {
   };
   useEffect(() => {
     if (result?.isSuccess) {
-      closeUserMgtModal({ name: modalName.UserMgtModal });
+      closeUserAddModal({ name: modalName.UserAddModal });
       alert('사용자 등록 완료');
     }
     initResult();
@@ -134,7 +134,7 @@ export default function UserMgtModal() {
             저장
           </button>
           <button
-            onClick={() => closeUserMgtModal({ name: modalName.UserMgtModal })}
+            onClick={() => closeUserAddModal({ name: modalName.UserAddModal })}
             className="text-white bg-gray-700 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
           >
             취소

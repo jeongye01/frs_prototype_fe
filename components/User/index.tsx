@@ -46,7 +46,7 @@ function UserRow() {
   );
 }
 function User() {
-  return <Table fields={fields} rows={} />;
+  return <Table fields={fields} tbodyRow={<UserRow />} />;
 }
 
 export default User;

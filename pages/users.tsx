@@ -70,14 +70,29 @@ function UserRows() {
   return (
     <>
       {userList.map((user, i) => (
-        <tr className="border-b  odd:bg-white even:bg-[#F9F9F9]">
+        <tr className="border-b   odd:bg-white even:bg-[#F9F9F9]">
           {Object.values(user)
             .slice(0, -1)
             .map(value => (
-              <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
+              <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
                 {value}
               </td>
             ))}
+          <td className="text-center  text-sm  border border-[#f2f2f2] py-[5px]">
+            <button className="bg-blue-400 text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2">
+              {Object.values(user).slice(-1)}
+            </button>
+          </td>
+          <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
+            <button className="bg-blue-400 text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2">
+              편집
+            </button>
+          </td>
+          <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
+            <button className="bg-green-600  text-xs text-white p-1 rounded absolute -translate-x-1/2 -translate-y-1/2">
+              초기화
+            </button>
+          </td>
         </tr>
       ))}
     </>

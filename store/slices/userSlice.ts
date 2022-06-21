@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CreateUserQuery } from 'api/user';
+import { CreateUserQuery, EditUserParamNQuery } from 'api/user';
 import { UserType } from 'typeDefs/User';
 
 export interface InitialState {
@@ -15,6 +15,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     createUser: (state, action: PayloadAction<CreateUserQuery>) => {},
+    editUser: (state, action: PayloadAction<EditUserParamNQuery>) => {},
   },
 });
 

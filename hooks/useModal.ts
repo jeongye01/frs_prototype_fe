@@ -5,6 +5,7 @@ import modalSlice from 'store/slices/modalSlice';
 
 export interface OpenModal {
   name: string;
+  state?: any;
   props?: { index: number };
 }
 

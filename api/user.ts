@@ -25,3 +25,13 @@ export const postUser = (query: CreateUserQuery) => {
     `/user?authorCd=${query.authorCd}&userId=${query.userId}&userNm=${query.userNm}&userPw=${query.userPw}`,
   );
 };
+
+export interface EditUserParamNQuery {
+  esntlId: string;
+  authorCd: string;
+  userNm: string;
+}
+
+export const putUser = ({ esntlId, authorCd, userNm }: EditUserParamNQuery) => {
+  return client.post(`/user/${esntlId}?authorCd=${authorCd}&userNm=${userNm}`);
+};

@@ -4,5 +4,6 @@ type LazyImportComponent = LazyExoticComponent<({ props }: any) => JSX.Element>;
 
 export type ModalIndex = {
   name: string;
+  state?: any;
   component?: LazyImportComponent;
 };

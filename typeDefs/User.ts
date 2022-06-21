@@ -1,4 +1,5 @@
 export interface UserType {
+  esntlId: string;
   esntl_id: number; //순번
   userId: string; //사용자 아이디
   userNm: string; //사용자 이름

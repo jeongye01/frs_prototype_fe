@@ -5,6 +5,8 @@ import React, { ChangeEvent, useEffect, useReducer } from 'react';
 import useGetActionState from 'hooks/useGetActionState';
 import userSlice from 'store/slices/userSlice';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export interface IForm {
   authorCd: string; // 권한 코드
@@ -31,6 +33,7 @@ export default function UserEditModal() {
   const [loading, result, initResult] = useGetActionState(
     userSlice.actions.editUser.type,
   );
+  const router = useRouter();
   //,
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -38,14 +41,18 @@ export default function UserEditModal() {
     const { authorCd, userNm } = formState;
     console.log(formState);
     if (!authorCd.trim() || !userNm.trim()) return;
-
+    if (!router.query.user) return;
     dispatch(
       userSlice.actions.editUser({
+        esntlId: router.query.user as string,
         authorCd,
         userNm,
       }),
     );
   };
+  useEffect(() => {
+    console.log(router.query.user);
+  }, [router]);
   useEffect(() => {
     if (result?.isSuccess) {
       closeUserEditModal({ name: modalName.UserEditModal });
@@ -95,9 +102,9 @@ export default function UserEditModal() {
             저장
           </button>
           <button
-            onClick={() =>
-              closeUserEditModal({ name: modalName.UserEditModal })
-            }
+            onClick={() => {
+              closeUserEditModal({ name: modalName.UserEditModal });
+            }}
             className="text-white bg-gray-700 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
           >
             취소

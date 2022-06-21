@@ -25,7 +25,7 @@ function TodayTotalFRChart() {
   return (
     <>
       {result?.isSuccess ? (
-        <div className="flex flex-col items-center shadow-md min-w-[250px]  w-full rounded-lg bg-white">
+        <div className="flex flex-col items-center shadow-md min-w-[250px] h-full  w-full rounded-lg bg-white">
           <div className="flex items-center p-3 w-full text-base    border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -38,22 +38,21 @@ function TodayTotalFRChart() {
             </svg>
             <h2 className="text-white">금일 얼굴인증현황(1:1&1:N)</h2>
           </div>
-          <BarChart
-            data={[
-              todayTotalFRData.cfTotCnt,
-              todayTotalFRData.cfPassCnt,
-              todayTotalFRData.cfFailCnt,
-            ]}
-            categories={['인증 요청', '인증 성공', '인증 실패']}
-            colors={['#662e8f', '#2e368f', '#5c7fd6']}
-          />
-          <div className="border-t  w-[90%] border-dashed border-t-slate-400" />
-          <div className="mt-4 py-6  w-[70%] ">
-            <PieChart
-              data={[todayTotalFRData.cfPassRate, todayTotalFRData.cfFailRate]}
-              colors={['#2e368f', '#5c7fd6']}
-              labels={['인증 성공률', '인증 실패률']}
-            />
+          <div className="flex w-full h-full">
+            <div className="flex w-3/5 h-full items-center">
+              <BarChart
+                data={[33, 33, 33]}
+                categories={['인증 요청', '인증 성공', '인증 실패']}
+                colors={['#662e8f', '#2e368f', '#5c7fd6']}
+              />
+            </div>
+            <div className="flex w-2/5 h-full items-center ">
+              <PieChart
+                data={[33, 33]}
+                colors={['#2e368f', '#5c7fd6']}
+                labels={['인증 성공률', '인증 실패률']}
+              />
+            </div>
           </div>
         </div>
       ) : (
@@ -64,3 +63,14 @@ function TodayTotalFRChart() {
 }
 
 export default TodayTotalFRChart;
+/*
+
+todayTotalFRData.cfTotCnt,
+                  todayTotalFRData.cfPassCnt,
+                  todayTotalFRData.cfFailCnt,
+
+ todayTotalFRData.cfPassRate,
+                  todayTotalFRData.cfFailRate,
+
+
+                  */

@@ -32,7 +32,7 @@ function HistoryDailyFRChart() {
   return (
     <>
       {result?.isSuccess ? (
-        <div className="flex flex-col items-center shadow-md min-w-[250px]  w-full rounded-lg bg-white">
+        <div className="flex flex-col items-center shadow-md min-w-[250px] h-full  w-full rounded-lg bg-white">
           <div className="flex items-center p-3 w-full text-base   border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -147,16 +147,16 @@ function TempChart({
   };
 
   return (
-    <div>
+    <div className="w-full h-full px-10">
       {lineData?.length === bar1Data?.length &&
         bar1Data?.length === bar2Data?.length &&
         bar2Data?.length === categories?.length && (
           <ReactApexChart
             type="line"
-            height={350}
             series={state.series}
             options={state.options}
-            width="500px"
+            width="100%"
+            height="100%"
           />
         )}
     </div>

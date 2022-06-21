@@ -95,7 +95,6 @@ function BarChart({ data, colors, categories }: Props) {
               series={state.series}
               options={state.options}
               width="100%"
-              height="200px"
             />
           </div>
         )}

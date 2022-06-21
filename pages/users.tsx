@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useEffect, useReducer, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import Table from 'components/Table';
 import Search from 'components/Search';
@@ -10,6 +10,7 @@ import { modalName } from 'utils/importModal';
 import User from 'components/User';
 import userListSlice from 'store/slices/userListSlice';
 import { BaseTbodyRowStyle } from 'components/Table';
+import Link from 'next/link';
 
 const fields = [
   '순번',
@@ -70,7 +71,7 @@ function UserRows() {
     setIsUsed(prev => !prev);
   };
 
-  const navigate = useNavigate();
+  const router = useRouter();
   return (
     <>
       {userList.map((user, i) => (
@@ -91,17 +92,21 @@ function UserRows() {
             </button>
           </td>
           <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
-            <button
-              onClick={() => {
-                navigate(`/users/${user.esntlId}/edit`);
-                openUserEditModal({
-                  name: modalName.UserEditModal,
-                });
-              }}
-              className="bg-blue-500 text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2"
+            <Link
+              href={`/users/?user=${user.esntlId}`}
+              as={`/users/${user.esntlId}`}
             >
-              편집
-            </button>
+              <button
+                onClick={() => {
+                  openUserEditModal({
+                    name: modalName.UserEditModal,
+                  });
+                }}
+                className="bg-blue-500 text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2"
+              >
+                편집
+              </button>
+            </Link>
           </td>
           <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
             <button className="bg-green-700  text-xs text-white p-1 rounded absolute -translate-x-1/2 -translate-y-1/2">

@@ -15,7 +15,6 @@ export const userListSlice = createSlice({
   reducers: {
     loadUserListData: (state, action: PayloadAction) => {},
     updateUserListState: (state, { payload }: PayloadAction<UserType[]>) => {
-      console.log(Object.values(payload), payload);
       state.data = Object.values(payload).map(row => {
         const {
           esntlId,

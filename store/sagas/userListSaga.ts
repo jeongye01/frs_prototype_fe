@@ -18,7 +18,7 @@ function* loadUserListSaga(action: PayloadAction) {
     const result: AxiosResponse<userAPI.LoadUsersResponse> = yield call(
       userAPI.getUserList,
     );
-    console.log(result);
+
     yield put(updateUserListState({ ...result.data.data.content }));
     yield put(getResult({ isSuccess: true, actionType: action.type }));
   } catch (error) {

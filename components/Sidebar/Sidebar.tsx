@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <nav className="w-[250px]  min-w-[250px] h-screen z-50 top-0 bottom-0 left-0 overflow-y-auto py-4 px-3 bg-[#3b75e3]">
+    <nav className="fixed w-[250px]  min-w-[250px] h-screen z-50 top-0 bottom-0 left-0 overflow-y-auto py-4 px-3 bg-[#3b75e3]">
       <div className="p-5">
         <Link href="/">
           <a>

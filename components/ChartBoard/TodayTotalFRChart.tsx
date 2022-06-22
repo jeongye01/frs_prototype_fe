@@ -5,26 +5,27 @@ import PieChart from 'components/chart/PieChart';
 import useGetActionState from 'hooks/useGetActionState';
 import todayTotalFRCSlice from 'store/slices/chart/todayTotalFRSlice';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { TodayFRType } from 'typeDefs/Chart';
+import { useGetServerData, getTodayTotalFR, TodayFRResponse } from 'api/chart';
+import { AxiosError } from 'axios';
 
 function TodayTotalFRChart() {
-  const dispatch = useAppDispatch();
-  const { data: todayTotalFRData } = useAppSelector(
-    state => state.todayTotalFR,
-  );
-  const [loading, result] = useGetActionState(
-    todayTotalFRCSlice.actions.loadTodayTodalFRData.type,
-  );
+  const { data, isLoading, isFetching } = useQuery<
+    TodayFRResponse,
+    AxiosError,
+    TodayFRType
+  >(['chart', 'todayTotalFR'], getTodayTotalFR, {
+    select: data => data.data,
+    staleTime: 1000,
+  });
+  useEffect(() => {
+    console.log(data, isFetching);
+  }, [data, isFetching]);
 
-  useEffect(() => {
-    if (loading) return;
-    dispatch(todayTotalFRCSlice.actions.loadTodayTodalFRData());
-  }, [dispatch]);
-  useEffect(() => {
-    console.log(todayTotalFRData);
-  }, [todayTotalFRData]);
   return (
     <>
-      {result?.isSuccess ? (
+      {!isLoading ? (
         <div className="flex flex-col items-center shadow-md min-w-[250px] h-full  w-full rounded-lg bg-white">
           <div className="flex items-center p-3 w-full text-base    border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] ">
             <svg
@@ -41,7 +42,11 @@ function TodayTotalFRChart() {
           <div className="flex w-full h-full">
             <div className="flex w-3/5 h-full items-center">
               <BarChart
-                data={[33, 33, 33]}
+                data={[
+                  data?.cfFailCnt || 0,
+                  data?.cfFailCnt || 0,
+                  data?.cfFailRate || 0,
+                ]}
                 categories={['인증 요청', '인증 성공', '인증 실패']}
                 colors={['#662e8f', '#2e368f', '#5c7fd6']}
               />

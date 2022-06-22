@@ -32,13 +32,6 @@ export const getHistoryFR = ({
   searchDateTo,
   resultCd,
 }: HistoryFRListQuery) => {
-  console.log(
-    resultCd,
-    resultCd === 0,
-    `/history/identification/list?pageSize=${pageSize}&page=${page}${
-      resultCd === null ? `` : `&resultCd=${resultCd}`
-    }&searchDateFrom=${searchDateFrom}&searchDateTo=${searchDateTo}`,
-  );
   return client.get(
     `/history/identification/list?pageSize=${pageSize}&page=${page}${
       resultCd === null ? '' : `&resultCd=${resultCd}`

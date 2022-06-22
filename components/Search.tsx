@@ -44,7 +44,7 @@ function Search() {
     if (loading) return;
     const { pageSize, page, searchDateFrom, searchDateTo, resultCd } =
       formState;
-    console.log(formState, resultCd, resultCd === -1);
+
     if (!searchDateFrom?.trim || !searchDateTo?.trim()) return;
 
     dispatch(
@@ -57,9 +57,7 @@ function Search() {
       }),
     );
   };
-  useEffect(() => {
-    console.log(result?.isSuccess, historyFRData);
-  }, [result]);
+
   return (
     <div className="px-2 rounded shadow bg-white">
       <form onSubmit={onSubmit} className="flex py-2 px-4 items-center">

@@ -26,8 +26,6 @@ export const historyDailyFRSlice = createSlice({
       state,
       { payload }: PayloadAction<HistoryDailyFRType[]>,
     ) => {
-      console.log('히스토리', Object.values(payload));
-
       state.statDes = [...Object.values(payload).map(data => data.statDe)];
       state.failrCnts = [...Object.values(payload).map(data => data.failrCnt)];
       state.reqeustCnts = [

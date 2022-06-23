@@ -19,13 +19,6 @@ function TodayTotalFRChart() {
     // refetchInterval: 30000, //30초 마다 데이터 refetch
   });
 
-  useEffect(() => {
-    console.log(data, isLoading, isFetching);
-  }, [data, isLoading, isFetching]);
-  useEffect(() => {
-    console.log(data, isFetching);
-  }, [data, isFetching]);
-
   return (
     <>
       <ChartBoardLayout title="일별 얼굴인증현황" onRefreshClick={refetch}>

@@ -61,10 +61,6 @@ function HistoryDailyFRChart() {
     refetchInterval: 30000, //30초 마다 데이터 refetch
   });
 
-  useEffect(() => {
-    console.log(data, isLoading, isFetching);
-  }, [data, isLoading, isFetching]);
-
   return (
     <>
       {data && (

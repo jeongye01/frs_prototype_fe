@@ -1,7 +1,7 @@
 import client from './client';
-
+import { HistoryFRType } from 'typeDefs/HistoryFR';
 export interface HistoryFRListQuery {
-  pageSize: number;
+  countPerPage: number;
   page: number;
   searchDateFrom: string;
   searchDateTo: string;
@@ -9,32 +9,22 @@ export interface HistoryFRListQuery {
 }
 
 export interface HistoryFRResponse {
-  sn: number;
-  requestDt: string;
-  faceId: string;
-  deviceId: string;
-  deviceNm: null;
-  score: string;
-  groupCd: null;
-  threshold: string;
-  resultCd: string;
-  resultNm: string;
-  image1Path: string;
-  image2Path: string;
-  mainUuid: string;
+  data: HistoryFRType[];
 }
 
 // 얼굴인증이력조회(1:N)
 export const getHistoryFR = ({
-  pageSize,
+  countPerPage,
   page,
   searchDateFrom,
   searchDateTo,
   resultCd,
 }: HistoryFRListQuery) => {
-  return client.get(
-    `/history/identification/list?pageSize=${pageSize}&page=${page}${
-      resultCd === null ? '' : `&resultCd=${resultCd}`
-    }&searchDateFrom=${searchDateFrom}&searchDateTo=${searchDateTo}`,
-  );
+  return client
+    .get(
+      `/history/identification/list?countPerPage=${countPerPage}&page=${page}${
+        resultCd === null ? '' : `&resultCd=${resultCd}`
+      }&searchDateFrom=${searchDateFrom}&searchDateTo=${searchDateTo}`,
+    )
+    .then(response => response.data);
 };

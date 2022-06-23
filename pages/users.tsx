@@ -3,12 +3,15 @@ import { useEffect, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import Table from 'components/Table';
+import Search from 'components/Search';
 import useGetActionState from 'hooks/useGetActionState';
 import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
+import User from 'components/User';
 import userListSlice from 'store/slices/userListSlice';
 import { BaseTbodyRowStyle } from 'components/Table';
 import Link from 'next/link';
+import { useQuery, QueryCache } from 'react-query';
 
 const fields = [
   '순번',
@@ -37,14 +40,6 @@ const Users: NextPage = () => {
     dispatch(userListSlice.actions.loadUserListData());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (result?.isSuccess) {
-      // success
-    } else {
-      // fail
-    }
-    initResult();
-  }, [result, initResult]);
   return (
     <div className=" px-4 flex flex-col   items-start  mt-12 bg-[#f5f7fc] ">
       <button
@@ -78,15 +73,24 @@ function UserRows() {
           className="border-b   odd:bg-white even:bg-[#F9F9F9]"
         >
           {Object.values(user)
-            .slice(1, -1)
+            .slice(1, 8)
             .map(value => (
               <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
                 {value}
               </td>
             ))}
+          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
+            {user?.lastConectDt
+              ?.replace('T', ' ')
+              .replace(/\..*/, '')
+              .slice(0, -3)}
+          </td>
+          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
+            {user?.registDt?.replace('T', ' ').replace(/\..*/, '').slice(0, -3)}
+          </td>
           <td className="text-center  text-sm  border border-[#f2f2f2] py-[5px]">
             <button className="bg-blue-500 text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2">
-              {Object.values(user).slice(-1)}
+              {user?.useYn ? '사용중' : '사용안함'}
             </button>
           </td>
           <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">

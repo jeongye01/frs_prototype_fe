@@ -1,8 +1,10 @@
 import React, { ChangeEvent, useEffect, useReducer } from 'react';
-
-import useGetActionState from 'hooks/useGetActionState';
 import historyFRSlice from 'store/slices/historyFRSlice';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { useAppDispatch } from 'hooks/redux';
+import { AxiosError } from 'axios';
+import { HistoryFRType } from 'typeDefs/HistoryFR';
+import { useQuery } from 'react-query';
+import { getHistoryFR, HistoryFRResponse } from 'api/history';
 
 export interface IForm {
   pageSize: number | null;
@@ -33,29 +35,37 @@ function formReducer(state: IForm, action: Action) {
 
 function Search() {
   const dispatch = useAppDispatch();
-  const [formState, formDispatch] = useReducer(formReducer, initialState);
-  const { data: historyFRData } = useAppSelector(state => state.historyFR);
-  const [loading, result] = useGetActionState(
-    historyFRSlice.actions.loadHistoryFRData.type,
+  const { data, isLoading, isFetching, refetch } = useQuery<
+    HistoryFRResponse,
+    AxiosError,
+    HistoryFRType[]
+  >(
+    ['chart', 'todayTotalFR'],
+    () =>
+      getHistoryFR({
+        countPerPage: 20,
+        page: 1,
+        searchDateFrom: formState.searchDateFrom || '2022-01-01',
+        searchDateTo: formState.searchDateTo || '2022-06-23',
+        resultCd:
+          ((+formState.resultCd === -1 ? null : formState.resultCd) as
+            | 1
+            | 0
+            | null) || null,
+      }),
+    {
+      select: data => data.data,
+    },
   );
 
+  const [formState, formDispatch] = useReducer(formReducer, initialState);
+  useEffect(() => {
+    if (!data) return;
+    dispatch(historyFRSlice.actions.updateHistoryFRState({ ...data }));
+  }, [data]);
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (loading) return;
-    const { pageSize, page, searchDateFrom, searchDateTo, resultCd } =
-      formState;
-
-    if (!searchDateFrom?.trim || !searchDateTo?.trim()) return;
-
-    dispatch(
-      historyFRSlice.actions.loadHistoryFRData({
-        pageSize: 20,
-        page: 0,
-        searchDateFrom,
-        searchDateTo,
-        resultCd: (+resultCd === -1 ? null : resultCd) as 1 | 0 | null,
-      }),
-    );
+    refetch();
   };
 
   return (

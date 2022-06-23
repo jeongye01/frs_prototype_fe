@@ -38,7 +38,7 @@ const Home: NextPage = () => {
   return (
     <div className="px-32   justify-between my-12 bg-[#f5f7fc] ">
       <div className="gap-12 h-[360px] mb-16  flex items-start">
-        <div className="w-2/5 h-full ">
+        <div className="w-2/5 h-4/5 ">
           <TodayTotalFRChart />
         </div>
         <div className="w-3/5 h-full ">

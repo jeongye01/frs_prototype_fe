@@ -32,6 +32,30 @@ function TodayTotalFRChart() {
         <div className="flex w-full h-full">
           <div className="flex w-3/5 h-full items-center">
             <BarChart
+              data={[66, 33, 33]}
+              categories={['인증 요청', '인증 성공', '인증 실패']}
+              colors={['#662e8f', '#2e368f', '#5c7fd6']}
+            />
+          </div>
+          <div className="flex w-2/5 h-full items-center ">
+            <PieChart
+              data={[50, 50]}
+              colors={['#2e368f', '#5c7fd6']}
+              labels={['인증 성공률', '인증 실패률']}
+            />
+          </div>
+        </div>
+      </ChartBoardLayout>
+    </>
+  );
+}
+
+export default TodayTotalFRChart;
+
+/*
+ <div className="flex w-full h-full">
+          <div className="flex w-3/5 h-full items-center">
+            <BarChart
               data={[
                 data?.cfTotCnt || 0,
                 data?.cfPassCnt || 0,
@@ -49,9 +73,5 @@ function TodayTotalFRChart() {
             />
           </div>
         </div>
-      </ChartBoardLayout>
-    </>
-  );
-}
 
-export default TodayTotalFRChart;
+*/

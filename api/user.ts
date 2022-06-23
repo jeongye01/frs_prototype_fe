@@ -9,7 +9,7 @@ export interface LoadUsersResponse {
 
 // 관리자 목록 로드
 export const getUserList = () => {
-  return client.get('/user?page=0&pageSize=20');
+  return client.get('/user?page=0&pageSize=40');
 };
 
 export interface CreateUserQuery {

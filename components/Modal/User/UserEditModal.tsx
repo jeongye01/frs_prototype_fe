@@ -62,7 +62,7 @@ export default function UserEditModal() {
     <div className="w-1/4 -translate-x-1/2 -translate-y-1/2 bg-white text-center border p-10">
       <form onSubmit={onSubmit} className=" space-y-4">
         <div className="flex">
-          <span className=" w-1/6 grid place-items-center  text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
+          <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
             권한 코드
           </span>
           <input
@@ -79,7 +79,7 @@ export default function UserEditModal() {
         </div>
 
         <div className="flex">
-          <span className="w-1/6  grid place-items-center text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
+          <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
             이름
           </span>
           <input

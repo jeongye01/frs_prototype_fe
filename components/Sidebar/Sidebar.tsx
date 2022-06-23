@@ -24,11 +24,8 @@ export default function Sidebar() {
 
       <ul className="space-y-2">
         <li className="space-y-2 ">
-          <a
-            href="#"
-            className="flex items-center justify-between  p-2 text-base font-normal  rounded-lg text-white "
-          >
-            <div className="flex">
+          <div className="flex items-center justify-between  p-2 text-base font-normal  rounded-lg text-white ">
+            <div className="flex items-center justify-between  p-2 text-base font-normal  rounded-lg text-white">
               <svg
                 className="w-6 h-6 text-white transition duration-75  group-hover:text-blue-400"
                 fill="currentColor"
@@ -56,7 +53,7 @@ export default function Sidebar() {
                 />
               </svg>
             </button>
-          </a>
+          </div>
 
           <ul className="  space-y-2">
             <li>

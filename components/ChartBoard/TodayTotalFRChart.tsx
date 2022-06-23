@@ -21,7 +21,12 @@ function TodayTotalFRChart() {
 
   return (
     <>
-      <ChartBoardLayout title="일별 얼굴인증현황" onRefreshClick={refetch}>
+      <ChartBoardLayout
+        title="일별 얼굴인증현황"
+        onRefreshClick={() => {
+          refetch();
+        }}
+      >
         <div className="flex w-full h-full">
           <div className="flex w-3/5 h-full items-center">
             <BarChart

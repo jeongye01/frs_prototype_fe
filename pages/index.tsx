@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 
-import TodayTotalFRChart from 'components/ChartBoard/TodayTotalFRChart';
-import HistoryDailyFRChart from 'components/ChartBoard/HistoryDailyFRChart';
+import TodayTotalFRChart from 'components/chartBoard/TodayTotalFRChart';
+import HistoryDailyFRChart from 'components/chartBoard/HistoryDailyFRChart';
 import Table from 'components/Table';
 
 const fields = [

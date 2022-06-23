@@ -1,60 +1,84 @@
 import type { NextPage } from 'next';
 import { useEffect } from 'react';
-import BarChart from 'components/chart/BarChart';
-import PieChart from 'components/chart/PieChart';
-import useGetActionState from 'hooks/useGetActionState';
-import historyDailyFRSlice from 'store/slices/chart/historyDailyFRSlice';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import dynamic from 'next/dynamic';
+
+import { AxiosError } from 'axios';
+import { HistoryDailyFRType } from 'typeDefs/Chart';
+import { useQuery } from 'react-query';
+import { getHistoryDailyFR, HistoryDailyFRResponse } from 'api/chart';
+import ChartBoardLayout from './Layout';
+
+const tempData: HistoryDailyFRType[] = [
+  {
+    statDe: '2022-06-01',
+    reqeustCnt: 3,
+    succesCnt: 1,
+    failrCnt: 2,
+    crttCls: null,
+  },
+  {
+    statDe: '2022-06-02',
+    reqeustCnt: 3,
+    succesCnt: 1,
+    failrCnt: 2,
+    crttCls: null,
+  },
+  {
+    statDe: '2022-06-03',
+    reqeustCnt: 3,
+    succesCnt: 1,
+    failrCnt: 2,
+    crttCls: null,
+  },
+  {
+    statDe: '2022-06-04',
+    reqeustCnt: 3,
+    succesCnt: 1,
+    failrCnt: 2,
+    crttCls: null,
+  },
+  {
+    statDe: '2022-06-05',
+    reqeustCnt: 3,
+    succesCnt: 1,
+    failrCnt: 2,
+    crttCls: null,
+  },
+];
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 });
 
 function HistoryDailyFRChart() {
-  const dispatch = useAppDispatch();
+  const { data, isLoading, isFetching, refetch } = useQuery<
+    HistoryDailyFRResponse,
+    AxiosError,
+    HistoryDailyFRType[]
+  >(['chart', 'historyDailyFR'], getHistoryDailyFR, {
+    select: data => data.data,
 
-  const { statDes, reqeustCnts, succesCnts, failrCnts } = useAppSelector(
-    state => state.historyDailyFR,
-  );
-  const [loading, result] = useGetActionState(
-    historyDailyFRSlice.actions.loadHistoryDailyFRData.type,
-  );
+    refetchInterval: 30000, //30초 마다 데이터 refetch
+  });
 
   useEffect(() => {
-    if (loading) return;
-    // 임의로 5로 지정
-    dispatch(historyDailyFRSlice.actions.loadHistoryDailyFRData(5));
-  }, [dispatch]);
+    console.log(data, isLoading, isFetching);
+  }, [data, isLoading, isFetching]);
 
   return (
     <>
-      {result?.isSuccess ? (
-        <div className="flex flex-col items-center shadow-md min-w-[250px] h-full  w-full rounded-lg bg-white">
-          <div className="flex items-center p-3 w-full text-base   border-b rounded-t-lg border-b-gray-300 bg-[#3b75e3] ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-1 text-white"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-            </svg>
-            <h2 className="text-white">일별 얼굴인증현황</h2>
-          </div>
+      {data && (
+        <ChartBoardLayout title="일별 얼굴인증현황" onRefreshClick={refetch}>
           <TempChart
             lineName="인증이력"
-            lineData={reqeustCnts}
+            lineData={data.map(history => history.reqeustCnt)}
             bar1Name="인증성공"
-            bar1Data={succesCnts}
+            bar1Data={data.map(history => history.succesCnt)}
             bar2Name="인증실패"
-            bar2Data={failrCnts}
-            categories={statDes}
+            bar2Data={data.map(history => history.failrCnt)}
+            categories={data.map(history => history.statDe) || 0}
           />
-        </div>
-      ) : (
-        <>Loading...</>
+        </ChartBoardLayout>
       )}
     </>
   );

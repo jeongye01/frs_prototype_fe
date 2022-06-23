@@ -19,8 +19,6 @@ export const historyFRSlice = createSlice({
       state,
       { payload }: PayloadAction<HistoryFRType[]>,
     ) => {
-      console.log('히스토리', Object.values(payload));
-
       state.data = Object.values(payload).reverse();
     },
   },

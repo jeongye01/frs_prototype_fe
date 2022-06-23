@@ -20,7 +20,7 @@ function* createUserSaga(action: PayloadAction<userAPI.CreateUserQuery>) {
   yield put(startLoading(action.type));
   try {
     const result: AxiosResponse = yield call(userAPI.postUser, { ...body });
-    console.log(result);
+
     yield put(loadUserListData());
     yield put(getResult({ isSuccess: true, actionType: action.type }));
   } catch (error) {
@@ -42,7 +42,7 @@ function* editUserSaga(action: PayloadAction<userAPI.EditUserParamNQuery>) {
     const result: AxiosResponse = yield call(userAPI.putUser, {
       ...paramNQuery,
     });
-    console.log(result);
+
     yield put(loadUserListData());
     yield put(getResult({ isSuccess: true, actionType: action.type }));
   } catch (error) {

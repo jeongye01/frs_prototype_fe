@@ -6,7 +6,6 @@ import useGetActionState from 'hooks/useGetActionState';
 import historyDailyFRSlice from 'store/slices/chart/historyDailyFRSlice';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import dynamic from 'next/dynamic';
-import { getEnabledCategories } from 'trace_events';
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
@@ -14,6 +13,7 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {
 
 function HistoryDailyFRChart() {
   const dispatch = useAppDispatch();
+
   const { statDes, reqeustCnts, succesCnts, failrCnts } = useAppSelector(
     state => state.historyDailyFR,
   );
@@ -26,9 +26,7 @@ function HistoryDailyFRChart() {
     // 임의로 5로 지정
     dispatch(historyDailyFRSlice.actions.loadHistoryDailyFRData(5));
   }, [dispatch]);
-  useEffect(() => {
-    console.log(result?.isSuccess);
-  }, [result]);
+
   return (
     <>
       {result?.isSuccess ? (

@@ -39,7 +39,7 @@ export default function UserEditModal() {
     e.preventDefault();
     if (loading) return;
     const { authorCd, userNm } = formState;
-    console.log(formState);
+
     if (!authorCd.trim() || !userNm.trim()) return;
     if (!router.query.user) return;
     dispatch(
@@ -50,9 +50,7 @@ export default function UserEditModal() {
       }),
     );
   };
-  useEffect(() => {
-    console.log(router.query.user);
-  }, [router]);
+
   useEffect(() => {
     if (result?.isSuccess) {
       closeUserEditModal({ name: modalName.UserEditModal });

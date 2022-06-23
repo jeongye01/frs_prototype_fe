@@ -5,9 +5,11 @@ import PieChart from 'components/chart/PieChart';
 import useGetActionState from 'hooks/useGetActionState';
 import todayTotalFRCSlice from 'store/slices/chart/todayTotalFRSlice';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import { getTodayTotalFR, TodayFRResponse } from 'api/chart';
+
 import { AxiosError } from 'axios';
 import { TodayFRType } from 'typeDefs/Chart';
+import { useQuery, UseQueryOptions } from 'react-query';
+import { useGetServerData, getTodayTotalFR, TodayFRResponse } from 'api/chart';
 
 function TodayTotalFRChart() {
   const { data, isLoading, isFetching } = useQuery<
@@ -23,14 +25,10 @@ function TodayTotalFRChart() {
   useEffect(() => {
     console.log(data, isLoading, isFetching);
   }, [data, isLoading, isFetching]);
+  useEffect(() => {
+    console.log(data, isFetching);
+  }, [data, isFetching]);
 
-  useEffect(() => {
-    if (loading) return;
-    dispatch(todayTotalFRCSlice.actions.loadTodayTodalFRData());
-  }, [dispatch]);
-  useEffect(() => {
-    console.log(todayTotalFRData);
-  }, [todayTotalFRData]);
   return (
     <>
       <div className="flex flex-col items-center shadow-md min-w-[250px] h-full  w-full rounded-lg bg-white">

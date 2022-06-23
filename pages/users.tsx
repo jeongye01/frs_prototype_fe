@@ -41,7 +41,6 @@ const Users: NextPage = () => {
   useEffect(() => {
     if (result?.isSuccess) {
       // success
-      console.log(userList);
     } else {
       // fail
     }

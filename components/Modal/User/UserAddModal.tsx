@@ -41,7 +41,7 @@ export default function UserAddModal() {
     e.preventDefault();
     if (loading) return;
     const { authorCd, userId, userNm, userPw } = formState;
-    console.log(formState);
+
     if (!authorCd.trim() || !userId.trim() || !userNm.trim() || !userPw.trim())
       return;
 

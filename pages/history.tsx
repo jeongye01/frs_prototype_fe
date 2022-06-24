@@ -6,6 +6,8 @@ import Search from 'components/Search';
 import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
 import Link from 'next/link';
+import Pagination from 'components/Pagination';
+import { useState } from 'react';
 
 const fields = [
   '순번',
@@ -22,11 +24,19 @@ const fields = [
 ];
 
 const History: NextPage = () => {
+  const [curPage, setCurPage] = useState<number>(1);
   return (
     <div className=" px-4 flex flex-col   items-start  mt-12 bg-[#f5f7fc] ">
       <Search />
       <div className="mb-10" />
       <Table fields={fields} tbodyRows={<HistoryRows />} />
+      <div className="mb-10" />
+      <Pagination
+        numOfPages={3}
+        numOfPageBtn={3}
+        curPage={curPage}
+        setCurPage={setCurPage}
+      />
     </div>
   );
 };

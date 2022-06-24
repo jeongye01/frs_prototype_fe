@@ -63,7 +63,7 @@ function Search() {
     AxiosError,
     HistoryFRType[]
   >(
-    ['chart', 'todayTotalFR'],
+    ['history', 'historyFR'],
     () =>
       getHistoryFR({
         countPerPage: 20,

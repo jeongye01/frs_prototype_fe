@@ -2,7 +2,9 @@ export default function Header() {
   const getDate = () => {
     const date = new Date();
 
-    return `${date.getFullYear()}년 ${date.getMonth()}월 ${date.getDate()}일`;
+    return `${date.getFullYear()}년 ${
+      date.getMonth() + 1
+    }월 ${date.getDate()}일`;
   };
   return (
     <header className="w-full flex items-center justify-between px-5 h-16 shadow bg-white">
@@ -13,7 +15,7 @@ export default function Header() {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          stroke-width="2"
+          strokeWidth="2"
         >
           <path
             strokeLinecap="round"
@@ -42,11 +44,11 @@ export default function Header() {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          stroke-width="2"
+          strokeWidth="2"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
           />
         </svg>

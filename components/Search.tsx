@@ -9,8 +9,8 @@ import { getHistoryFR, HistoryFRResponse } from 'api/history';
 export interface IForm {
   pageSize: number | null;
   page: number | null;
-  searchDateFrom: string | null;
-  searchDateTo: string | null;
+  searchDateFrom: string;
+  searchDateTo: string;
   resultCd: 1 | 0 | -1;
 }
 export interface Action {
@@ -22,11 +22,34 @@ export interface Action {
     | 'resultCd';
   payload: string | number | null;
 }
+const leadingZeros = (n: number, digits: number) => {
+  let zero = '';
+  const nToString = n.toString();
+
+  if (nToString.length < digits) {
+    for (let i = 0; i < digits - nToString.length; i++) zero += '0';
+  }
+  return zero + n;
+};
+const getDefaultDateFrom = () => {
+  const date = new Date();
+
+  return `${date.getFullYear()}-01-01`;
+};
+const getDefaultDateTo = () => {
+  const date = new Date();
+
+  return `${date.getFullYear()}-${leadingZeros(
+    date.getMonth() + 1,
+    2,
+  )}-${leadingZeros(date.getDate(), 2)}`;
+};
+
 const initialState: IForm = {
   pageSize: 20,
   page: 0,
-  searchDateFrom: null,
-  searchDateTo: null,
+  searchDateFrom: getDefaultDateFrom(),
+  searchDateTo: getDefaultDateTo(),
   resultCd: -1,
 };
 function formReducer(state: IForm, action: Action) {
@@ -37,37 +60,35 @@ function Search() {
   const dispatch = useAppDispatch();
   const { data, isLoading, isFetching, refetch } = useQuery<
     HistoryFRResponse,
-    AxiosError,
-    HistoryFRType[]
-  >(
-    ['chart', 'todayTotalFR'],
-    () =>
-      getHistoryFR({
-        countPerPage: 20,
-        page: 1,
-        searchDateFrom: formState.searchDateFrom || '2022-01-01',
-        searchDateTo: formState.searchDateTo || '2022-06-23',
-        resultCd:
-          ((+formState.resultCd === -1 ? null : formState.resultCd) as
-            | 1
-            | 0
-            | null) || null,
-      }),
-    {
-      select: data => data.data,
-    },
+    AxiosError
+  >(['history', 'historyFR'], () =>
+    getHistoryFR({
+      pageSize: 20,
+      page: 0,
+      searchDateFrom: formState.searchDateFrom,
+      searchDateTo: formState.searchDateTo,
+      resultCd:
+        ((+formState.resultCd === -1 ? null : formState.resultCd) as
+          | 1
+          | 0
+          | null) || null,
+    }),
   );
 
   const [formState, formDispatch] = useReducer(formReducer, initialState);
   useEffect(() => {
     if (!data) return;
-    dispatch(historyFRSlice.actions.updateHistoryFRState({ ...data }));
+    console.log(data);
+    dispatch(historyFRSlice.actions.updateHistoryFRState(data));
   }, [data]);
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     refetch();
   };
 
+  useEffect(() => {
+    console.log(formState);
+  }, [formState]);
   return (
     <div className="px-2 rounded shadow bg-white">
       <form onSubmit={onSubmit} className="flex py-2 px-4 items-center">
@@ -83,7 +104,7 @@ function Search() {
                 payload: event.currentTarget.value,
               })
             }
-            value={formState.searchDateFrom ?? undefined}
+            value={formState.searchDateFrom}
           />
         </div>
         <span className="mx-3 text-xl">~</span>
@@ -98,7 +119,7 @@ function Search() {
                 payload: event.currentTarget.value,
               })
             }
-            value={formState.searchDateTo ?? undefined}
+            value={formState.searchDateTo}
           />
         </div>
         <span className="ml-5 mr-3">인증결과</span>
@@ -113,7 +134,7 @@ function Search() {
           value={formState.resultCd ?? undefined}
           className="px-2 py-2 outline-0 text-sm  text-gray-900 bg-[#F9F9F9] rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value={-1} selected>
+          <option value={-1} defaultChecked>
             전체
           </option>
           <option value={1}>성공</option>
@@ -149,15 +170,3 @@ function Search() {
   );
 }
 export default Search;
-
-function DateInput() {
-  return (
-    <div className="relative">
-      <input
-        type="date"
-        className="block px-5 py-2 outline-0  text-sm text-gray-900 bg-[#F9F9F9] rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
-        required
-      />
-    </div>
-  );
-}

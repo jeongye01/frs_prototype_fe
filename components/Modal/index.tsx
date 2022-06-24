@@ -41,15 +41,17 @@ export default function ModalSection() {
       >
         <div className="absolute  w-full h-full z-999 bg-black bg-opacity-50" />
         <div className="relative  top-1/2 translate-x-1/2" ref={modalRef}>
-          {openList.map(({ name, props }: ModalComponentState) => {
-            const config = modalList.find(ele => {
-              return ele.name === name;
-            });
-            if (!config || !config.component) return null;
-            const ModalComponent = config.component;
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            return <ModalComponent {...props} />;
-          })}
+          <div className="w-1/4 -translate-x-1/2 -translate-y-1/2 bg-white text-center border p-10">
+            {openList.map(({ name, props }: ModalComponentState) => {
+              const config = modalList.find(ele => {
+                return ele.name === name;
+              });
+              if (!config || !config.component) return null;
+              const ModalComponent = config.component;
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              return <ModalComponent {...props} />;
+            })}
+          </div>
         </div>
       </div>
     </Suspense>

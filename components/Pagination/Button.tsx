@@ -9,7 +9,7 @@ function Arrow({ direction, arrColor }: ArrProps) {
   if (direction === 'left')
     return (
       <svg
-        className={`w-5 h-5 ${arrColor}`}
+        className={`w-7 h-7 ${arrColor}`}
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -25,7 +25,7 @@ function Arrow({ direction, arrColor }: ArrProps) {
     );
   return (
     <svg
-      className={`w-5 h-5 ${arrColor}`}
+      className={`w-7 h-7 ${arrColor}`}
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -95,13 +95,13 @@ export default function PaginationButton({
     <button
       type="button"
       onClick={onClick}
-      className={`flex flex-row grow-0 justify-center items-center rounded-[4px]  font-[600] text-[12px]  w-[20px] h-[20px] pc:text-[20px]  pc:w-[34px] pc:h-[34px] pc:rounded-[8px] ${getBgColor(
+      className={`flex flex-row grow-0 justify-center items-center rounded-[4px]  font-[600]   ${getBgColor(
         btnType,
         isActive,
       )}`}
     >
       <span
-        className={`glow-0  not-italic whitespace-nowrap ${getTextColor(
+        className={`glow-0 text-lg not-italic whitespace-nowrap ${getTextColor(
           'number',
           isActive,
         )}`}

@@ -25,7 +25,7 @@ const History: NextPage = () => {
   const { totalPages } = useAppSelector(state => state.historyFR);
   console.log(totalPages);
   return (
-    <div className=" px-4 flex flex-col   items-start  mt-12 bg-[#f5f7fc] ">
+    <div className=" px-4 flex flex-col  items-start  mt-12 bg-[#f5f7fc] ">
       <Search />
       <div className="mb-10" />
       <Table fields={fields} tbodyRows={<HistoryRows />} />

@@ -36,13 +36,13 @@ const values = [
 
 const Home: NextPage = () => {
   return (
-    <div className="px-32   justify-between my-12 bg-[#f5f7fc] ">
+    <div className="px-32 h-full  justify-between my-12 bg-[#f5f7fc] ">
       <div className="gap-12 h-[300px] mb-6  flex items-start">
-        <div className="w-2/5 h-full ">
-          <TodayTotalFRChart />
-        </div>
         <div className="w-3/5 h-full ">
           <HistoryDailyFRChart />
+        </div>
+        <div className="w-2/5 h-full ">
+          <TodayTotalFRChart />
         </div>
       </div>
       <Table

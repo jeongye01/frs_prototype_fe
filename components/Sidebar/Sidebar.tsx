@@ -64,7 +64,7 @@ export default function Sidebar() {
                     router.pathname === '/history' && 'bg-blue-800'
                   } hover:bg-blue-800`}
                 >
-                  이력조회
+                  얼굴인증 이력조회
                 </a>
               </Link>
             </li>

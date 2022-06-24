@@ -65,15 +65,17 @@ function HistoryDailyFRChart() {
     <>
       {data && (
         <ChartBoardLayout title="일별 얼굴인증현황" onRefreshClick={refetch}>
-          <TempChart
-            lineName="인증이력"
-            lineData={data.map(history => history.reqeustCnt)}
-            bar1Name="인증성공"
-            bar1Data={data.map(history => history.succesCnt)}
-            bar2Name="인증실패"
-            bar2Data={data.map(history => history.failrCnt)}
-            categories={data.map(history => history.statDe) || 0}
-          />
+          {!isFetching && (
+            <TempChart
+              lineName="인증이력"
+              lineData={data.map(history => history.reqeustCnt)}
+              bar1Name="인증성공"
+              bar1Data={data.map(history => history.succesCnt)}
+              bar2Name="인증실패"
+              bar2Data={data.map(history => history.failrCnt)}
+              categories={data.map(history => history.statDe) || 0}
+            />
+          )}
         </ChartBoardLayout>
       )}
     </>

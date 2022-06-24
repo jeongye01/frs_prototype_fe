@@ -2,7 +2,9 @@ export default function Header() {
   const getDate = () => {
     const date = new Date();
 
-    return `${date.getFullYear()}년 ${date.getMonth()}월 ${date.getDate()}일`;
+    return `${date.getFullYear()}년 ${
+      date.getMonth() + 1
+    }월 ${date.getDate()}일`;
   };
   return (
     <header className="w-full flex items-center justify-between px-5 h-16 shadow bg-white">

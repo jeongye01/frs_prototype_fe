@@ -9,7 +9,7 @@ export interface HistoryFRListQuery {
 }
 
 export interface HistoryFRResponse {
-  data: { content: HistoryFRType[] };
+  data: { content: HistoryFRType[]; totalPages: string };
 }
 
 // 얼굴인증이력조회(1:N)

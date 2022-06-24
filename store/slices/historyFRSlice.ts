@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HistoryFRListQuery } from 'api/history';
+import { HistoryFRListQuery, HistoryFRResponse } from 'api/history';
 import { HistoryFRType } from 'typeDefs/HistoryFR';
 
 export interface InitialState {
   data: HistoryFRType[];
+  totalPages: number;
 }
 const initialState: InitialState = {
   data: [] as HistoryFRType[],
+  totalPages: 1,
 };
 
 export const historyFRSlice = createSlice({
@@ -17,9 +19,10 @@ export const historyFRSlice = createSlice({
     loadHistoryFRData: (state, action: PayloadAction<HistoryFRListQuery>) => {},
     updateHistoryFRState: (
       state,
-      { payload }: PayloadAction<HistoryFRType[]>,
+      { payload }: PayloadAction<HistoryFRResponse>,
     ) => {
-      state.data = Object.values(payload).reverse();
+      state.data = payload.data.content;
+      state.totalPages = +payload.data.totalPages;
     },
   },
 });

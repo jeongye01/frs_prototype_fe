@@ -53,14 +53,14 @@ const Home: NextPage = () => {
     ['history', 'historyFR'],
     () =>
       getHistoryFR({
-        countPerPage: 20,
-        page: 1,
+        pageSize: 20,
+        page: 0,
         searchDateFrom: getDefaultDateFrom(),
         searchDateTo: getDefaultDateTo(),
         resultCd: null,
       }),
     {
-      select: data => data.data,
+      select: data => data.data.content,
     },
   );
   console.log(data);
@@ -99,22 +99,13 @@ function HistoryRows({ data }: Props) {
           key={history.faceId}
           className="border-b   odd:bg-white even:bg-[#F9F9F9]"
         >
-          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
-            {history.sn}
-          </td>
-          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
-            {history.requestDt}
-          </td>
           {Object.values(history)
-            .slice(2, 10)
+            .slice(0, -2)
             .map(value => (
               <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
                 {value}
               </td>
             ))}
-          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
-            {history.mainUuid}
-          </td>
         </tr>
       ))}
     </>

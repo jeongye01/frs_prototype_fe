@@ -60,32 +60,26 @@ function Search() {
   const dispatch = useAppDispatch();
   const { data, isLoading, isFetching, refetch } = useQuery<
     HistoryFRResponse,
-    AxiosError,
-    HistoryFRType[]
-  >(
-    ['history', 'historyFR'],
-    () =>
-      getHistoryFR({
-        pageSize: 20,
-        page: 0,
-        searchDateFrom: formState.searchDateFrom,
-        searchDateTo: formState.searchDateTo,
-        resultCd:
-          ((+formState.resultCd === -1 ? null : formState.resultCd) as
-            | 1
-            | 0
-            | null) || null,
-      }),
-    {
-      select: data => data.data.content,
-    },
+    AxiosError
+  >(['history', 'historyFR'], () =>
+    getHistoryFR({
+      pageSize: 20,
+      page: 0,
+      searchDateFrom: formState.searchDateFrom,
+      searchDateTo: formState.searchDateTo,
+      resultCd:
+        ((+formState.resultCd === -1 ? null : formState.resultCd) as
+          | 1
+          | 0
+          | null) || null,
+    }),
   );
 
   const [formState, formDispatch] = useReducer(formReducer, initialState);
   useEffect(() => {
     if (!data) return;
     console.log(data);
-    dispatch(historyFRSlice.actions.updateHistoryFRState({ ...data }));
+    dispatch(historyFRSlice.actions.updateHistoryFRState(data));
   }, [data]);
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -140,7 +134,7 @@ function Search() {
           value={formState.resultCd ?? undefined}
           className="px-2 py-2 outline-0 text-sm  text-gray-900 bg-[#F9F9F9] rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value={-1} selected>
+          <option value={-1} defaultChecked>
             전체
           </option>
           <option value={1}>성공</option>

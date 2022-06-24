@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-
 import { useAppSelector } from 'hooks/redux';
 import Table from 'components/Table';
 import Search from 'components/Search';
@@ -23,6 +22,8 @@ const fields = [
 
 const History: NextPage = () => {
   const [curPage, setCurPage] = useState<number>(1);
+  const { totalPages } = useAppSelector(state => state.historyFR);
+  console.log(totalPages);
   return (
     <div className=" px-4 flex flex-col   items-start  mt-12 bg-[#f5f7fc] ">
       <Search />
@@ -30,8 +31,8 @@ const History: NextPage = () => {
       <Table fields={fields} tbodyRows={<HistoryRows />} />
       <div className="mb-10" />
       <Pagination
-        numOfPages={3}
-        numOfPageBtn={3}
+        numOfPages={totalPages}
+        numOfPageBtn={4}
         curPage={curPage}
         setCurPage={setCurPage}
       />
@@ -42,13 +43,16 @@ const History: NextPage = () => {
 export default History;
 
 function HistoryRows() {
-  const { data: historyFRData } = useAppSelector(state => state.historyFR);
+  const { data: historyFRData, totalPages } = useAppSelector(
+    state => state.historyFR,
+  );
   const [openFRImageModal] = useModal();
+  console.log(historyFRData, totalPages);
   return (
     <>
       {historyFRData.map((history, i) => (
         <tr
-          key={history.faceId}
+          key={`${history.faceId}-${history.sn}`}
           className="border-b   odd:bg-white even:bg-[#F9F9F9]"
         >
           {Object.values(history)

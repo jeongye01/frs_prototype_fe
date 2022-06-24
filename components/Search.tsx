@@ -66,8 +66,8 @@ function Search() {
     ['history', 'historyFR'],
     () =>
       getHistoryFR({
-        countPerPage: 20,
-        page: 1,
+        pageSize: 20,
+        page: 0,
         searchDateFrom: formState.searchDateFrom,
         searchDateTo: formState.searchDateTo,
         resultCd:
@@ -77,13 +77,14 @@ function Search() {
             | null) || null,
       }),
     {
-      select: data => data.data,
+      select: data => data.data.content,
     },
   );
 
   const [formState, formDispatch] = useReducer(formReducer, initialState);
   useEffect(() => {
     if (!data) return;
+    console.log(data);
     dispatch(historyFRSlice.actions.updateHistoryFRState({ ...data }));
   }, [data]);
   const onSubmit = (e: React.SyntheticEvent) => {

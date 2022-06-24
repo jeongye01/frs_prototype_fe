@@ -11,16 +11,14 @@ import { useState } from 'react';
 
 const fields = [
   '순번',
-  '인증 요청일시',
+  '인증 요청일',
   '얼굴 ID',
-  '단말 ID',
-  '단말 번호',
   '매칭 점수',
-  '그룹코드',
   '기준 점수',
   '인증결과-코드',
-  '인증결과-명',
-  '메인 uuid',
+  '단말 번호',
+  '단말 이름',
+  '그룹 코드',
 ];
 
 const History: NextPage = () => {
@@ -53,31 +51,13 @@ function HistoryRows() {
           key={history.faceId}
           className="border-b   odd:bg-white even:bg-[#F9F9F9]"
         >
-          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
-            {history.sn}
-          </td>
-          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
-            <Link href={`/history?sn=${history.sn}`} as={`/history`}>
-              <button
-                onClick={() =>
-                  openFRImageModal({ name: modalName.FRImageModal })
-                }
-                className="text-blue-400"
-              >
-                {history.requestDt}
-              </button>
-            </Link>
-          </td>
           {Object.values(history)
-            .slice(2, 10)
+            .slice(0, -2)
             .map(value => (
               <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
                 {value}
               </td>
             ))}
-          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
-            {history.mainUuid}
-          </td>
         </tr>
       ))}
     </>

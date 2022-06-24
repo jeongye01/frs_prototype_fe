@@ -28,3 +28,21 @@ export const getHistoryFR = ({
     )
     .then(response => response.data);
 };
+
+interface HistoryFRImageQuery {
+  sn: number;
+}
+//얼굴인증이력(1:N) 이미지1 (base64 byte)
+export const getHistoryFRImage1 = ({ sn }: HistoryFRImageQuery) => {
+  return client.get(`/history/identification/${sn}/image1`).then(response => {
+    console.log(response);
+    return response.data;
+  });
+};
+
+//얼굴인증이력(1:N) 이미지2 (base64 byte)
+export const getHistoryFRImage2 = ({ sn }: HistoryFRImageQuery) => {
+  return client
+    .get(`/history/identification/${sn}/image2`)
+    .then(response => response.data);
+};

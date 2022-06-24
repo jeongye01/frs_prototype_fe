@@ -94,7 +94,7 @@ function UserRows() {
             </button>
           </td>
           <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
-            <Link href={`/users/?user=${user.esntlId}`} as={`/users`}>
+            <Link href={`/users?user=${user.esntlId}`} as={`/users`}>
               <button
                 onClick={() => {
                   openUserEditModal({

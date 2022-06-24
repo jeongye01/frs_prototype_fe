@@ -3,6 +3,7 @@ import { ModalIndex } from 'typeDefs/Modal';
 export const modalName = {
   UserAddModal: 'UserAddModal',
   UserEditModal: 'UserEditModal',
+  FRImageModal: 'FRImageModal',
 };
 
 const modalList: ModalIndex[] = [
@@ -13,6 +14,10 @@ const modalList: ModalIndex[] = [
   {
     name: modalName.UserEditModal,
     component: lazy(() => import('components/Modal/User/UserEditModal')),
+  },
+  {
+    name: modalName.FRImageModal,
+    component: lazy(() => import('components/Modal/FRImageModal')),
   },
 ];
 

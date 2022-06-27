@@ -1,5 +1,6 @@
 import client from './client';
 import { UserType } from 'typeDefs/User';
+import { AuthorType } from 'typeDefs/Author';
 
 export interface LoadUsersResponse {
   data: {
@@ -41,4 +42,14 @@ export interface EditUserParamNQuery {
 
 export const putUser = ({ esntlId, authorCd, userNm }: EditUserParamNQuery) => {
   return client.post(`/user/${esntlId}?authorCd=${authorCd}&userNm=${userNm}`);
+};
+
+export interface GetAuthorsResponse {
+  data: {
+    content: AuthorType[];
+  };
+}
+// 권한 목록
+export const getAuthors = () => {
+  return client.get(`/author`).then(response => response.data);
 };

@@ -1,13 +1,18 @@
 import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
-import React, { ChangeEvent, useEffect, useReducer } from 'react';
+import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
 
 import useGetActionState from 'hooks/useGetActionState';
 import userSlice from 'store/slices/userSlice';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
-import { GetAuthorsResponse, getAuthors } from 'api/user';
+import {
+  GetAuthorsResponse,
+  getAuthors,
+  CheckDuplicatedResponse,
+  checkDuplicated,
+} from 'api/user';
 import { AuthorType } from 'typeDefs/Author';
 
 export interface IForm {
@@ -39,18 +44,24 @@ export default function UserAddModal() {
   const [loading, result, initResult] = useGetActionState(
     userSlice.actions.createUser.type,
   );
+  const [userIdOk, setUserIdOk] = useState<string | null>(null);
+  const { data: authors } = useQuery<
+    GetAuthorsResponse,
+    AxiosError,
+    AuthorType[]
+  >(['users', 'authors'], getAuthors, { select: data => data.data.content });
+
   const {
-    data: authors,
-    isFetching,
-    refetch,
-  } = useQuery<GetAuthorsResponse, AxiosError, AuthorType[]>(
-    ['users', 'authors'],
-    getAuthors,
-    { select: data => data.data.content },
+    data: checkDuplicatedResult,
+    refetch: checkIdValidation,
+    isLoading: checkDupLoading,
+    isFetching: checkDupFetching,
+  } = useQuery<CheckDuplicatedResponse, AxiosError>(
+    ['users', 'checkDuplicated'],
+    () => checkDuplicated({ userId: formState.userId }),
+    { enabled: false },
   );
-  useEffect(() => {
-    console.log(authors);
-  }, [authors]);
+
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (loading) return;
@@ -69,19 +80,36 @@ export default function UserAddModal() {
     );
   };
   useEffect(() => {
+    if (checkDupFetching) return;
+    if (!checkDuplicatedResult) return;
+    setUserIdOk(checkDuplicatedResult?.resultCode);
+  }, [checkDuplicatedResult, checkDupLoading, checkDupFetching]);
+  useEffect(() => {
     if (result?.isSuccess) {
       closeUserAddModal({ name: modalName.UserAddModal });
       alert('사용자 등록 완료');
     }
     initResult();
   }, [result]);
+  useEffect(() => {
+    setUserIdOk(null);
+    return () => setUserIdOk(null);
+  }, []);
   return (
     <form onSubmit={onSubmit} className=" space-y-4">
       <div className="flex">
         <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
           권한 코드
         </span>
-        <select className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 ">
+        <select
+          onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+            formDispatch({
+              type: 'authorCd',
+              payload: event.currentTarget.value,
+            })
+          }
+          className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 "
+        >
           {authors?.map(author => (
             <option
               key={author.authorCd}
@@ -109,7 +137,24 @@ export default function UserAddModal() {
             })
           }
         />
+        <button
+          type="button"
+          onClick={() => checkIdValidation()}
+          className="text-sm text-white bg-blue-500 rounded-lg ml-2 px-2"
+        >
+          중복확인
+        </button>
       </div>
+      {userIdOk === 'ok' && (
+        <span className="text-sm text-green-500">
+          사용가능한 아이디 입니다.
+        </span>
+      )}
+      {userIdOk !== 'ok' && userIdOk !== null && (
+        <span className="text-sm text-red-500">
+          사용할 수 없는 아이디 입니다.
+        </span>
+      )}
       <div className="flex">
         <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
           이름

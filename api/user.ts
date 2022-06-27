@@ -44,6 +44,18 @@ export const putUser = ({ esntlId, authorCd, userNm }: EditUserParamNQuery) => {
   return client.post(`/user/${esntlId}?authorCd=${authorCd}&userNm=${userNm}`);
 };
 
+interface CheckDuplicatedParam {
+  userId: string;
+}
+export interface CheckDuplicatedResponse {
+  resultCode: string;
+}
+export const checkDuplicated = ({ userId }: CheckDuplicatedParam) => {
+  return client
+    .get(`/user/duplicate/${userId}`)
+    .then(response => response.data);
+};
+
 export interface GetAuthorsResponse {
   data: {
     content: AuthorType[];

@@ -11,6 +11,7 @@ import { AxiosError } from 'axios';
 import { HistoryFRType } from 'typeDefs/HistoryFR';
 import { useQuery } from 'react-query';
 import { getHistoryFR, HistoryFRResponse } from 'api/history';
+import { leadingZeros } from 'utils/leadingZeros';
 
 export interface IForm {
   pageSize: number | null;
@@ -28,15 +29,7 @@ export interface Action {
     | 'resultCd';
   payload: string | number | null;
 }
-const leadingZeros = (n: number, digits: number) => {
-  let zero = '';
-  const nToString = n.toString();
 
-  if (nToString.length < digits) {
-    for (let i = 0; i < digits - nToString.length; i++) zero += '0';
-  }
-  return zero + n;
-};
 const getDefaultDateFrom = () => {
   const date = new Date();
 

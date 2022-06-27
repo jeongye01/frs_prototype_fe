@@ -9,7 +9,7 @@ function Arrow({ direction, arrColor }: ArrProps) {
   if (direction === 'left')
     return (
       <svg
-        className={`w-7 h-7 ${arrColor}`}
+        className={`w-5 h-5 ${arrColor}`}
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -25,7 +25,7 @@ function Arrow({ direction, arrColor }: ArrProps) {
     );
   return (
     <svg
-      className={`w-7 h-7 ${arrColor}`}
+      className={`w-5 h-5 ${arrColor}`}
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -42,15 +42,15 @@ function Arrow({ direction, arrColor }: ArrProps) {
 }
 
 enum BgColor {
-  orange = 'bg-primaryOrange-200',
-  white = 'bg-primaryWhite',
-  gray100 = 'bg-[#e6e6e6]',
+  blue = 'bg-blue-400',
+  none = '',
+  gray300 = 'bg-gray-300',
 }
 
 enum TextColor {
-  gray200 = 'text-[#898989]',
-  black = 'text-primaryBlack-500',
-  white = 'text-primaryWhite',
+  gray500 = 'text-gray-500',
+  black = 'text-black',
+  white = 'text-white',
 }
 
 type ButtonTypes = 'number' | 'arrow';
@@ -63,7 +63,7 @@ export interface Props {
   onClick: () => void;
 }
 
-export default function PaginationButton({
+function PaginationButton({
   btnType,
   isActive,
   number,
@@ -73,10 +73,10 @@ export default function PaginationButton({
   const getBgColor = useCallback(
     (type: ButtonTypes, active: boolean): BgColor => {
       if (type === 'number') {
-        if (active) return BgColor.orange;
-        return BgColor.white;
+        if (active) return BgColor.blue;
+        return BgColor.none;
       }
-      return BgColor.gray100;
+      return BgColor.gray300;
     },
     [],
   );
@@ -87,7 +87,7 @@ export default function PaginationButton({
         return TextColor.black;
       }
       if (active) return TextColor.black;
-      return TextColor.gray200;
+      return TextColor.gray500;
     },
     [],
   );
@@ -95,13 +95,13 @@ export default function PaginationButton({
     <button
       type="button"
       onClick={onClick}
-      className={`flex flex-row grow-0 justify-center items-center rounded-[4px]  font-[600]   ${getBgColor(
+      className={`flex flex-row grow-0 justify-center items-center   font-[600]  text-[20px]  w-[34px] h-[34px] rounded-[8px] ${getBgColor(
         btnType,
         isActive,
       )}`}
     >
       <span
-        className={`glow-0 text-lg not-italic whitespace-nowrap ${getTextColor(
+        className={`glow-0  not-italic whitespace-nowrap ${getTextColor(
           'number',
           isActive,
         )}`}
@@ -118,3 +118,5 @@ export default function PaginationButton({
     </button>
   );
 }
+
+export default React.memo(PaginationButton);

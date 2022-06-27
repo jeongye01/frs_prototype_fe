@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { LoadUsersResponse } from 'api/user';
 import { UserType } from 'typeDefs/User';
 
 export interface InitialState {
   data: UserType[];
+  totalPages: number;
 }
 const initialState: InitialState = {
   data: [] as UserType[],
+  totalPages: 1,
 };
 
 export const userListSlice = createSlice({
@@ -14,8 +17,11 @@ export const userListSlice = createSlice({
   initialState,
   reducers: {
     loadUserListData: (state, action: PayloadAction) => {},
-    updateUserListState: (state, { payload }: PayloadAction<UserType[]>) => {
-      state.data = Object.values(payload).map(row => {
+    updateUserListState: (
+      state,
+      { payload }: PayloadAction<LoadUsersResponse>,
+    ) => {
+      state.data = Object.values(payload.data.content).map(row => {
         const {
           esntlId,
           esntl_id,
@@ -43,6 +49,8 @@ export const userListSlice = createSlice({
           useYn,
         };
       });
+      console.log(+payload.data.totalPages);
+      state.totalPages = +payload.data.totalPages;
     },
   },
 });

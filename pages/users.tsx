@@ -3,15 +3,15 @@ import { useEffect, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import Table from 'components/Table';
-import Search from 'components/Search';
-import useGetActionState from 'hooks/useGetActionState';
 import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
-import User from 'components/User';
 import userListSlice from 'store/slices/userListSlice';
 import { BaseTbodyRowStyle } from 'components/Table';
 import Link from 'next/link';
 import { useQuery, QueryCache } from 'react-query';
+import Pagination from 'components/Pagination';
+import { LoadUsersResponse, getUserList } from 'api/user';
+import { AxiosError } from 'axios';
 
 const fields = [
   '순번',
@@ -30,15 +30,26 @@ const fields = [
 
 const Users: NextPage = () => {
   const [openUserAddModal] = useModal();
-  const [loading, result, initResult] = useGetActionState(
-    userListSlice.actions.loadUserListData.type,
-  );
+  const [curPage, setCurPage] = useState<number>(1);
+  const { totalPages } = useAppSelector(state => state.userList);
   const dispatch = useAppDispatch();
-  const { data: userList } = useAppSelector(store => store.userList);
+  const { data, isLoading, isFetching, refetch } = useQuery<
+    LoadUsersResponse,
+    AxiosError
+  >(['users'], () =>
+    getUserList({
+      page: curPage - 1,
+    }),
+  );
   useEffect(() => {
-    if (loading) return;
-    dispatch(userListSlice.actions.loadUserListData());
-  }, [dispatch]);
+    if (!data) return;
+    console.log(isFetching);
+    console.log(data, totalPages);
+    dispatch(userListSlice.actions.updateUserListState(data));
+  }, [data]);
+  useEffect(() => {
+    refetch();
+  }, [curPage]);
 
   return (
     <div className=" px-4 flex flex-col   items-start  mt-12 bg-[#f5f7fc] ">
@@ -50,6 +61,13 @@ const Users: NextPage = () => {
       </button>
       <div className="mb-5" />
       <Table fields={fields} tbodyRows={<UserRows />} />
+      <div className="mb-8" />
+      <Pagination
+        numOfPages={totalPages}
+        numOfPageBtn={4}
+        curPage={curPage}
+        setCurPage={setCurPage}
+      />
     </div>
   );
 };
@@ -69,7 +87,7 @@ function UserRows() {
     <>
       {userList.map((user, i) => (
         <tr
-          key={user.esntlId}
+          key={`${user.userId}`}
           className="border-b   odd:bg-white even:bg-[#F9F9F9]"
         >
           {Object.values(user)

@@ -4,12 +4,19 @@ import { UserType } from 'typeDefs/User';
 export interface LoadUsersResponse {
   data: {
     content: UserType[];
+    totalPages: number;
   };
 }
 
+export interface LoadUsersParam {
+  page: number;
+}
+
 // 관리자 목록 로드
-export const getUserList = () => {
-  return client.get('/user?page=0&pageSize=40');
+export const getUserList = ({ page }: LoadUsersParam) => {
+  return client
+    .get(`/user?page=${page}&pageSize=20`)
+    .then(response => response.data);
 };
 
 export interface CreateUserQuery {

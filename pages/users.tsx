@@ -3,8 +3,6 @@ import { useEffect, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import Table from 'components/Table';
-import Search from 'components/Search';
-import useGetActionState from 'hooks/useGetActionState';
 import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
 import userListSlice from 'store/slices/userListSlice';

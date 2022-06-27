@@ -1,4 +1,10 @@
-import React, { ChangeEvent, useEffect, useReducer } from 'react';
+import React, {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useReducer,
+} from 'react';
 import historyFRSlice from 'store/slices/historyFRSlice';
 import { useAppDispatch } from 'hooks/redux';
 import { AxiosError } from 'axios';
@@ -55,8 +61,12 @@ const initialState: IForm = {
 function formReducer(state: IForm, action: Action) {
   return { ...state, [action.type]: action.payload };
 }
+interface Props {
+  curPage: number;
+  setCurPage: Dispatch<SetStateAction<number>>;
+}
 
-function Search() {
+function Search({ curPage, setCurPage }: Props) {
   const dispatch = useAppDispatch();
   const { data, isLoading, isFetching, refetch } = useQuery<
     HistoryFRResponse,
@@ -64,7 +74,7 @@ function Search() {
   >(['history', 'historyFR'], () =>
     getHistoryFR({
       pageSize: 20,
-      page: 0,
+      page: curPage - 1,
       searchDateFrom: formState.searchDateFrom,
       searchDateTo: formState.searchDateTo,
       resultCd:

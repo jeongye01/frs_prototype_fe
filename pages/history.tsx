@@ -6,7 +6,7 @@ import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
 import Link from 'next/link';
 import Pagination from 'components/Pagination';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const fields = [
   '순번',
@@ -23,13 +23,13 @@ const fields = [
 const History: NextPage = () => {
   const [curPage, setCurPage] = useState<number>(1);
   const { totalPages } = useAppSelector(state => state.historyFR);
-  console.log(totalPages);
+
   return (
     <div className=" px-4 flex flex-col  items-start  mt-12 bg-[#f5f7fc] ">
-      <Search />
+      <Search curPage={curPage} setCurPage={setCurPage} />
       <div className="mb-10" />
       <Table fields={fields} tbodyRows={<HistoryRows />} />
-      <div className="mb-10" />
+      <div className="mb-8" />
       <Pagination
         numOfPages={totalPages}
         numOfPageBtn={4}
@@ -55,8 +55,22 @@ function HistoryRows() {
           key={`${history.faceId}-${history.sn}`}
           className="border-b   odd:bg-white even:bg-[#F9F9F9]"
         >
+          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
+            {history.sn}
+          </td>
+          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
+            <Link href={`/history?sn=${history.sn}`} as={`/history`}>
+              <button
+                onClick={() =>
+                  openFRImageModal({ name: modalName.FRImageModal })
+                }
+              >
+                {history.requestDt}
+              </button>
+            </Link>
+          </td>
           {Object.values(history)
-            .slice(0, -2)
+            .slice(2, -2)
             .map(value => (
               <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
                 {value}

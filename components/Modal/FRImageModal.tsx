@@ -15,6 +15,6 @@ export default function UserAddModal() {
     ['history', 'FRImage1'],
     () => getHistoryFRImage1({ sn: +(router.query?.sn || 0) }),
   );
-
+  console.log(data);
   return <div>사진 {router.query?.sn}</div>;
 }

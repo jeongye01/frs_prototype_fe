@@ -74,3 +74,13 @@ export interface PostUseYnParam {
 export const postUseYn = ({ esntlId, useYn }: PostUseYnParam) => {
   return client.post(`/user/${esntlId}/useYn?useYn=${useYn}`);
 };
+
+//비밀번호 초기화
+
+export interface PostInitPwParam {
+  esntlId: string;
+}
+
+export const postInitPw = ({ esntlId }: PostInitPwParam) => {
+  return client.post(`/user/resetUserPw/${esntlId}`);
+};

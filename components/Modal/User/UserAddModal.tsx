@@ -40,13 +40,24 @@ export default function UserAddModal() {
   const [formState, formDispatch] = useReducer(formReducer, initialState);
 
   const [userIdOk, setUserIdOk] = useState<string | null>(null);
-  const { isSuccess, isLoading, mutate } = useMutation(() =>
-    postUser({
-      authorCd: formState.authorCd,
-      userId: formState.userId,
-      userNm: formState.userNm,
-      userPw: formState.userPw,
-    }),
+  const { isLoading, mutate } = useMutation(
+    () =>
+      postUser({
+        authorCd: formState.authorCd,
+        userId: formState.userId,
+        userNm: formState.userNm,
+        userPw: formState.userPw,
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['users']);
+        closeUserAddModal({ name: modalName.UserAddModal });
+        alert('사용자 등록 완료');
+      },
+      onError: () => {
+        alert('사용자 등록 실패');
+      },
+    },
   );
   const { data: authors } = useQuery<
     GetAuthorsResponse,
@@ -81,13 +92,7 @@ export default function UserAddModal() {
     if (!checkDuplicatedResult) return;
     setUserIdOk(checkDuplicatedResult?.resultCode);
   }, [checkDuplicatedResult, checkDupLoading, checkDupFetching]);
-  useEffect(() => {
-    //실패 경우 넣기
-    if (!isSuccess) return;
-    queryClient.invalidateQueries(['users']);
-    closeUserAddModal({ name: modalName.UserAddModal });
-    alert('사용자 등록 완료');
-  }, [isSuccess]);
+
   useEffect(() => {
     setUserIdOk(null);
     return () => setUserIdOk(null);

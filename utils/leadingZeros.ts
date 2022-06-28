@@ -5,5 +5,6 @@ export const leadingZeros = (n: number, digits: number) => {
   if (nToString.length < digits) {
     for (let i = 0; i < digits - nToString.length; i++) zero += '0';
   }
+
   return zero + n;
 };

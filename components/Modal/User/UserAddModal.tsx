@@ -1,17 +1,16 @@
 import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
 import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
-
-import useGetActionState from 'hooks/useGetActionState';
-import userSlice from 'store/slices/userSlice';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
+import { useAppDispatch } from 'hooks/redux';
 import { AxiosError } from 'axios';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
   GetAuthorsResponse,
   getAuthors,
   CheckDuplicatedResponse,
   checkDuplicated,
+  CreateUserQuery,
+  postUser,
 } from 'api/user';
 import { AuthorType } from 'typeDefs/Author';
 
@@ -38,13 +37,18 @@ function formReducer(state: IForm, action: Action) {
 
 export default function UserAddModal() {
   const [_, closeUserAddModal] = useModal();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
   const [formState, formDispatch] = useReducer(formReducer, initialState);
-  //  const { data: historyFRData } = useAppSelector(state => state.user);
-  const [loading, result, initResult] = useGetActionState(
-    userSlice.actions.createUser.type,
-  );
+
   const [userIdOk, setUserIdOk] = useState<string | null>(null);
+  const { isSuccess, isLoading, mutate } = useMutation(() =>
+    postUser({
+      authorCd: formState.authorCd,
+      userId: formState.userId,
+      userNm: formState.userNm,
+      userPw: formState.userPw,
+    }),
+  );
   const { data: authors } = useQuery<
     GetAuthorsResponse,
     AxiosError,
@@ -64,20 +68,14 @@ export default function UserAddModal() {
 
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (loading) return;
+    console.log(formState);
+    if (isLoading) return;
     const { authorCd, userId, userNm, userPw } = formState;
 
     if (!authorCd.trim() || !userId.trim() || !userNm.trim() || !userPw.trim())
       return;
 
-    dispatch(
-      userSlice.actions.createUser({
-        authorCd,
-        userId,
-        userNm,
-        userPw,
-      }),
-    );
+    mutate();
   };
   useEffect(() => {
     if (checkDupFetching) return;
@@ -85,12 +83,11 @@ export default function UserAddModal() {
     setUserIdOk(checkDuplicatedResult?.resultCode);
   }, [checkDuplicatedResult, checkDupLoading, checkDupFetching]);
   useEffect(() => {
-    if (result?.isSuccess) {
-      closeUserAddModal({ name: modalName.UserAddModal });
-      alert('사용자 등록 완료');
-    }
-    initResult();
-  }, [result]);
+    if (!isSuccess) return;
+    queryClient.invalidateQueries(['users']);
+    closeUserAddModal({ name: modalName.UserAddModal });
+    alert('사용자 등록 완료');
+  }, [isSuccess]);
   useEffect(() => {
     setUserIdOk(null);
     return () => setUserIdOk(null);
@@ -99,7 +96,7 @@ export default function UserAddModal() {
     <form onSubmit={onSubmit} className=" space-y-4">
       <div className="flex">
         <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
-          권한 코드
+          권한
         </span>
         <select
           onChange={(event: ChangeEvent<HTMLSelectElement>) =>
@@ -110,6 +107,7 @@ export default function UserAddModal() {
           }
           className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 "
         >
+          <option key="선택">선택</option>
           {authors?.map(author => (
             <option
               key={author.authorCd}

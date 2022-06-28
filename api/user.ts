@@ -16,7 +16,7 @@ export interface LoadUsersParam {
 // 관리자 목록 로드
 export const getUserList = ({ page }: LoadUsersParam) => {
   return client
-    .get(`/user?page=${page}&pageSize=20`)
+    .get(`/user?page=${page}&pageSize=15`)
     .then(response => response.data);
 };
 
@@ -26,12 +26,14 @@ export interface CreateUserQuery {
   userNm: string; //사용자 이름
   userPw: string;
 }
-
+//사용자 등록
 export const postUser = (query: CreateUserQuery) => {
   // http://172.16.107.111:6772/v1/user?authorCd=a&userId=a&userNm=a&userPw=a
-  return client.post(
-    `/user?authorCd=${query.authorCd}&userId=${query.userId}&userNm=${query.userNm}&userPw=${query.userPw}`,
-  );
+  return client
+    .post(
+      `/user?authorCd=${query.authorCd}&userId=${query.userId}&userNm=${query.userNm}&userPw=${query.userPw}`,
+    )
+    .then(response => response.data);
 };
 
 export interface EditUserParamNQuery {

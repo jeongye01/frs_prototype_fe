@@ -16,7 +16,6 @@ export const historyFRSlice = createSlice({
   name: 'HistoryFR',
   initialState,
   reducers: {
-    loadHistoryFRData: (state, action: PayloadAction<HistoryFRListQuery>) => {},
     updateHistoryFRState: (
       state,
       { payload }: PayloadAction<HistoryFRResponse>,

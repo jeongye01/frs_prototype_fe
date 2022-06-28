@@ -14,7 +14,6 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    createUser: (state, action: PayloadAction<CreateUserQuery>) => {},
     editUser: (state, action: PayloadAction<EditUserParamNQuery>) => {},
   },
 });

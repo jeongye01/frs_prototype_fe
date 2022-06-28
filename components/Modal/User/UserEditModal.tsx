@@ -4,9 +4,17 @@ import React, { ChangeEvent, useEffect, useReducer } from 'react';
 
 import useGetActionState from 'hooks/useGetActionState';
 import userSlice from 'store/slices/userSlice';
-import { useAppSelector, useAppDispatch } from 'hooks/redux';
-import Link from 'next/link';
+import { useAppDispatch } from 'hooks/redux';
+import {
+  putUser,
+  EditUserParamNQuery,
+  GetAuthorsResponse,
+  getAuthors,
+} from 'api/user';
 import { useRouter } from 'next/router';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { AxiosError } from 'axios';
+import { AuthorType } from 'typeDefs/Author';
 
 export interface IForm {
   authorCd: string; // 권한 코드
@@ -28,53 +36,75 @@ function formReducer(state: IForm, action: Action) {
 export default function UserEditModal() {
   const [_, closeUserEditModal] = useModal();
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
   const [formState, formDispatch] = useReducer(formReducer, initialState);
-  //  const { data: historyFRData } = useAppSelector(state => state.user);
-  const [loading, result, initResult] = useGetActionState(
-    userSlice.actions.editUser.type,
+
+  const { isSuccess, isLoading, mutate } = useMutation(() =>
+    putUser({
+      authorCd: formState.authorCd,
+      userNm: formState.userNm,
+      esntlId: router.query.esntlId as string,
+    }),
   );
+  const { data: authors } = useQuery<
+    GetAuthorsResponse,
+    AxiosError,
+    AuthorType[]
+  >(['users', 'authors'], getAuthors, { select: data => data.data.content });
+
   const router = useRouter();
   //,
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (loading) return;
+    if (isLoading) return;
     const { authorCd, userNm } = formState;
 
     if (!authorCd.trim() || !userNm.trim()) return;
-    if (!router.query.user) return;
-    dispatch(
-      userSlice.actions.editUser({
-        esntlId: router.query.user as string,
-        authorCd,
-        userNm,
-      }),
-    );
+    if (!router.query.esntlId) return;
+    mutate();
   };
 
   useEffect(() => {
-    if (result?.isSuccess) {
-      closeUserEditModal({ name: modalName.UserEditModal });
-      alert('사용자 정보 변경 완료');
-    }
-    initResult();
-  }, [result]);
+    //실패 경우 넣기
+    if (!isSuccess) return;
+    queryClient.invalidateQueries(['users']);
+    closeUserEditModal({ name: modalName.UserEditModal });
+    alert('사용자 정보 변경 완료');
+  }, [isSuccess]);
   return (
     <form onSubmit={onSubmit} className=" space-y-4">
       <div className="flex">
         <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
-          권한 코드
+          아이디
         </span>
-        <input
-          type="text"
-          className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  "
-          value={formState.authorCd}
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+        <div className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  ">
+          {router.query.userId}
+        </div>
+      </div>
+      <div className="flex">
+        <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
+          권한
+        </span>
+        <select
+          onChange={(event: ChangeEvent<HTMLSelectElement>) =>
             formDispatch({
               type: 'authorCd',
               payload: event.currentTarget.value,
             })
           }
-        />
+          className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 "
+        >
+          <option key="선택">선택</option>
+          {authors?.map(author => (
+            <option
+              key={author.authorCd}
+              value={author.authorCd}
+              selected={formState.authorCd === author.authorCd}
+            >
+              {author.authorNm}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="flex">

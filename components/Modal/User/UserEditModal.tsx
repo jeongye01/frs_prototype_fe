@@ -39,7 +39,7 @@ export default function UserEditModal() {
   const queryClient = useQueryClient();
   const [formState, formDispatch] = useReducer(formReducer, initialState);
 
-  const { isSuccess, isLoading, mutate } = useMutation(() =>
+  const { isSuccess, isError, isLoading, mutate } = useMutation(() =>
     putUser({
       authorCd: formState.authorCd,
       userNm: formState.userNm,

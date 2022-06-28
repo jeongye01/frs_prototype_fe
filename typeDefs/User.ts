@@ -10,5 +10,5 @@ export interface UserType {
   lastConectDt: string; //마지막 접속 일시
   registDt: string; // 등록일자
   roles: string; //권한
-  useYn: string; //사용여부
+  useYn: 'Y' | 'N'; //사용여부
 }

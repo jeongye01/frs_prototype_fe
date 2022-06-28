@@ -16,7 +16,6 @@ export const userListSlice = createSlice({
   name: 'userList',
   initialState,
   reducers: {
-    loadUserListData: (state, action: PayloadAction) => {},
     updateUserListState: (
       state,
       { payload }: PayloadAction<LoadUsersResponse>,

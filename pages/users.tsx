@@ -8,10 +8,16 @@ import { modalName } from 'utils/importModal';
 import userListSlice from 'store/slices/userListSlice';
 import { BaseTbodyRowStyle } from 'components/Table';
 import Link from 'next/link';
-import { useQuery, QueryCache } from 'react-query';
+import { useQuery, QueryCache, useQueryClient, useMutation } from 'react-query';
 import Pagination from 'components/Pagination';
-import { LoadUsersResponse, getUserList } from 'api/user';
+import {
+  LoadUsersResponse,
+  getUserList,
+  postUseYn,
+  PostUseYnParam,
+} from 'api/user';
 import { AxiosError } from 'axios';
+import { UserType } from 'typeDefs/User';
 
 const fields = [
   '순번',
@@ -76,13 +82,44 @@ export default Users;
 
 function UserRows() {
   const [isUsed, setIsUsed] = useState(true);
-  const { data: userList } = useAppSelector(store => store.userList);
+  const queryClient = useQueryClient();
+  const { data: userList, totalPages } = useAppSelector(
+    store => store.userList,
+  );
   const [openUserEditModal] = useModal();
-  const onUseButtonClick = () => {
+  const onUseYnClick = () => {
     setIsUsed(prev => !prev);
   };
+  const { isSuccess, isLoading, mutate } = useMutation(postUseYn, {
+    onSettled: async (_: any, __: any, params: PostUseYnParam) => {
+      queryClient.invalidateQueries(['users']);
+      const newList = userList.map(user => {
+        if (user.esntlId === params.esntlId)
+          return { ...user, useYn: params.useYn };
+        return user;
+      });
+      const newUser = userList.filter(user => user.esntlId === params.esntlId);
 
-  const router = useRouter();
+      await queryClient.cancelQueries(['users']);
+      alert('저장되었습니다.');
+      queryClient.setQueryData(['users'], {
+        data: { content: newList, totalPages },
+      });
+    },
+    onMutate: async (params: PostUseYnParam) => {
+      console.log(
+        'mutate!',
+        userList,
+        params,
+        userList.map(user => {
+          if (user.esntlId === params.esntlId)
+            return { ...user, useYn: params.useYn };
+          return user;
+        }),
+      );
+    },
+  });
+
   return (
     <>
       {userList.map((user, i) => (
@@ -107,8 +144,24 @@ function UserRows() {
             {user?.registDt?.replace('T', ' ').replace(/\..*/, '').slice(0, -3)}
           </td>
           <td className="text-center  text-sm  border border-[#f2f2f2] py-[5px]">
-            <button className="bg-blue-500 text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2">
-              {user?.useYn ? '사용중' : '사용안함'}
+            <button
+              onClick={() => {
+                let result = confirm(
+                  `${
+                    user.useYn === 'Y' ? '사용안함' : '사용함'
+                  }으로 변경하시겠습니까? `,
+                );
+                if (result)
+                  mutate({
+                    esntlId: user.esntlId,
+                    useYn: user.useYn === 'Y' ? 'N' : 'Y',
+                  });
+              }}
+              className={`${
+                user?.useYn === 'Y' ? 'bg-blue-500' : 'bg-gray-500'
+              } text-xs text-white py-1 px-3 rounded absolute -translate-x-1/2 -translate-y-1/2`}
+            >
+              {user?.useYn === 'Y' ? '사용중' : '사용안함'}
             </button>
           </td>
           <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
@@ -138,3 +191,8 @@ function UserRows() {
     </>
   );
 }
+
+interface TempProps {
+  user: UserType;
+}
+function UserRow() {}

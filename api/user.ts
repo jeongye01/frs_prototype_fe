@@ -65,3 +65,12 @@ export interface GetAuthorsResponse {
 export const getAuthors = () => {
   return client.get(`/author`).then(response => response.data);
 };
+
+export interface PostUseYnParam {
+  esntlId: string;
+  useYn: 'Y' | 'N';
+}
+
+export const postUseYn = ({ esntlId, useYn }: PostUseYnParam) => {
+  return client.post(`/user/${esntlId}/useYn?useYn=${useYn}`);
+};

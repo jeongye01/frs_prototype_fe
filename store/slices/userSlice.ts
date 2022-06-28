@@ -13,9 +13,7 @@ const initialState: InitialState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    editUser: (state, action: PayloadAction<EditUserParamNQuery>) => {},
-  },
+  reducers: {},
 });
 
 export default userSlice;

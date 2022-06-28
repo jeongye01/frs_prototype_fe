@@ -1,7 +1,6 @@
 import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
 import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
-import { useAppDispatch } from 'hooks/redux';
 import { AxiosError } from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
@@ -83,6 +82,7 @@ export default function UserAddModal() {
     setUserIdOk(checkDuplicatedResult?.resultCode);
   }, [checkDuplicatedResult, checkDupLoading, checkDupFetching]);
   useEffect(() => {
+    //실패 경우 넣기
     if (!isSuccess) return;
     queryClient.invalidateQueries(['users']);
     closeUserAddModal({ name: modalName.UserAddModal });

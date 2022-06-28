@@ -15,6 +15,8 @@ import {
   getUserList,
   postUseYn,
   PostUseYnParam,
+  postInitPw,
+  PostInitPwParam,
 } from 'api/user';
 import { AxiosError } from 'axios';
 import { UserType } from 'typeDefs/User';
@@ -81,16 +83,13 @@ const Users: NextPage = () => {
 export default Users;
 
 function UserRows() {
-  const [isUsed, setIsUsed] = useState(true);
   const queryClient = useQueryClient();
   const { data: userList, totalPages } = useAppSelector(
     store => store.userList,
   );
   const [openUserEditModal] = useModal();
-  const onUseYnClick = () => {
-    setIsUsed(prev => !prev);
-  };
-  const { isSuccess, isLoading, mutate } = useMutation(postUseYn, {
+
+  const { mutate: useYnMutate } = useMutation(postUseYn, {
     onSettled: async (_: any, __: any, params: PostUseYnParam) => {
       queryClient.invalidateQueries(['users']);
       const newList = userList.map(user => {
@@ -117,6 +116,14 @@ function UserRows() {
           return user;
         }),
       );
+    },
+  });
+
+  const { mutate: initPwMutate } = useMutation(postInitPw, {
+    onSuccess: () => {
+      console.log('success');
+      queryClient.invalidateQueries(['users']);
+      alert('초기화되었습니다');
     },
   });
 
@@ -152,7 +159,7 @@ function UserRows() {
                   }으로 변경하시겠습니까? `,
                 );
                 if (result)
-                  mutate({
+                  useYnMutate({
                     esntlId: user.esntlId,
                     useYn: user.useYn === 'Y' ? 'N' : 'Y',
                   });
@@ -182,7 +189,18 @@ function UserRows() {
             </Link>
           </td>
           <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
-            <button className="bg-green-700  text-xs text-white p-1 rounded absolute -translate-x-1/2 -translate-y-1/2">
+            <button
+              onClick={() => {
+                let result = confirm(
+                  '비밀 번호를 초기화 하시겠습니까? 초기화시 비밀번호는 아이디 + 1234!로 변경이 됩니다.',
+                );
+                if (result)
+                  initPwMutate({
+                    esntlId: user.esntlId,
+                  });
+              }}
+              className="bg-green-700  text-xs text-white p-1 rounded absolute -translate-x-1/2 -translate-y-1/2"
+            >
               초기화
             </button>
           </td>

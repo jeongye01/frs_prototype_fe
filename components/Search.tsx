@@ -11,7 +11,7 @@ import { AxiosError } from 'axios';
 import { HistoryFRType } from 'typeDefs/HistoryFR';
 import { useQuery } from 'react-query';
 import { getHistoryFR, HistoryFRResponse } from 'api/history';
-import { leadingZeros } from 'utils/leadingZeros';
+import { leadingZeros } from 'utils/dateFormat';
 
 export interface IForm {
   pageSize: number | null;
@@ -86,6 +86,9 @@ function Search({ curPage, setCurPage }: Props) {
   }, [data]);
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    dispatch(
+      historyFRSlice.actions.updateHistoryFRState({} as HistoryFRResponse),
+    );
     refetch();
   };
 

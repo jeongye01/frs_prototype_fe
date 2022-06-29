@@ -7,42 +7,22 @@ import { AxiosError } from 'axios';
 import { HistoryFRType } from 'typeDefs/HistoryFR';
 import { useQuery } from 'react-query';
 import { getHistoryFR, HistoryFRResponse } from 'api/history';
-
+import {
+  leadingZeros,
+  getDefaultDateFrom,
+  getDefaultDateTo,
+} from 'utils/dateFormat';
 const fields = [
   '순번',
-  '인증 요청일시',
+  '인증 요청일',
   '얼굴 ID',
-  '단말 ID',
-  '단말 번호',
   '매칭 점수',
-  '그룹코드',
   '기준 점수',
   '인증결과-코드',
-  '인증결과-명',
-  '메인 uuid',
+  '단말 번호',
+  '단말 이름',
+  '그룹 코드',
 ];
-const leadingZeros = (n: number, digits: number) => {
-  let zero = '';
-  const nToString = n.toString();
-
-  if (nToString.length < digits) {
-    for (let i = 0; i < digits - nToString.length; i++) zero += '0';
-  }
-  return zero + n;
-};
-const getDefaultDateFrom = () => {
-  const date = new Date();
-
-  return `${date.getFullYear()}-01-01`;
-};
-const getDefaultDateTo = () => {
-  const date = new Date();
-
-  return `${date.getFullYear()}-${leadingZeros(
-    date.getMonth() + 1,
-    2,
-  )}-${leadingZeros(date.getDate(), 2)}`;
-};
 
 const Home: NextPage = () => {
   const { data, isLoading, isFetching, refetch } = useQuery<

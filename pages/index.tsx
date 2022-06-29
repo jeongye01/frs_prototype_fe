@@ -49,7 +49,7 @@ const Home: NextPage = () => {
   }, [data]);
   return (
     <>
-      <div className="px-32 h-full  justify-between py-12 bg-[#f5f7fc] ">
+      <div className="px-32 h-full mt-20  justify-between mb-12 bg-[#f5f7fc] ">
         <div className="gap-12 h-[300px] mb-6  flex items-start">
           <div className="w-3/5 h-full ">
             <HistoryDailyFRChart />

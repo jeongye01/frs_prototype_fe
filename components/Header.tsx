@@ -7,7 +7,7 @@ export default function Header() {
     }월 ${date.getDate()}일`;
   };
   return (
-    <header className="w-full flex items-center justify-between px-5 h-16 shadow bg-white">
+    <header className="fixed z-50 w-full flex items-center justify-between px-5 h-16 shadow bg-white">
       <div className="flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"

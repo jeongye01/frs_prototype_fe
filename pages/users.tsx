@@ -60,7 +60,7 @@ const Users: NextPage = () => {
   }, [curPage]);
 
   return (
-    <div className=" px-4 flex flex-col   items-start  mt-12 bg-[#f5f7fc] ">
+    <div className=" px-4 flex flex-col   items-start  mt-20 mb-10 bg-[#f5f7fc] ">
       <div className="flex items-center">
         <button
           onClick={() => openUserAddModal({ name: modalName.UserAddModal })}

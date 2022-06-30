@@ -47,23 +47,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     console.log(data);
   }, [data]);
-  return (
-    <>
-      <div className="px-32 h-full mt-20  justify-between mb-12 bg-[#f5f7fc] ">
-        <div className="gap-12 h-[300px] mb-6  flex items-start">
-          <div className="w-3/5 h-full ">
-            <HistoryDailyFRChart />
-          </div>
-          <div className="w-2/5 h-full ">
-            <TodayTotalFRChart />
-          </div>
-        </div>
-        {data && (
-          <Table fields={fields} tbodyRows={<HistoryRows data={data} />} />
-        )}
-      </div>
-    </>
-  );
+  return <>159516121</>;
 };
 
 export default Home;

@@ -11,8 +11,9 @@ export default function Layout({ children }: Props) {
     <div className="main mx-auto  flex ">
       <Sidebar />
       <div className=" w-[250px]  min-w-[250px] h-screen  top-0 bottom-0 left-0 overflow-y-auto py-4 px-3 bg-[#3b75e3]" />
-      <div className="w-full  h-full  px-[70px] bg-[#f5f7fc] overflow-y-scroll">
-        <Header />
+
+      <div className="w-full  h-full  px-[70px] bg-[#f5f7fc] overflow-y-scroll z-50">
+        <div className="bg-light-blue-500 px-3 md:px-8 h-80 fixed  w-full " />
         {children}
       </div>
       <Modal />

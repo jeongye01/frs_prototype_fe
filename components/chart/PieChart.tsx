@@ -30,7 +30,9 @@ function PieChart({ data, labels, colors }: Props) {
               value: {
                 show: true,
                 fontSize: '16px',
-                fontFamily: 'Helvetica, Arial, sans-serif',
+                //fontFamily: {
+                //notoSansKR: ['Noto Sans KR', 'sans-serif'],
+                //},
                 offsetY: 0,
               },
               total: {

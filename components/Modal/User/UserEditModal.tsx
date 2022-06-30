@@ -39,12 +39,23 @@ export default function UserEditModal() {
   const queryClient = useQueryClient();
   const [formState, formDispatch] = useReducer(formReducer, initialState);
 
-  const { isSuccess, isError, isLoading, mutate } = useMutation(() =>
-    putUser({
-      authorCd: formState.authorCd,
-      userNm: formState.userNm,
-      esntlId: router.query.esntlId as string,
-    }),
+  const { isSuccess, isError, isLoading, mutate } = useMutation(
+    () =>
+      putUser({
+        authorCd: formState.authorCd,
+        userNm: formState.userNm,
+        esntlId: router.query.esntlId as string,
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['users']);
+        closeUserEditModal({ name: modalName.UserEditModal });
+        alert('사용자 정보 변경 완료');
+      },
+      onError: () => {
+        alert('사용자 정보 변경 실패');
+      },
+    },
   );
   const { data: authors } = useQuery<
     GetAuthorsResponse,
@@ -64,13 +75,6 @@ export default function UserEditModal() {
     mutate();
   };
 
-  useEffect(() => {
-    //실패 경우 넣기
-    if (!isSuccess) return;
-    queryClient.invalidateQueries(['users']);
-    closeUserEditModal({ name: modalName.UserEditModal });
-    alert('사용자 정보 변경 완료');
-  }, [isSuccess]);
   return (
     <form onSubmit={onSubmit} className=" space-y-4">
       <div className="flex">

@@ -79,6 +79,10 @@ export default function UserAddModal() {
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     console.log(formState);
+    if (userIdOk === null) {
+      alert('아이디 중복 확인을 해주세요.');
+      return;
+    }
     if (isLoading) return;
     const { authorCd, userId, userNm, userPw } = formState;
 
@@ -112,7 +116,9 @@ export default function UserAddModal() {
           }
           className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 "
         >
-          <option key="선택">선택</option>
+          <option key="선택" value="">
+            선택
+          </option>
           {authors?.map(author => (
             <option
               key={author.authorCd}
@@ -133,12 +139,13 @@ export default function UserAddModal() {
           type="text"
           className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  "
           value={formState.userId}
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            setUserIdOk(null);
             formDispatch({
               type: 'userId',
               payload: event.currentTarget.value,
-            })
-          }
+            });
+          }}
         />
         <button
           type="button"

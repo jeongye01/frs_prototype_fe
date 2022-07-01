@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from 'components/Sidebar/Sidebar';
+import Sidebar from 'components/Sidebar/NewSiderbar';
 import Modal from 'components/Modal';
 import Header from 'components/Header';
 
@@ -8,15 +8,14 @@ interface Props {
 }
 export default function Layout({ children }: Props) {
   return (
-    <div className="main mx-auto  flex ">
+    <div>
       <Sidebar />
-      <div className=" w-[250px]  min-w-[250px] h-screen  top-0 bottom-0 left-0 overflow-y-auto py-4 px-3 bg-[#3b75e3]" />
-
-      <div className="w-full  h-full  px-[70px] bg-[#f5f7fc] overflow-y-scroll z-50">
+      <div className="md:ml-64">
         <div className="bg-light-blue-500 px-3 md:px-8 h-80 fixed  w-full " />
         {children}
+
+        <Modal />
       </div>
-      <Modal />
     </div>
   );
 }

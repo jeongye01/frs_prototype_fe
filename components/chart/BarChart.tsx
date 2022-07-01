@@ -72,9 +72,7 @@ function BarChart({ data, colors, categories }: Props) {
           },
         },
       },
-      tooltip: {
-        enabled: false,
-      },
+
       states: {
         hover: {
           filter: {

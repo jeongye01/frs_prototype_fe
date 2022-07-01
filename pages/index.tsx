@@ -47,7 +47,24 @@ const Home: NextPage = () => {
   useEffect(() => {
     console.log(data);
   }, [data]);
-  return <>159516121</>;
+  return (
+    <>
+      <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
+      <div className="px-3 md:px-8 -mt-60 mb-12">
+        <div className="container mx-auto max-w-full">
+          <div className="grid grid-cols-1 xl:grid-cols-5">
+            <div className="xl:col-start-1 xl:col-end-4 px-4 mb-14">
+              <HistoryDailyFRChart />
+            </div>
+            <div className="xl:col-start-4 xl:col-end-6 px-4 mb-14">
+              <TodayTotalFRChart />
+            </div>
+          </div>
+        </div>
+        <Table fields={fields} tbodyRows={<HistoryRows data={data} />} />
+      </div>
+    </>
+  );
 };
 
 export default Home;
@@ -58,17 +75,14 @@ interface Props {
 function HistoryRows({ data }: Props) {
   return (
     <>
-      {data.map((history, i) => (
-        <tr
-          key={history.faceId}
-          className="border-b   odd:bg-white even:bg-[#F9F9F9]"
-        >
+      {data?.map((history, i) => (
+        <tr key={history.faceId} className="">
           {Object.values(history)
             .slice(0, -2)
             .map(value => (
-              <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
+              <th className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-2 text-center">
                 {value}
-              </td>
+              </th>
             ))}
         </tr>
       ))}

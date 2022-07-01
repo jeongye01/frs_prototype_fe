@@ -1,6 +1,8 @@
 import StatusCard from 'components/StatusCard';
 import ChartLine from 'components/ChartLine';
 import ChartBar from 'components/ChartBar';
+import HistoryDailyFRChart from 'components/chartBoard/HistoryDailyFRChart';
+import TodayTotalFRChart from 'components/chartBoard/TodayTotalFRChart';
 //import PageVisitsCard from 'components/PageVisitsCard';
 //import TrafficCard from 'components/TrafficCard';
 
@@ -13,10 +15,10 @@ export default function Dashboard() {
         <div className="container mx-auto max-w-full">
           <div className="grid grid-cols-1 xl:grid-cols-5">
             <div className="xl:col-start-1 xl:col-end-4 px-4 mb-14">
-              <ChartLine />
+              <HistoryDailyFRChart />
             </div>
             <div className="xl:col-start-4 xl:col-end-6 px-4 mb-14">
-              <ChartBar />
+              <TodayTotalFRChart />
             </div>
           </div>
         </div>

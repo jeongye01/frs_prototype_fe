@@ -6,7 +6,7 @@ import { AxiosError } from 'axios';
 import { HistoryDailyFRType } from 'typeDefs/Chart';
 import { useQuery } from 'react-query';
 import { getHistoryDailyFR, HistoryDailyFRResponse } from 'api/chart';
-import ChartBoardLayout from './Layout';
+import ChartLayout from './Layout';
 
 const tempData: HistoryDailyFRType[] = [
   {
@@ -62,9 +62,13 @@ function HistoryDailyFRChart() {
   });
 
   return (
-    <>
+    <ChartLayout
+      headerColor="orange"
+      onRefreshClick={refetch}
+      title="일별 얼굴인증"
+    >
       {data && (
-        <ChartBoardLayout title="일별 얼굴인증현황" onRefreshClick={refetch}>
+        <>
           {!isFetching && (
             <TempChart
               lineName="인증이력"
@@ -76,9 +80,9 @@ function HistoryDailyFRChart() {
               categories={data.map(history => history.statDe) || 0}
             />
           )}
-        </ChartBoardLayout>
+        </>
       )}
-    </>
+    </ChartLayout>
   );
 }
 

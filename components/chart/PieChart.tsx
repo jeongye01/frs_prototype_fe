@@ -77,7 +77,7 @@ function PieChart({ data, labels, colors }: Props) {
         },
       ],
       tooltip: {
-        enabled: false,
+        enabled: true,
       },
 
       states: {
@@ -93,14 +93,12 @@ function PieChart({ data, labels, colors }: Props) {
   return (
     <>
       {data?.length === colors?.length && colors?.length === labels?.length && (
-        <div className="pointer-events-none">
-          <ReactApexChart
-            type="donut"
-            series={state.series}
-            options={state.options}
-            width="100%"
-          />
-        </div>
+        <ReactApexChart
+          type="donut"
+          series={state.series}
+          options={state.options}
+          width="100%"
+        />
       )}
     </>
   );

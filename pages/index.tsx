@@ -77,8 +77,17 @@ function HistoryRows({ data }: Props) {
     <>
       {data?.map((history, i) => (
         <tr key={history.faceId} className="">
+          <th className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-2 text-center">
+            {history.sn}
+          </th>
+          <th className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-2 text-center">
+            {history.requestDt
+              ?.replace('T', ' ')
+              .replace(/\..*/, '')
+              .slice(0, -3)}
+          </th>
           {Object.values(history)
-            .slice(0, -2)
+            .slice(2, -2)
             .map(value => (
               <th className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-2 text-center">
                 {value}

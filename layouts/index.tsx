@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from 'components/Sidebar/NewSiderbar';
+import Sidebar from 'components/Sidebar/NewSidebar";
 import Modal from 'components/Modal';
 import Header from 'components/Header';
 

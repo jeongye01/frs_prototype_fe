@@ -63,30 +63,31 @@ function HistoryRows() {
   return (
     <>
       {historyFRData.map((history, i) => (
-        <tr
-          key={`${history.faceId}-${history.sn}`}
-          className="border-b   odd:bg-white even:bg-[#F9F9F9]"
-        >
-          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
+        <tr key={`${history.faceId}-${history.sn}`} className="">
+          <th className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-2 text-center">
             {history.sn}
-          </td>
-          <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
+          </th>
+
+          <th className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-2 text-center">
             <Link href={`/history?sn=${history.sn}`} as={`/history`}>
               <button
                 onClick={() =>
                   openFRImageModal({ name: modalName.FRImageModal })
                 }
               >
-                {history.requestDt}
+                {history.requestDt
+                  ?.replace('T', ' ')
+                  .replace(/\..*/, '')
+                  .slice(0, -3)}
               </button>
             </Link>
-          </td>
+          </th>
           {Object.values(history)
             .slice(2, -2)
             .map(value => (
-              <td className="text-center   text-sm border border-[#f2f2f2] py-[5px]">
+              <th className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-2 text-center">
                 {value}
-              </td>
+              </th>
             ))}
         </tr>
       ))}

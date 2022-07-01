@@ -7,7 +7,13 @@ import { modalName } from 'utils/importModal';
 import Link from 'next/link';
 import Pagination from 'components/Pagination';
 import { useEffect, useState } from 'react';
-
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Typography,
+} from '@material-tailwind/react';
 const fields = [
   '순번',
   '인증 요청일',
@@ -25,18 +31,16 @@ const History: NextPage = () => {
   const { totalPages } = useAppSelector(state => state.historyFR);
 
   return (
-    <div className=" px-4 flex flex-col  items-start  mt-20 mb-12 bg-[#f5f7fc] ">
-      <Search curPage={curPage} setCurPage={setCurPage} />
-      <div className="mb-8" />
-      <Table fields={fields} tbodyRows={<HistoryRows />} />
-      <div className="mb-8" />
-      <Pagination
-        numOfPages={totalPages}
-        numOfPageBtn={4}
-        curPage={curPage}
-        setCurPage={setCurPage}
-      />
-    </div>
+    <>
+      <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
+      <div className="px-3 md:px-8 -mt-72 mb-12">
+        <Card className=" w-fit ">
+          <CardBody className="py-4">
+            <Search curPage={curPage} setCurPage={setCurPage} />
+          </CardBody>
+        </Card>
+      </div>
+    </>
   );
 };
 
@@ -81,3 +85,20 @@ function HistoryRows() {
     </>
   );
 }
+/*
+
+ <div className=" px-4 flex flex-col  items-start  mt-20 mb-12 bg-[#f5f7fc] ">
+      <Search curPage={curPage} setCurPage={setCurPage} />
+      <div className="mb-8" />
+      <Table fields={fields} tbodyRows={<HistoryRows />} />
+      <div className="mb-8" />
+      <Pagination
+        numOfPages={totalPages}
+        numOfPageBtn={4}
+        curPage={curPage}
+        setCurPage={setCurPage}
+      />
+    </div>
+
+
+*/

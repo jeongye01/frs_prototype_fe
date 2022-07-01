@@ -28,17 +28,25 @@ const fields = [
 
 const History: NextPage = () => {
   const [curPage, setCurPage] = useState<number>(1);
-  const { totalPages } = useAppSelector(state => state.historyFR);
+  const { totalPages, data } = useAppSelector(state => state.historyFR);
 
   return (
     <>
       <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
-      <div className="px-3 md:px-8 -mt-72 mb-12">
+      <div className="px-3 md:px-8 -mt-72 mb-12 space-y-16">
         <Card className=" w-fit ">
           <CardBody className="py-4">
             <Search curPage={curPage} setCurPage={setCurPage} />
           </CardBody>
         </Card>
+
+        <Table fields={fields} tbodyRows={<HistoryRows data={data} />} />
+        <Pagination
+          numOfPages={totalPages}
+          numOfPageBtn={4}
+          curPage={curPage}
+          setCurPage={setCurPage}
+        />
       </div>
     </>
   );
@@ -85,20 +93,3 @@ function HistoryRows() {
     </>
   );
 }
-/*
-
- <div className=" px-4 flex flex-col  items-start  mt-20 mb-12 bg-[#f5f7fc] ">
-      <Search curPage={curPage} setCurPage={setCurPage} />
-      <div className="mb-8" />
-      <Table fields={fields} tbodyRows={<HistoryRows />} />
-      <div className="mb-8" />
-      <Pagination
-        numOfPages={totalPages}
-        numOfPageBtn={4}
-        curPage={curPage}
-        setCurPage={setCurPage}
-      />
-    </div>
-
-
-*/

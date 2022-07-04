@@ -3,14 +3,59 @@ import AdminNavbar from 'components/AdminNavbar';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-
+import {
+  ProSidebar,
+  Menu,
+  MenuItem,
+  SubMenu,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+} from 'react-pro-sidebar';
+import 'react-pro-sidebar/dist/css/styles.css';
 export default function Sidebar() {
   const [showSidebar, setShowSidebar] = useState('-left-64');
   const activeClassName = `bg-gradient-to-tr from-light-blue-500 to-light-blue-700 text-white shadow-md`;
   const router = useRouter();
   return (
-    <>
-      <AdminNavbar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+    <div
+      className={`h-screen fixed top-0 md:left-0 ${showSidebar} overflow-y-auto flex-row flex-nowrap overflow-hidden shadow-xl bg-white w-64 z-10 py-4 px-6 transition-all duration-300`}
+    >
+      <ProSidebar width="100%">
+        <SidebarHeader className="bg-white">
+          <Link href="/">
+            <a className="mt-2 text-center w-full inline-block bg-light-blue-500 shadow-xl rounded">
+              <Image
+                src="/img/logo_cubox_w.png"
+                alt="brand_logo"
+                width={170}
+                height={56}
+              />
+            </a>
+          </Link>
+          <hr className="my-4 min-w-full" />
+        </SidebarHeader>
+        <SidebarContent className="bg-white">
+          <Menu iconShape="square" className="bg-white">
+            <MenuItem>Dashboard</MenuItem>
+            <SubMenu title="Components" className="bg-white">
+              <MenuItem className="bg-white">Component 1</MenuItem>
+              <MenuItem className="bg-white">Component 2</MenuItem>
+            </SubMenu>
+          </Menu>
+        </SidebarContent>
+        <SidebarFooter>
+          {/**
+           *  You can add a footer for the sidebar ex: copyright
+           */}
+        </SidebarFooter>
+      </ProSidebar>
+    </div>
+  );
+}
+/*
+
+   <AdminNavbar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
       <div
         className={`h-screen fixed top-0 md:left-0 ${showSidebar} overflow-y-auto flex-row flex-nowrap overflow-hidden shadow-xl bg-white w-64 z-10 py-4 px-6 transition-all duration-300`}
       >
@@ -29,7 +74,7 @@ export default function Sidebar() {
           <div className="flex flex-col">
             <hr className="my-4 min-w-full" />
 
-            <ul className="flex-col min-w-full flex list-none">
+            <ul className="flex-col min-w-full flex list-none collapse">
               <li className="rounded-lg mb-4">
                 <Link href="/history">
                   <a
@@ -55,8 +100,8 @@ export default function Sidebar() {
                   </a>
                 </Link>
               </li>
-
-              <li className="rounded-lg mb-4">
+              <div className="h-20 bg-red-400 animate-toggleSlider">123</div>
+              <li className=" rounded-lg mb-4">
                 <Link href="/users">
                   <a
                     className={`flex items-center gap-4 text-sm text-gray-700 font-light text-gray-500 px-4 py-3 rounded-lg ${
@@ -84,7 +129,4 @@ export default function Sidebar() {
             </ul>
           </div>
         </div>
-      </div>
-    </>
-  );
-}
+      </div>*/

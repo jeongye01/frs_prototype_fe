@@ -62,6 +62,7 @@ const Home: NextPage = () => {
           </div>
         </div>
         <Table
+          title="인증 이력"
           color="purple"
           fields={fields}
           tbodyRows={<HistoryRows data={data} />}

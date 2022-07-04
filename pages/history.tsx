@@ -33,14 +33,15 @@ const History: NextPage = () => {
   return (
     <>
       <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
-      <div className="px-3 md:px-8 -mt-72 mb-12 space-y-16">
+      <div className="px-3 md:px-8 -mt-72 mb-12">
         <Card className=" w-fit ">
           <CardBody className="py-4">
             <Search curPage={curPage} setCurPage={setCurPage} />
           </CardBody>
         </Card>
-
+        <div className="mb-14" />
         <Table fields={fields} tbodyRows={<HistoryRows data={data} />} />
+        <div className="mb-6" />
         <Pagination
           numOfPages={totalPages}
           numOfPageBtn={4}

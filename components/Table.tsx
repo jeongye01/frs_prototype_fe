@@ -34,7 +34,7 @@ function Table<T>({ fields, rows, tbodyRows, color, title }: Props<T>) {
                 {fields?.map(field => (
                   <th
                     scope="col"
-                    className="px-2 text-purple-500 align-middle border-b border-solid border-gray-200 py-3 text-sm whitespace-nowrap font-light text-center"
+                    className={`px-2 text-${color}-500 align-middle border-b border-solid border-gray-200 py-3 text-sm whitespace-nowrap font-light text-center`}
                   >
                     {field}
                   </th>

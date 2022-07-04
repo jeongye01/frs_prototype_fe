@@ -21,6 +21,7 @@ import {
 import { AxiosError } from 'axios';
 import { UserType } from 'typeDefs/User';
 import LoadingSpinner from 'components/Loading/Spinner';
+import { Button, Card, CardBody } from '@material-tailwind/react';
 
 const fields = [
   '순번',
@@ -61,32 +62,44 @@ const Users: NextPage = () => {
   }, [curPage]);
 
   return (
-    <div className=" px-4 flex flex-col   items-start  mt-20 mb-10 bg-[#f5f7fc] ">
-      <div className="flex items-center">
-        <button
-          onClick={() => openUserAddModal({ name: modalName.UserAddModal })}
-          className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
-        >
-          👷 사용자 추가
-        </button>
-        {isFetching && <LoadingSpinner />}
+    <>
+      <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
+      <div className="px-3 md:px-8 -mt-72 mb-12">
+        <Card className=" w-fit ">
+          <Button
+            onClick={() => openUserAddModal({ name: modalName.UserAddModal })}
+            color="green"
+            className="text-[16px]"
+          >
+            사용자 추가 +
+          </Button>
+        </Card>
+        <div className="mb-10" />
+        <Table fields={fields} tbodyRows={<UserRows />} />
+        <div className="mb-8 " />
+        <Pagination
+          numOfPages={totalPages}
+          numOfPageBtn={4}
+          curPage={curPage}
+          setCurPage={setCurPage}
+        />
       </div>
-      <div className="mb-5" />
-
-      <Table fields={fields} tbodyRows={<UserRows />} />
-
-      <div className="mb-8 " />
-      <Pagination
-        numOfPages={totalPages}
-        numOfPageBtn={4}
-        curPage={curPage}
-        setCurPage={setCurPage}
-      />
-    </div>
+    </>
   );
 };
 
 export default Users;
+/*
+
+ <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
+      <div className="px-3 md:px-8 -mt-72 mb-12">
+        <Card className=" w-fit ">
+          <CardBody className="py-4">
+            <Search curPage={curPage} setCurPage={setCurPage} />
+          </CardBody>
+        </Card>
+        <div className="mb-14" />
+*/
 
 function UserRows() {
   const queryClient = useQueryClient();

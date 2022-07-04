@@ -7,13 +7,7 @@ import { modalName } from 'utils/importModal';
 import Link from 'next/link';
 import Pagination from 'components/Pagination';
 import { useEffect, useState } from 'react';
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Typography,
-} from '@material-tailwind/react';
+import { Card, CardBody } from '@material-tailwind/react';
 const fields = [
   '순번',
   '인증 요청일',

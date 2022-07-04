@@ -205,7 +205,7 @@ function UserRows() {
                   });
               }}
               className={`${
-                user?.useYn === 'Y' ? 'bg-blue-500' : 'bg-gray-500'
+                user?.useYn === 'Y' ? 'bg-blue-500' : 'bg-grey-500'
               } text-xs text-white py-1  p-[4px] rounded absolute -translate-x-1/2 -translate-y-1/2`}
             >
               {user?.useYn === 'Y' ? '사용중' : '사용안함'}
@@ -235,7 +235,7 @@ function UserRows() {
                     esntlId: user.esntlId,
                   });
               }}
-              className="bg-green-700  text-xs text-white p-[4px] rounded absolute -translate-x-1/2 -translate-y-1/2"
+              className="bg-[#4BAF50]  text-xs text-white p-[4px] rounded absolute -translate-x-1/2 -translate-y-1/2"
             >
               초기화
             </button>

@@ -90,7 +90,7 @@ const Users: NextPage = () => {
         </Card>
 
         <div className="mb-10" />
-        <Table fields={fields} tbodyRows={<UserRows />} />
+        <Table fields={fields} tbodyRows={<UserRows />} color="indigo" title="사용자 목록" />
         <div className="mb-8 " />
         <Pagination
           numOfPages={totalPages}

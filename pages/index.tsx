@@ -61,7 +61,11 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-        <Table fields={fields} tbodyRows={<HistoryRows data={data} />} />
+        <Table
+          color="purple"
+          fields={fields}
+          tbodyRows={<HistoryRows data={data} />}
+        />
       </div>
     </>
   );

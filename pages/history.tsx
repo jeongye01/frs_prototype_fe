@@ -34,7 +34,12 @@ const History: NextPage = () => {
           </CardBody>
         </Card>
         <div className="mb-14" />
-        <Table fields={fields} tbodyRows={<HistoryRows data={data} />} />
+        <Table
+          fields={fields}
+          color="purple"
+          tbodyRows={<HistoryRows data={data} />}
+          title="인증 이력"
+        />
         <div className="mb-6" />
         <Pagination
           numOfPages={totalPages}

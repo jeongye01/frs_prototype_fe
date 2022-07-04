@@ -1,6 +1,6 @@
 import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
-import React, { ChangeEvent, useEffect, useReducer } from 'react';
+import React, { ChangeEvent, ReactNode, useEffect, useReducer } from 'react';
 
 import useGetActionState from 'hooks/useGetActionState';
 import userSlice from 'store/slices/userSlice';
@@ -15,14 +15,26 @@ import { useRouter } from 'next/router';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { AxiosError } from 'axios';
 import { AuthorType } from 'typeDefs/Author';
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Input,
+  Select,
+  Option,
+  Card,
+  CardBody,
+} from '@material-tailwind/react';
 
 export interface IForm {
   authorCd: string; // 권한 코드
   userNm: string; //사용자 이름
 }
 export interface Action {
-  type: 'authorCd' | 'userNm';
-  payload: string;
+  type: 'authorCd' | 'userNm' | 'init';
+  payload?: string;
 }
 const initialState: IForm = {
   authorCd: '',
@@ -30,10 +42,15 @@ const initialState: IForm = {
 };
 
 function formReducer(state: IForm, action: Action) {
+  if (action.type === 'init') return initialState;
   return { ...state, [action.type]: action.payload };
 }
+interface Props {
+  isModalOpen: boolean;
+  modalHandler: () => void;
+}
 
-export default function UserEditModal() {
+export default function UserEditModal({ isModalOpen, modalHandler }: Props) {
   const [_, closeUserEditModal] = useModal();
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
@@ -49,7 +66,10 @@ export default function UserEditModal() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['users']);
-        closeUserEditModal({ name: modalName.UserEditModal });
+        modalHandler();
+        formDispatch({
+          type: 'init',
+        });
         alert('사용자 정보 변경 완료');
       },
       onError: () => {
@@ -76,48 +96,36 @@ export default function UserEditModal() {
   };
 
   return (
-    <form onSubmit={onSubmit} className=" space-y-4">
-      <div className="flex">
-        <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
-          아이디
-        </span>
-        <div className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  ">
-          {router.query.userId}
-        </div>
-      </div>
-      <div className="flex">
-        <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
-          권한
-        </span>
-        <select
-          onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+    <Dialog
+      open={isModalOpen}
+      handler={modalHandler}
+      size="xs"
+      className="p-10 overflow-y-scroll"
+    >
+      <form onSubmit={onSubmit} className=" space-y-4">
+        <Input label="아이디" type="text" value={router.query.userId} />
+
+        <Select
+          onChange={(event: ReactNode) =>
             formDispatch({
               type: 'authorCd',
-              payload: event.currentTarget.value,
+              payload: event?.toString() as string,
             })
           }
-          className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 "
+          size="md"
+          variant="outlined"
+          label="권한"
         >
-          <option key="선택">선택</option>
           {authors?.map(author => (
-            <option
-              key={author.authorCd}
-              value={author.authorCd}
-              selected={formState.authorCd === author.authorCd}
-            >
+            <Option key={author.authorCd} value={author.authorCd}>
               {author.authorNm}
-            </option>
+            </Option>
           ))}
-        </select>
-      </div>
+        </Select>
 
-      <div className="flex">
-        <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
-          이름
-        </span>
-        <input
+        <Input
+          label="이름"
           type="text"
-          className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  "
           value={formState.userNm}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             formDispatch({
@@ -126,21 +134,15 @@ export default function UserEditModal() {
             })
           }
         />
-      </div>
 
-      <div className="space-x-3">
-        <button className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
-          저장
-        </button>
-        <button
-          onClick={() => {
-            closeUserEditModal({ name: modalName.UserEditModal });
-          }}
-          className="text-white bg-gray-700 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
-        >
-          취소
-        </button>
-      </div>
-    </form>
+        <div className="space-x-3 flex justify-center">
+          <Button type="submit">저장</Button>
+
+          <Button onClick={modalHandler} color="grey">
+            취소
+          </Button>
+        </div>
+      </form>
+    </Dialog>
   );
 }

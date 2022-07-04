@@ -31,6 +31,7 @@ import {
   DialogFooter,
 } from '@material-tailwind/react';
 import UserAddModal from 'components/Modal/User/UserAddModal';
+import UserEditModal from 'components/Modal/User/UserEditModal';
 
 const fields = [
   '순번',
@@ -52,9 +53,10 @@ const Users: NextPage = () => {
   const [curPage, setCurPage] = useState<number>(1);
   const { totalPages } = useAppSelector(state => state.userList);
   const dispatch = useAppDispatch();
-  const [open, setOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const handleOpen = () => setOpen(!open);
+  const handleAddModalOpen = () => setIsAddModalOpen(!isAddModalOpen);
+
   const { data, isLoading, isFetching, refetch } = useQuery<
     LoadUsersResponse,
     AxiosError
@@ -78,7 +80,11 @@ const Users: NextPage = () => {
       <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
       <div className="px-3 md:px-8 -mt-72 mb-12">
         <Card className=" w-fit ">
-          <Button onClick={handleOpen} color="green" className="text-[16px]">
+          <Button
+            onClick={handleAddModalOpen}
+            color="green"
+            className="text-[16px]"
+          >
             사용자 추가 +
           </Button>
         </Card>
@@ -93,7 +99,10 @@ const Users: NextPage = () => {
           setCurPage={setCurPage}
         />
       </div>
-      <UserAddModal isModalOpen={open} modalHandler={handleOpen} />
+      <UserAddModal
+        isModalOpen={isAddModalOpen}
+        modalHandler={handleAddModalOpen}
+      />
     </>
   );
 };
@@ -117,7 +126,8 @@ function UserRows() {
     store => store.userList,
   );
   const [openUserEditModal] = useModal();
-
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const handleEditModalOpen = () => setIsEditModalOpen(!isEditModalOpen);
   const { mutate: useYnMutate } = useMutation(postUseYn, {
     onSettled: async (_: any, __: any, params: PostUseYnParam) => {
       queryClient.invalidateQueries(['users']);
@@ -207,11 +217,7 @@ function UserRows() {
               as={`/users`}
             >
               <button
-                onClick={() => {
-                  openUserEditModal({
-                    name: modalName.UserEditModal,
-                  });
-                }}
+                onClick={handleEditModalOpen}
                 className="bg-blue-500 text-xs text-white py-1  p-[4px] rounded absolute -translate-x-1/2 -translate-y-1/2"
               >
                 편집
@@ -236,6 +242,10 @@ function UserRows() {
           </td>
         </tr>
       ))}
+      <UserEditModal
+        isModalOpen={isEditModalOpen}
+        modalHandler={handleEditModalOpen}
+      />
     </>
   );
 }

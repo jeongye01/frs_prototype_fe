@@ -1,6 +1,12 @@
 import useModal from 'hooks/useModal';
 import { modalName } from 'utils/importModal';
-import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
+import React, {
+  ChangeEvent,
+  ReactNode,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 import { AxiosError } from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
@@ -12,7 +18,16 @@ import {
   postUser,
 } from 'api/user';
 import { AuthorType } from 'typeDefs/Author';
-
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Input,
+  Select,
+  Option,
+} from '@material-tailwind/react';
 export interface IForm {
   authorCd: string; // 권한 코드
   userId: string; //사용자 아이디
@@ -20,8 +35,8 @@ export interface IForm {
   userPw: string;
 }
 export interface Action {
-  type: 'authorCd' | 'userId' | 'userNm' | 'userPw';
-  payload: string;
+  type: 'authorCd' | 'userId' | 'userNm' | 'userPw' | 'init';
+  payload?: string;
 }
 const initialState: IForm = {
   authorCd: '',
@@ -31,10 +46,16 @@ const initialState: IForm = {
 };
 
 function formReducer(state: IForm, action: Action) {
+  if (action.type === 'init') return initialState;
   return { ...state, [action.type]: action.payload };
 }
 
-export default function UserAddModal() {
+interface Props {
+  isModalOpen: boolean;
+  modalHandler: () => void;
+}
+
+export default function UserAddModal({ isModalOpen, modalHandler }: Props) {
   const [_, closeUserAddModal] = useModal();
   const queryClient = useQueryClient();
   const [formState, formDispatch] = useReducer(formReducer, initialState);
@@ -52,6 +73,9 @@ export default function UserAddModal() {
       onSuccess: () => {
         queryClient.invalidateQueries(['users']);
         closeUserAddModal({ name: modalName.UserAddModal });
+        formDispatch({
+          type: 'init',
+        });
         alert('사용자 등록 완료');
       },
       onError: () => {
@@ -99,79 +123,70 @@ export default function UserAddModal() {
 
   useEffect(() => {
     setUserIdOk(null);
-    return () => setUserIdOk(null);
+    formDispatch({
+      type: 'init',
+    });
   }, []);
   return (
-    <form onSubmit={onSubmit} className=" space-y-4">
-      <div className="flex">
-        <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
-          권한
-        </span>
-        <select
-          onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+    <Dialog
+      open={isModalOpen}
+      handler={modalHandler}
+      size="xs"
+      className="p-10"
+    >
+      <form onSubmit={onSubmit} className=" space-y-4">
+        <Select
+          onChange={(event: ReactNode) =>
             formDispatch({
               type: 'authorCd',
-              payload: event.currentTarget.value,
+              payload: event?.toString() as string,
             })
           }
-          className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 "
+          size="md"
+          variant="outlined"
+          label="권한"
         >
-          <option key="선택" value="">
-            선택
-          </option>
           {authors?.map(author => (
-            <option
-              key={author.authorCd}
-              value={author.authorCd}
-              selected={formState.authorCd === author.authorCd}
-            >
+            <Option key={author.authorCd} value={author.authorCd}>
               {author.authorNm}
-            </option>
+            </Option>
           ))}
-        </select>
-      </div>
+        </Select>
 
-      <div className="flex">
-        <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
-          아이디
-        </span>
-        <input
+        <div className="flex">
+          <Input
+            label="아이디"
+            type="text"
+            value={formState.userId}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              setUserIdOk(null);
+              formDispatch({
+                type: 'userId',
+                payload: event.currentTarget.value,
+              });
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => checkIdValidation()}
+            className="text-sm text-white whitespace-nowrap bg-blue-500 rounded-lg ml-2 px-2"
+          >
+            중복확인
+          </button>
+        </div>
+        {userIdOk === 'ok' && (
+          <span className="text-sm text-green-500">
+            사용가능한 아이디 입니다.
+          </span>
+        )}
+        {userIdOk !== 'ok' && userIdOk !== null && (
+          <span className="text-sm text-red-500">
+            사용할 수 없는 아이디 입니다.
+          </span>
+        )}
+        <Input
+          label="이름"
           type="text"
-          className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  "
-          value={formState.userId}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            setUserIdOk(null);
-            formDispatch({
-              type: 'userId',
-              payload: event.currentTarget.value,
-            });
-          }}
-        />
-        <button
-          type="button"
-          onClick={() => checkIdValidation()}
-          className="text-sm text-white bg-blue-500 rounded-lg ml-2 px-2"
-        >
-          중복확인
-        </button>
-      </div>
-      {userIdOk === 'ok' && (
-        <span className="text-sm text-green-500">
-          사용가능한 아이디 입니다.
-        </span>
-      )}
-      {userIdOk !== 'ok' && userIdOk !== null && (
-        <span className="text-sm text-red-500">
-          사용할 수 없는 아이디 입니다.
-        </span>
-      )}
-      <div className="flex">
-        <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
-          이름
-        </span>
-        <input
-          type="text"
-          className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  "
           value={formState.userNm}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             formDispatch({
@@ -180,14 +195,9 @@ export default function UserAddModal() {
             })
           }
         />
-      </div>
-      <div className="flex">
-        <span className=" w-1/5 px-1 grid place-items-center whitespace-nowrap text-[12px] text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md ">
-          비밀번호
-        </span>
-        <input
+        <Input
+          label="비밀번호"
           type="password"
-          className="outline-none rounded-none rounded-r-lg bg-gray-50 border  text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  "
           value={formState.userPw}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             formDispatch({
@@ -196,19 +206,22 @@ export default function UserAddModal() {
             })
           }
         />
-      </div>
 
-      <div className="space-x-3">
-        <button className="text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
-          저장
-        </button>
-        <button
-          onClick={() => closeUserAddModal({ name: modalName.UserAddModal })}
-          className="text-white bg-gray-700 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
-        >
-          취소
-        </button>
-      </div>
-    </form>
+        <div className="space-x-3 flex justify-center">
+          <Button type="submit">저장</Button>
+
+          <Button onClick={modalHandler} color="grey">
+            취소
+          </Button>
+        </div>
+      </form>
+    </Dialog>
   );
 }
+/*
+
+ 
+
+
+
+*/

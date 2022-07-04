@@ -21,7 +21,16 @@ import {
 import { AxiosError } from 'axios';
 import { UserType } from 'typeDefs/User';
 import LoadingSpinner from 'components/Loading/Spinner';
-import { Button, Card, CardBody } from '@material-tailwind/react';
+import {
+  Button,
+  Card,
+  CardBody,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from '@material-tailwind/react';
+import UserAddModal from 'components/Modal/User/UserAddModal';
 
 const fields = [
   '순번',
@@ -43,6 +52,9 @@ const Users: NextPage = () => {
   const [curPage, setCurPage] = useState<number>(1);
   const { totalPages } = useAppSelector(state => state.userList);
   const dispatch = useAppDispatch();
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(!open);
   const { data, isLoading, isFetching, refetch } = useQuery<
     LoadUsersResponse,
     AxiosError
@@ -66,14 +78,11 @@ const Users: NextPage = () => {
       <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
       <div className="px-3 md:px-8 -mt-72 mb-12">
         <Card className=" w-fit ">
-          <Button
-            onClick={() => openUserAddModal({ name: modalName.UserAddModal })}
-            color="green"
-            className="text-[16px]"
-          >
+          <Button onClick={handleOpen} color="green" className="text-[16px]">
             사용자 추가 +
           </Button>
         </Card>
+
         <div className="mb-10" />
         <Table fields={fields} tbodyRows={<UserRows />} />
         <div className="mb-8 " />
@@ -84,6 +93,7 @@ const Users: NextPage = () => {
           setCurPage={setCurPage}
         />
       </div>
+      <UserAddModal isModalOpen={open} modalHandler={handleOpen} />
     </>
   );
 };

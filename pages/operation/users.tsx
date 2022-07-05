@@ -49,7 +49,6 @@ const fields = [
 ];
 
 const Users: NextPage = () => {
-  const [openUserAddModal] = useModal();
   const [curPage, setCurPage] = useState<number>(1);
   const { totalPages } = useAppSelector(state => state.userList);
   const dispatch = useAppDispatch();

@@ -163,11 +163,11 @@ export default function Sidebar() {
                     </Link>
                   </li>
                   <li className="py-1">
-                    <Link href="/operation/authMemu">
+                    <Link href="/operation/author-menu">
                       <a
                         className={`text-white ${
-                          router.pathname === '/operation/authMemu' &&
-                          'underline-offset-8'
+                          router.pathname === '/operation/author-menu' &&
+                          'underline underline-offset-4   decoration-2'
                         }`}
                       >
                         권한별 메뉴 관리

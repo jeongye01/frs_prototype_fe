@@ -122,9 +122,9 @@ export default function Sidebar() {
                   </svg>
                 </button>
                 <ul
-                  className={`rounded mt-2 bg-light-blue-400 px-4  ${
+                  className={`${activeClassName} rounded px-2  ${
                     navState.opManage ? 'max-h-fit py-1' : 'max-h-0 '
-                  }  overflow-hidden transition-all`}
+                  }  overflow-hidden transition-all ease-in-out mt-2`}
                 >
                   <li className="py-1">
                     <Link href="/operation/users">

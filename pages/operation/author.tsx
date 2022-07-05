@@ -30,8 +30,8 @@ import {
   DialogBody,
   DialogFooter,
 } from '@material-tailwind/react';
-import UserAddModal from 'components/Modal/User/UserAddModal';
-import UserEditModal from 'components/Modal/User/UserEditModal';
+import UserAddModal from 'components/Modal/Operation/UserAddModal';
+import UserEditModal from 'components/Modal/Operation/UserEditModal';
 
 const fields = [
   '순번',

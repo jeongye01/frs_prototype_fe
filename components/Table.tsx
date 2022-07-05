@@ -14,7 +14,7 @@ interface Props<T> {
 function Table<T>({ fields, rows, tbodyRows, color, title }: Props<T>) {
   return (
     <Card>
-      <CardHeader color={color} className="flex items-center py-2 px-5">
+      <CardHeader color={color} className=" flex items-center py-2 px-5">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6 mr-1 text-white"

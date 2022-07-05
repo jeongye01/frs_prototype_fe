@@ -9,3 +9,11 @@ export interface AuthorType {
   updtId: string;
   updtDt: string;
 }
+
+export interface AuthorMenuType {
+  authorCd: string;
+  menuCd: string;
+  menuClCd: string;
+  menuClNm: string;
+  menuNm: string;
+}

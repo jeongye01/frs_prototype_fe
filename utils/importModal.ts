@@ -9,11 +9,11 @@ export const modalName = {
 const modalList: ModalIndex[] = [
   {
     name: modalName.UserAddModal,
-    component: lazy(() => import('components/Modal/User/UserAddModal')),
+    component: lazy(() => import('components/Modal/Operation/UserAddModal')),
   },
   {
     name: modalName.UserEditModal,
-    component: lazy(() => import('components/Modal/User/UserEditModal')),
+    component: lazy(() => import('components/Modal/Operation/UserEditModal')),
   },
   {
     name: modalName.FRImageModal,

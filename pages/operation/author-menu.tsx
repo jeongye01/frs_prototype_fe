@@ -47,7 +47,7 @@ const Users: NextPage = () => {
     AuthorMenuType[]
   >(
     ['author-menu', 'excl'],
-    () => getAuthorMenuExcl({ authorCd: authorSelected?.authorCd ?? '00008' }),
+    () => getAuthorMenuExcl({ authorCd: authorSelected?.authorCd ?? '' }),
     {
       select: res => res.data,
       onSuccess: res => setExclState(res.sort((a, b) => +a.menuCd - +b.menuCd)),
@@ -59,10 +59,13 @@ const Users: NextPage = () => {
     AuthorMenuType[]
   >(
     ['author-menu', 'incl'],
-    () => getAuthorMenuIncl({ authorCd: authorSelected?.authorCd ?? '00008' }),
+    authorSelected?.authorCd
+      ? () => getAuthorMenuIncl({ authorCd: authorSelected?.authorCd })
+      : () => ({} as GetAuthorMenuResponse),
     {
       select: res => res.data,
-      onSuccess: res => setInclState(res.sort((a, b) => +a.menuCd - +b.menuCd)),
+      onSuccess: res =>
+        setInclState(res?.sort((a, b) => +a.menuCd - +b.menuCd)),
     },
   );
   const { mutate: save } = useMutation(postAuthorMenu, {
@@ -246,12 +249,13 @@ const Users: NextPage = () => {
               </svg>
             </IconButton>
             <IconButton
-              onClick={() =>
+              onClick={() => {
+                if (!authorSelected?.authorCd) return;
                 save({
-                  authorCd: authorSelected?.authorCd ?? '00008',
+                  authorCd: authorSelected?.authorCd,
                   menuCds: inclState.map(incl => incl.menuCd).join(','),
-                })
-              }
+                });
+              }}
               color="green"
               className="rounded-full whitespace-nowrap"
             >

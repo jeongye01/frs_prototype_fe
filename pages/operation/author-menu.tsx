@@ -14,6 +14,7 @@ import {
   GetAuthorMenuResponse,
   getAuthorMenuExcl,
   getAuthorMenuIncl,
+  postAuthorMenu,
 } from 'api/author';
 import { AuthorMenuType } from 'typeDefs/Author';
 import { AxiosError } from 'axios';
@@ -49,6 +50,14 @@ const Users: NextPage = () => {
   >(['author-menu', 'incl'], () => getAuthorMenuIncl({ authorCd: '00008' }), {
     select: res => res.data,
     onSuccess: res => setInclState(res.sort((a, b) => +a.menuCd - +b.menuCd)),
+  });
+  const { mutate: save } = useMutation(postAuthorMenu, {
+    onSuccess: () => {
+      alert('저장되었습니다');
+    },
+    onError: () => {
+      alert('저장 실패');
+    },
   });
   const [exclState, setExclState] = useState<AuthorMenuType[]>(exclData ?? []);
   const [inclState, setInclState] = useState<AuthorMenuType[]>(inclData ?? []);
@@ -102,9 +111,10 @@ const Users: NextPage = () => {
   return (
     <>
       <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
-      <div className="px-3 md:px-8 -mt-72 mb-12">
+      <div className="px-3 md:px-8 -mt-72 mb-12 relative">
         <div className="mb-10" />
-        <div className="relative grid grid-cols-2 gap-36 px-36 ">
+
+        <div className=" grid grid-cols-2 gap-36 px-36 ">
           <div className="relative">
             <Table
               fields={fieldsExcl}
@@ -119,7 +129,7 @@ const Users: NextPage = () => {
               title="전체메뉴"
             />
           </div>
-          <div className="absolute left-1/2 -translate-x-20  flex flex-col mx-16 items-center space-y-4 mt-80">
+          <div className="absolute left-1/2 -translate-x-20 -top-10 flex flex-col mx-16 items-center space-y-4 mt-80">
             <IconButton
               onClick={() => {
                 setIsExclAllChecked(prev => prev && false);
@@ -136,7 +146,7 @@ const Users: NextPage = () => {
                   ),
                 ]);
               }}
-              color="green"
+              color="indigo"
               className="rounded-full"
             >
               <svg
@@ -185,6 +195,18 @@ const Users: NextPage = () => {
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
+            </IconButton>
+            <IconButton
+              onClick={() =>
+                save({
+                  authorCd: '00008',
+                  menuCds: inclState.map(incl => incl.menuCd).join(','),
+                })
+              }
+              color="green"
+              className="rounded-full whitespace-nowrap"
+            >
+              저장
             </IconButton>
           </div>
           <Table

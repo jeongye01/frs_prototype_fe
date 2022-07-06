@@ -40,7 +40,7 @@ const Users: NextPage = () => {
     AuthorMenuType[]
   >(['author-menu', 'excl'], () => getAuthorMenuExcl({ authorCd: '00008' }), {
     select: res => res.data,
-    onSuccess: res => setExclState(res),
+    onSuccess: res => setExclState(res.sort((a, b) => +a.menuCd - +b.menuCd)),
   });
   const { data: inclData } = useQuery<
     GetAuthorMenuResponse,
@@ -48,7 +48,7 @@ const Users: NextPage = () => {
     AuthorMenuType[]
   >(['author-menu', 'incl'], () => getAuthorMenuIncl({ authorCd: '00008' }), {
     select: res => res.data,
-    onSuccess: res => setInclState(res),
+    onSuccess: res => setInclState(res.sort((a, b) => +a.menuCd - +b.menuCd)),
   });
   const [exclState, setExclState] = useState<AuthorMenuType[]>(exclData ?? []);
   const [inclState, setInclState] = useState<AuthorMenuType[]>(inclData ?? []);
@@ -62,17 +62,37 @@ const Users: NextPage = () => {
   );
   const isExclAllCheckHandler = () => {
     if (!exclState) return;
-    setCheckedExclItems(new Set([...exclState]));
+
+    if (!isExclAllChecked) {
+      setCheckedExclItems(new Set([...exclState]));
+    } else {
+      setCheckedExclItems(new Set<AuthorMenuType>());
+    }
+
     setIsExclAllChecked(prev => !prev);
   };
+  const isInclAllCheckHandler = () => {
+    if (!inclState) return;
+    if (!isInclAllChecked) {
+      setCheckedInclItems(new Set([...inclState]));
+    } else {
+      setCheckedInclItems(new Set<AuthorMenuType>());
+    }
+    setIsInclAllChecked(prev => !prev);
+  };
   const fieldsExcl = [
-    <Checkbox onClick={isExclAllCheckHandler} color="indigo" />,
+    <Checkbox
+      onClick={isExclAllCheckHandler}
+      checked={isExclAllChecked}
+      color="indigo"
+    />,
     '메뉴분류',
     '메뉴명',
   ];
   const fieldsIncl = [
     <Checkbox
-      onClick={() => setIsInclAllChecked(prev => !prev)}
+      onClick={isInclAllCheckHandler}
+      checked={isInclAllChecked}
       color="indigo"
     />,
     '메뉴분류',
@@ -102,11 +122,19 @@ const Users: NextPage = () => {
           <div className="absolute left-1/2 -translate-x-20  flex flex-col mx-16 items-center space-y-4 mt-80">
             <IconButton
               onClick={() => {
+                setIsExclAllChecked(prev => prev && false);
                 setCheckedExclItems(new Set<AuthorMenuType>());
                 setExclState(prev =>
-                  prev.filter(menu => !checkedExclItems.has(menu)),
+                  prev
+                    .filter(menu => !checkedExclItems.has(menu))
+                    .sort((a, b) => +a.menuCd - +b.menuCd),
                 );
-                setInclState(prev => [...prev, ...checkedExclItems]);
+                setInclState(prev => [
+                  ...prev,
+                  ...[...checkedExclItems].sort(
+                    (a, b) => +a.menuCd - +b.menuCd,
+                  ),
+                ]);
               }}
               color="green"
               className="rounded-full"
@@ -126,7 +154,23 @@ const Users: NextPage = () => {
                 />
               </svg>
             </IconButton>
-            <IconButton color="grey" className="rounded-full">
+            <IconButton
+              onClick={() => {
+                setIsInclAllChecked(prev => prev && false);
+                setCheckedInclItems(new Set<AuthorMenuType>());
+                setInclState(prev =>
+                  prev.filter(menu => !checkedInclItems.has(menu)),
+                );
+                setExclState(prev => [
+                  ...prev,
+                  ...[...checkedInclItems].sort(
+                    (a, b) => +a.menuCd - +b.menuCd,
+                  ),
+                ]);
+              }}
+              color="grey"
+              className="rounded-full"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"

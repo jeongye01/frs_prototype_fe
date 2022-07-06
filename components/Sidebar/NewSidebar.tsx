@@ -142,7 +142,7 @@ export default function Sidebar() {
                     <Link href="#">
                       <a
                         className={`text-white ${
-                          router.pathname === '/operation/users' &&
+                          router.pathname === '/operation/authors' &&
                           'underline underline-offset-4   decoration-2'
                         }`}
                       >

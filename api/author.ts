@@ -13,6 +13,11 @@ export interface PostAuthorQuery {
 export interface GetAuthorMenuResponse {
   data: AuthorMenuType[];
 }
+
+export const getAuthorMenu = () => {
+  return client.get(`/authormenu`).then(res => res.data);
+};
+
 export interface GetAuthorMenuQuery {
   authorCd: string; // 권한 코드
 }

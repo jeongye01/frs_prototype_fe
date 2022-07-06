@@ -139,10 +139,10 @@ export default function Sidebar() {
                     </Link>
                   </li>
                   <li className="py-1">
-                    <Link href="/operation/author">
+                    <Link href="#">
                       <a
                         className={`text-white ${
-                          router.pathname === '/operation/author' &&
+                          router.pathname === '/operation/users' &&
                           'underline underline-offset-4   decoration-2'
                         }`}
                       >
@@ -151,7 +151,7 @@ export default function Sidebar() {
                     </Link>
                   </li>
                   <li className="py-1">
-                    <Link href="/operation/menu">
+                    <Link href="#">
                       <a
                         className={`text-white ${
                           router.pathname === '/operation/menu' &&
@@ -175,7 +175,7 @@ export default function Sidebar() {
                     </Link>
                   </li>
                   <li className="py-1">
-                    <Link href="/operation/code">
+                    <Link href="#">
                       <a
                         className={`text-white ${
                           router.pathname === '/operation/code' &&

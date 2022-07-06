@@ -29,3 +29,14 @@ export const getAuthorMenuIncl = ({ authorCd }: GetAuthorMenuQuery) => {
     .get(`/authormenu/incl?authorCd=${authorCd}`)
     .then(res => res.data);
 };
+
+// 권한 메뉴 등록
+export interface PostAuthorMenuQuery {
+  authorCd: string;
+  menuCds: string;
+}
+export const postAuthorMenu = ({ authorCd, menuCds }: PostAuthorMenuQuery) => {
+  return client
+    .post(`/authormenu?authorCd=${authorCd}&menuCds=${menuCds}`)
+    .then(res => res.data);
+};

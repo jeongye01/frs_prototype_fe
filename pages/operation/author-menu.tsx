@@ -14,42 +14,71 @@ import {
   GetAuthorMenuResponse,
   getAuthorMenuExcl,
   getAuthorMenuIncl,
+  postAuthorMenu,
 } from 'api/author';
-import { AuthorMenuType } from 'typeDefs/Author';
+import { AuthorMenuType, AuthorType } from 'typeDefs/Author';
 import { AxiosError } from 'axios';
 import { UserType } from 'typeDefs/User';
 import LoadingSpinner from 'components/Loading/Spinner';
 import {
   Button,
-  Card,
-  CardBody,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
   IconButton,
   Checkbox,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+  Select,
+  Option,
 } from '@material-tailwind/react';
 
 import { nanoid } from 'nanoid';
+import Search from 'components/Search';
+import { getAuthors, GetAuthorsResponse } from 'api/user';
 
 const Users: NextPage = () => {
-  const { data: exclData } = useQuery<
+  const [authorSelected, setAuthorSelected] = useState<{
+    authorCd: string;
+    authorNm: string;
+  }>();
+  const { data: exclData, refetch: exclRefetch } = useQuery<
     GetAuthorMenuResponse,
     AxiosError,
     AuthorMenuType[]
-  >(['author-menu', 'excl'], () => getAuthorMenuExcl({ authorCd: '00008' }), {
-    select: res => res.data,
-    onSuccess: res => setExclState(res),
-  });
-  const { data: inclData } = useQuery<
+  >(
+    ['author-menu', 'excl'],
+    () => getAuthorMenuExcl({ authorCd: authorSelected?.authorCd ?? '00008' }),
+    {
+      select: res => res.data,
+      onSuccess: res => setExclState(res.sort((a, b) => +a.menuCd - +b.menuCd)),
+    },
+  );
+  const { data: inclData, refetch: inclRefetch } = useQuery<
     GetAuthorMenuResponse,
     AxiosError,
     AuthorMenuType[]
-  >(['author-menu', 'incl'], () => getAuthorMenuIncl({ authorCd: '00008' }), {
-    select: res => res.data,
-    onSuccess: res => setInclState(res),
+  >(
+    ['author-menu', 'incl'],
+    () => getAuthorMenuIncl({ authorCd: authorSelected?.authorCd ?? '00008' }),
+    {
+      select: res => res.data,
+      onSuccess: res => setInclState(res.sort((a, b) => +a.menuCd - +b.menuCd)),
+    },
+  );
+  const { mutate: save } = useMutation(postAuthorMenu, {
+    onSuccess: () => {
+      alert('저장되었습니다');
+    },
+    onError: () => {
+      alert('저장 실패');
+    },
   });
+  const { data: authors } = useQuery<
+    GetAuthorsResponse,
+    AxiosError,
+    AuthorType[]
+  >(['users', 'authors'], getAuthors, { select: data => data.data.content });
+
   const [exclState, setExclState] = useState<AuthorMenuType[]>(exclData ?? []);
   const [inclState, setInclState] = useState<AuthorMenuType[]>(inclData ?? []);
   const [isExclAllChecked, setIsExclAllChecked] = useState<boolean>(false);
@@ -62,29 +91,79 @@ const Users: NextPage = () => {
   );
   const isExclAllCheckHandler = () => {
     if (!exclState) return;
-    setCheckedExclItems(new Set([...exclState]));
+
+    if (!isExclAllChecked) {
+      setCheckedExclItems(new Set([...exclState]));
+    } else {
+      setCheckedExclItems(new Set<AuthorMenuType>());
+    }
+
     setIsExclAllChecked(prev => !prev);
   };
+  const isInclAllCheckHandler = () => {
+    if (!inclState) return;
+    if (!isInclAllChecked) {
+      setCheckedInclItems(new Set([...inclState]));
+    } else {
+      setCheckedInclItems(new Set<AuthorMenuType>());
+    }
+    setIsInclAllChecked(prev => !prev);
+  };
   const fieldsExcl = [
-    <Checkbox onClick={isExclAllCheckHandler} color="indigo" />,
-    '메뉴분류',
-    '메뉴명',
-  ];
-  const fieldsIncl = [
     <Checkbox
-      onClick={() => setIsInclAllChecked(prev => !prev)}
+      onClick={isExclAllCheckHandler}
+      checked={isExclAllChecked}
       color="indigo"
     />,
     '메뉴분류',
     '메뉴명',
   ];
-
+  const fieldsIncl = [
+    <Checkbox
+      onClick={isInclAllCheckHandler}
+      checked={isInclAllChecked}
+      color="indigo"
+    />,
+    '메뉴분류',
+    '메뉴명',
+  ];
+  useEffect(() => {
+    exclRefetch();
+    inclRefetch();
+  }, [authorSelected]);
   return (
     <>
       <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
-      <div className="px-3 md:px-8 -mt-72 mb-12">
-        <div className="mb-10" />
-        <div className="relative grid grid-cols-2 gap-36 px-36 ">
+
+      <div className="px-3 md:px-8 -mt-80 mb-12 relative">
+        <div className="w-1/6 ml-36">
+          <Menu>
+            <MenuHandler>
+              <Button size="md" color="indigo" variant="gradient">
+                {authorSelected?.authorNm ?? '권한 구분'}
+              </Button>
+            </MenuHandler>
+
+            <MenuList>
+              {authors?.map(author => (
+                <MenuItem>
+                  <button
+                    onClick={() => {
+                      setAuthorSelected({
+                        authorCd: author.authorCd,
+                        authorNm: author.authorNm,
+                      });
+                    }}
+                    className="w-full h-full"
+                  >
+                    {author.authorNm}
+                  </button>
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+        </div>
+        <div className="mt-8 grid grid-cols-2 gap-36 px-36 ">
           <div className="relative">
             <Table
               fields={fieldsExcl}
@@ -99,16 +178,24 @@ const Users: NextPage = () => {
               title="전체메뉴"
             />
           </div>
-          <div className="absolute left-1/2 -translate-x-20  flex flex-col mx-16 items-center space-y-4 mt-80">
+          <div className="absolute left-1/2 -translate-x-20 -top-10 flex flex-col mx-16 items-center space-y-4 mt-80">
             <IconButton
               onClick={() => {
+                setIsExclAllChecked(prev => prev && false);
                 setCheckedExclItems(new Set<AuthorMenuType>());
                 setExclState(prev =>
-                  prev.filter(menu => !checkedExclItems.has(menu)),
+                  prev
+                    .filter(menu => !checkedExclItems.has(menu))
+                    .sort((a, b) => +a.menuCd - +b.menuCd),
                 );
-                setInclState(prev => [...prev, ...checkedExclItems]);
+                setInclState(prev => [
+                  ...prev,
+                  ...[...checkedExclItems].sort(
+                    (a, b) => +a.menuCd - +b.menuCd,
+                  ),
+                ]);
               }}
-              color="green"
+              color="indigo"
               className="rounded-full"
             >
               <svg
@@ -126,7 +213,23 @@ const Users: NextPage = () => {
                 />
               </svg>
             </IconButton>
-            <IconButton color="grey" className="rounded-full">
+            <IconButton
+              onClick={() => {
+                setIsInclAllChecked(prev => prev && false);
+                setCheckedInclItems(new Set<AuthorMenuType>());
+                setInclState(prev =>
+                  prev.filter(menu => !checkedInclItems.has(menu)),
+                );
+                setExclState(prev => [
+                  ...prev,
+                  ...[...checkedInclItems].sort(
+                    (a, b) => +a.menuCd - +b.menuCd,
+                  ),
+                ]);
+              }}
+              color="grey"
+              className="rounded-full"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -141,6 +244,18 @@ const Users: NextPage = () => {
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
+            </IconButton>
+            <IconButton
+              onClick={() =>
+                save({
+                  authorCd: authorSelected?.authorCd ?? '00008',
+                  menuCds: inclState.map(incl => incl.menuCd).join(','),
+                })
+              }
+              color="green"
+              className="rounded-full whitespace-nowrap"
+            >
+              저장
             </IconButton>
           </div>
           <Table
@@ -163,6 +278,30 @@ const Users: NextPage = () => {
 };
 
 export default Users;
+
+/*
+ <Select
+          label="권한구분"
+          className="absolute left-1/2 -translate-x-1/2 top-56 w-1/12 "
+          color="indigo"
+        >
+          {authors?.map(author => (
+            <Option key={author.authorCd}>
+              <button
+                onClick={() => {
+                  setAuthorSelected(author.authorCd);
+                  exclRefetch();
+                  inclRefetch();
+                }}
+              >
+                {author.authorNm}
+              </button>
+            </Option>
+          ))}
+        </Select>
+
+*/
+
 /*
 
  <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
@@ -229,3 +368,12 @@ function AuthorMenuCheckBox({ isAllChecked, menu, checkedItems }: CheckProps) {
     </button>
   );
 }
+
+/*
+
+   <MenuList>
+            {authors?.map(author => (
+              <MenuItem>{author.authorNm}</MenuItem>
+            ))}
+          </MenuList>
+*/

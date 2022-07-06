@@ -1,5 +1,11 @@
 import type { NextPage } from 'next';
-import { useEffect, useReducer, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 import { useRouter } from 'next/router';
 import Table from 'components/Table';
 import Link from 'next/link';
@@ -27,29 +33,84 @@ import {
 
 import { nanoid } from 'nanoid';
 
-const fields = [<Checkbox color="indigo" />, '메뉴분류', '메뉴명'];
-
 const Users: NextPage = () => {
-  const queryClient = useQueryClient();
-  const exclData = queryClient.getQueryData(['author-menu', 'excl']);
+  const { data: exclData } = useQuery<
+    GetAuthorMenuResponse,
+    AxiosError,
+    AuthorMenuType[]
+  >(['author-menu', 'excl'], () => getAuthorMenuExcl({ authorCd: '00008' }), {
+    select: res => res.data,
+    onSuccess: res => setExclState(res),
+  });
+  const { data: inclData } = useQuery<
+    GetAuthorMenuResponse,
+    AxiosError,
+    AuthorMenuType[]
+  >(['author-menu', 'incl'], () => getAuthorMenuIncl({ authorCd: '00008' }), {
+    select: res => res.data,
+    onSuccess: res => setInclState(res),
+  });
+  const [exclState, setExclState] = useState<AuthorMenuType[]>(exclData ?? []);
+  const [inclState, setInclState] = useState<AuthorMenuType[]>(inclData ?? []);
+  const [isExclAllChecked, setIsExclAllChecked] = useState<boolean>(false);
+  const [isInclAllChecked, setIsInclAllChecked] = useState<boolean>(false);
+  const [checkedExclItems, setCheckedExclItems] = useState(
+    new Set<AuthorMenuType>(),
+  );
+  const [checkedInclItems, setCheckedInclItems] = useState(
+    new Set<AuthorMenuType>(),
+  );
+  const isExclAllCheckHandler = () => {
+    if (!exclState) return;
+    setCheckedExclItems(new Set([...exclState]));
+    setIsExclAllChecked(prev => !prev);
+  };
+  const fieldsExcl = [
+    <Checkbox onClick={isExclAllCheckHandler} color="indigo" />,
+    '메뉴분류',
+    '메뉴명',
+  ];
+  const fieldsIncl = [
+    <Checkbox
+      onClick={() => setIsInclAllChecked(prev => !prev)}
+      color="indigo"
+    />,
+    '메뉴분류',
+    '메뉴명',
+  ];
 
-  useEffect(() => {
-    console.log(exclData);
-  }, [exclData]);
   return (
     <>
       <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
       <div className="px-3 md:px-8 -mt-72 mb-12">
         <div className="mb-10" />
         <div className="relative grid grid-cols-2 gap-36 px-36 ">
-          <Table
-            fields={fields}
-            tbodyRows={<ExclRows />}
-            color="indigo"
-            title="전체메뉴"
-          />
+          <div className="relative">
+            <Table
+              fields={fieldsExcl}
+              tbodyRows={
+                <Rows
+                  data={exclState}
+                  isAllChecked={isExclAllChecked}
+                  checkedItems={checkedExclItems}
+                />
+              }
+              color="indigo"
+              title="전체메뉴"
+            />
+          </div>
           <div className="absolute left-1/2 -translate-x-20  flex flex-col mx-16 items-center space-y-4 mt-80">
-            <IconButton color="green" className="rounded-full">
+            <IconButton
+              onClick={() => {
+                setCheckedExclItems(new Set<AuthorMenuType>());
+                setExclState(prev =>
+                  prev.filter(menu => !checkedExclItems.has(menu)),
+                );
+                setInclState(prev => [...prev, ...checkedExclItems]);
+              }}
+              color="green"
+              className="rounded-full"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -83,8 +144,14 @@ const Users: NextPage = () => {
             </IconButton>
           </div>
           <Table
-            fields={fields}
-            tbodyRows={<InclRows />}
+            fields={fieldsIncl}
+            tbodyRows={
+              <Rows
+                data={inclState}
+                isAllChecked={isInclAllChecked}
+                checkedItems={checkedInclItems}
+              />
+            }
             color="indigo"
             title="권한에 적용될 메뉴"
           />
@@ -108,15 +175,12 @@ export default Users;
         <div className="mb-14" />
 */
 
-function ExclRows() {
-  const { data } = useQuery<
-    GetAuthorMenuResponse,
-    AxiosError,
-    AuthorMenuType[]
-  >(['author-menu', 'excl'], () => getAuthorMenuExcl({ authorCd: '00008' }), {
-    select: res => res.data,
-  });
-
+interface Props {
+  data: AuthorMenuType[] | undefined;
+  isAllChecked: boolean;
+  checkedItems: Set<AuthorMenuType>;
+}
+function Rows({ data, isAllChecked, checkedItems }: Props) {
   return (
     <>
       {data?.map(menu => (
@@ -125,7 +189,11 @@ function ExclRows() {
           className="border-b   odd:bg-white even:bg-[#F9F9F9]"
         >
           <td className="text-center   text-sm border border-[#f2f2f2]">
-            <Checkbox color="indigo" />
+            <AuthorMenuCheckBox
+              menu={menu}
+              isAllChecked={isAllChecked}
+              checkedItems={checkedItems}
+            />
           </td>
           <td className="text-center   text-sm border border-[#f2f2f2] ">
             {menu.menuClNm}
@@ -138,33 +206,26 @@ function ExclRows() {
     </>
   );
 }
-function InclRows() {
-  const { data } = useQuery<
-    GetAuthorMenuResponse,
-    AxiosError,
-    AuthorMenuType[]
-  >(['author-menu', 'incl'], () => getAuthorMenuIncl({ authorCd: '00008' }), {
-    select: res => res.data,
-  });
 
+interface CheckProps {
+  isAllChecked: boolean;
+  menu: AuthorMenuType;
+  checkedItems: Set<AuthorMenuType>;
+}
+function AuthorMenuCheckBox({ isAllChecked, menu, checkedItems }: CheckProps) {
+  const [isChecked, setIsChecked] = useState(isAllChecked);
+  const checkedItemHandler = () => {
+    if (!isChecked) {
+      checkedItems.add(menu);
+    } else {
+      checkedItems.delete(menu);
+    }
+    console.log(checkedItems);
+    setIsChecked(prev => !prev);
+  };
   return (
-    <>
-      {data?.map(menu => (
-        <tr
-          key={nanoid()}
-          className="border-b   odd:bg-white even:bg-[#F9F9F9]"
-        >
-          <td className="text-center   text-sm border border-[#f2f2f2]">
-            <Checkbox color="indigo" />
-          </td>
-          <td className="text-center   text-sm border border-[#f2f2f2] ">
-            {menu.menuClNm}
-          </td>
-          <td className="text-center   text-sm border border-[#f2f2f2]">
-            {menu.menuNm}
-          </td>
-        </tr>
-      ))}
-    </>
+    <button onClick={checkedItemHandler}>
+      <Checkbox color="indigo" value={menu.menuCd} checked={isChecked} />
+    </button>
   );
 }

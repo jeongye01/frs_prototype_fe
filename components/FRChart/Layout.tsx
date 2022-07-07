@@ -1,4 +1,3 @@
-import type { NextPage } from 'next';
 import { Card, CardBody, CardHeader } from '@material-tailwind/react';
 import { color } from '@material-tailwind/react/types/components/alert';
 interface Props {

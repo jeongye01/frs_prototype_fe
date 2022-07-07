@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { Card, CardBody, CardHeader } from '@material-tailwind/react';
-import HistoryDailyFRChart from './chartBoard/HistoryDailyFRChart';
+import HistoryDailyFRChart from './HistoryDailyFRChart';
 
 export default function ChartLine() {
   return (

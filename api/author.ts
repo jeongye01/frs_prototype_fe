@@ -1,6 +1,5 @@
 import client from './client';
-import { UserType } from 'typeDefs/User';
-import { AuthorType, AuthorMenuType } from 'typeDefs/Author';
+import { AuthorMenuType } from 'typeDefs/Author';
 
 export interface PostAuthorQuery {
   authorCd?: string;

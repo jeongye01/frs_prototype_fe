@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { Card, CardBody, CardHeader } from '@material-tailwind/react';
-import TodayTotalFRChart from './chartBoard/TodayTotalFRChart';
+import TodayTotalFRChart from './TodayTotalFRChart';
 
 export default function ChartBar() {
   return (

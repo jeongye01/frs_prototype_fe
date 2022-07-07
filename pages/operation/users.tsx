@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useQuery, QueryCache, useQueryClient, useMutation } from 'react-query';
 import Pagination from 'components/Pagination';
 import {
-  LoadUsersResponse,
+  GetUsersResponse,
   getUserList,
   postUseYn,
   PostUseYnParam,
@@ -57,7 +57,7 @@ const Users: NextPage = () => {
   const handleAddModalOpen = () => setIsAddModalOpen(!isAddModalOpen);
 
   const { data, isLoading, isFetching, refetch } = useQuery<
-    LoadUsersResponse,
+    GetUsersResponse,
     AxiosError
   >(['users'], () =>
     getUserList({

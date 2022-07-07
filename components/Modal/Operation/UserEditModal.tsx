@@ -1,16 +1,5 @@
-import useModal from 'hooks/useModal';
-import { modalName } from 'utils/importModal';
-import React, { ChangeEvent, ReactNode, useEffect, useReducer } from 'react';
-
-import useGetActionState from 'hooks/useGetActionState';
-import userSlice from 'store/slices/userSlice';
-import { useAppDispatch } from 'hooks/redux';
-import {
-  putUser,
-  EditUserParamNQuery,
-  GetAuthorsResponse,
-  getAuthors,
-} from 'api/user';
+import React, { ChangeEvent, ReactNode, useReducer } from 'react';
+import { putUser, GetAuthorsResponse, getAuthors } from 'api/user';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { AxiosError } from 'axios';
@@ -18,14 +7,9 @@ import { AuthorType } from 'typeDefs/Author';
 import {
   Button,
   Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
   Input,
   Select,
   Option,
-  Card,
-  CardBody,
 } from '@material-tailwind/react';
 
 export interface IForm {
@@ -51,12 +35,10 @@ interface Props {
 }
 
 export default function UserEditModal({ isModalOpen, modalHandler }: Props) {
-  const [_, closeUserEditModal] = useModal();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const [formState, formDispatch] = useReducer(formReducer, initialState);
 
-  const { isSuccess, isError, isLoading, mutate } = useMutation(
+  const { isLoading, mutate } = useMutation(
     () =>
       putUser({
         authorCd: formState.authorCd,

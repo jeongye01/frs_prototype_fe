@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
+import React, { useState } from 'react';
 import { IconButton } from '@material-tailwind/react';
 interface Props {
   numOfPages: number;
@@ -8,28 +8,6 @@ interface Props {
   curPage: number;
 }
 
-/*
-   isActive={slideNum > 1}
-        arrDirection="left"
-        onClick={() => {
-          if (slideNum <= 1) return;
-          setSlideNum(prev => prev - 1);
-          setCurPage(1 + (slideNum - 2) * numOfPageBtn);
-        }}
-
-
-
-
-          btnType="arrow"
-        isActive={slideNum < Math.ceil(numOfPages / numOfPageBtn)}
-        arrDirection="right"
-        onClick={() => {
-          if (slideNum >= Math.ceil(numOfPages / numOfPageBtn)) return;
-          setSlideNum(prev => prev + 1);
-          setCurPage(1 + slideNum * numOfPageBtn);
-        }}
-
-*/
 function Pagination({ numOfPages, setCurPage, curPage, numOfPageBtn }: Props) {
   const [slideNum, setSlideNum] = useState<number>(1);
 

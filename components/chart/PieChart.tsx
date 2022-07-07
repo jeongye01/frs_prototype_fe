@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
-
+import { Color } from 'typeDefs/utils/Color';
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 });
 
+//same length
 interface Props {
   data: number[];
   labels: string[];
-  colors: string[];
+  colors: Color[];
 }
 function PieChart({ data, labels, colors }: Props) {
   const state = {
@@ -91,16 +92,14 @@ function PieChart({ data, labels, colors }: Props) {
   };
 
   return (
-    <>
-      {data?.length === colors?.length && colors?.length === labels?.length && (
-        <ReactApexChart
-          type="donut"
-          series={state.series}
-          options={state.options}
-          width="100%"
-        />
-      )}
-    </>
+    <div className=" w-full">
+      <ReactApexChart
+        type="donut"
+        series={state.series}
+        options={state.options}
+        width="100%"
+      />
+    </div>
   );
 }
 export default PieChart;

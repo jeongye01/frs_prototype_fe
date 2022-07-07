@@ -8,7 +8,7 @@ export interface HistoryFRListQuery {
   resultCd: 1 | 0 | null;
 }
 
-export interface HistoryFRResponse {
+export interface GetHistoryFRResponse {
   data: { content: HistoryFRType[]; totalPages: string };
 }
 
@@ -27,7 +27,6 @@ export const getHistoryFR = ({
       }&searchDateFrom=${searchDateFrom}&searchDateTo=${searchDateTo}`,
     )
     .then(response => {
-      console.log(response);
       return response.data;
     });
 };
@@ -38,7 +37,6 @@ interface HistoryFRImageQuery {
 //얼굴인증이력(1:N) 이미지1 (base64 byte)
 export const getHistoryFRImage1 = ({ sn }: HistoryFRImageQuery) => {
   return client.get(`/history/iden/${sn}/image1`).then(response => {
-    console.log(response);
     return response.data;
   });
 };

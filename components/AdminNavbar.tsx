@@ -1,4 +1,3 @@
-import { useLocation } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { Dispatch, SetStateAction } from 'react';
 interface Props {
@@ -6,8 +5,6 @@ interface Props {
   setShowSidebar: Dispatch<SetStateAction<string>>;
 }
 export default function AdminNavbar({ showSidebar, setShowSidebar }: Props) {
-  //const location = useLocation().pathname;
-
   return (
     <nav className="bg-light-blue-500 md:ml-64 py-6 px-3">
       <div className="container max-w-full mx-auto flex items-center justify-between md:pr-8 md:pl-10">

@@ -1,7 +1,7 @@
 import client from './client';
 import { HistoryDailyFRType, TodayFRType } from 'typeDefs/Chart';
 
-export interface TodayFRResponse {
+export interface GetTodayFRResponse {
   data: TodayFRType;
 }
 
@@ -14,12 +14,11 @@ export interface HistoryDailyFRParam {
   day: number;
 }
 
-export interface HistoryDailyFRResponse {
+export interface GetHistoryDailyFRResponse {
   data: HistoryDailyFRType[];
 }
 
 // 일별 얼굴 인증현황
-// export const getHistoryDailyFR = ({ day }: HistoryDailyFRParam) => {
 export const getHistoryDailyFR = () => {
   return client.get(`/chart/history/daily/10`).then(response => response.data);
 };

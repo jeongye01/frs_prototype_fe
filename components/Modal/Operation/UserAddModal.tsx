@@ -1,5 +1,3 @@
-import useModal from 'hooks/useModal';
-import { modalName } from 'utils/importModal';
 import React, {
   ChangeEvent,
   ReactNode,
@@ -14,20 +12,17 @@ import {
   getAuthors,
   CheckDuplicatedResponse,
   checkDuplicated,
-  CreateUserQuery,
   postUser,
 } from 'api/user';
 import { AuthorType } from 'typeDefs/Author';
 import {
   Button,
   Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
   Input,
   Select,
   Option,
 } from '@material-tailwind/react';
+
 export interface IForm {
   authorCd: string; // 권한 코드
   userId: string; //사용자 아이디
@@ -56,12 +51,11 @@ interface Props {
 }
 
 export default function UserAddModal({ isModalOpen, modalHandler }: Props) {
-  const [_, closeUserAddModal] = useModal();
   const queryClient = useQueryClient();
   const [formState, formDispatch] = useReducer(formReducer, initialState);
 
   const [userIdOk, setUserIdOk] = useState<string | null>(null);
-  const { isLoading, mutate } = useMutation(
+  const { isLoading: createUserLoading, mutate: createUser } = useMutation(
     () =>
       postUser({
         authorCd: formState.authorCd,
@@ -72,7 +66,6 @@ export default function UserAddModal({ isModalOpen, modalHandler }: Props) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['users']);
-        closeUserAddModal({ name: modalName.UserAddModal });
         formDispatch({
           type: 'init',
         });
@@ -83,43 +76,36 @@ export default function UserAddModal({ isModalOpen, modalHandler }: Props) {
       },
     },
   );
+
   const { data: authors } = useQuery<
     GetAuthorsResponse,
     AxiosError,
     AuthorType[]
   >(['users', 'authors'], getAuthors, { select: data => data.data.content });
 
-  const {
-    data: checkDuplicatedResult,
-    refetch: checkIdValidation,
-    isLoading: checkDupLoading,
-    isFetching: checkDupFetching,
-  } = useQuery<CheckDuplicatedResponse, AxiosError>(
+  const { refetch: checkIdValidation } = useQuery<
+    CheckDuplicatedResponse,
+    AxiosError
+  >(
     ['users', 'checkDuplicated'],
     () => checkDuplicated({ userId: formState.userId }),
-    { enabled: false },
+    { enabled: false, onSuccess: res => setUserIdOk(res?.resultCode) },
   );
 
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    console.log(formState);
     if (userIdOk === null) {
       alert('아이디 중복 확인을 해주세요.');
       return;
     }
-    if (isLoading) return;
+    if (createUserLoading) return;
     const { authorCd, userId, userNm, userPw } = formState;
 
     if (!authorCd.trim() || !userId.trim() || !userNm.trim() || !userPw.trim())
       return;
 
-    mutate();
+    createUser();
   };
-  useEffect(() => {
-    if (checkDupFetching) return;
-    if (!checkDuplicatedResult) return;
-    setUserIdOk(checkDuplicatedResult?.resultCode);
-  }, [checkDuplicatedResult, checkDupLoading, checkDupFetching]);
 
   useEffect(() => {
     setUserIdOk(null);
@@ -218,10 +204,3 @@ export default function UserAddModal({ isModalOpen, modalHandler }: Props) {
     </Dialog>
   );
 }
-/*
-
- 
-
-
-
-*/

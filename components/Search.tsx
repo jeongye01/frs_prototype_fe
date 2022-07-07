@@ -10,7 +10,7 @@ import historyFRSlice from 'store/slices/historyFRSlice';
 import { useAppDispatch } from 'hooks/redux';
 import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
-import { getHistoryFR, HistoryFRResponse } from 'api/history';
+import { getHistoryFR, GetHistoryFRResponse } from 'api/history';
 import { leadingZeros } from 'utils/dateFormat';
 import LoadingSpinner from 'components/Loading/Spinner';
 import { Select, Option, Input, Button } from '@material-tailwind/react';
@@ -67,7 +67,7 @@ interface Props {
 function Search({ curPage, setCurPage }: Props) {
   const dispatch = useAppDispatch();
   const { data, isLoading, isFetching, refetch } = useQuery<
-    HistoryFRResponse,
+    GetHistoryFRResponse,
     AxiosError
   >(['history', 'historyFR'], () =>
     getHistoryFR({

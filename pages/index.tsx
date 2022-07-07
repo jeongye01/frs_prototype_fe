@@ -1,12 +1,12 @@
 import type { NextPage } from 'next';
-import TodayTotalFRChart from 'components/chartBoard/TodayTotalFRChart';
-import HistoryDailyFRChart from 'components/chartBoard/HistoryDailyFRChart';
+import TodayTotalFRChart from 'components/FRChart/TodayTotalFRChart';
+import HistoryDailyFRChart from 'components/FRChart/HistoryDailyFRChart';
 import Table from 'components/Table';
 import React, { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import { HistoryFRType } from 'typeDefs/HistoryFR';
 import { useQuery } from 'react-query';
-import { getHistoryFR, HistoryFRResponse } from 'api/history';
+import { getHistoryFR, GetHistoryFRResponse } from 'api/history';
 import {
   leadingZeros,
   getDefaultDateFrom,
@@ -26,7 +26,7 @@ const fields = [
 
 const Home: NextPage = () => {
   const { data, isLoading, isFetching, refetch } = useQuery<
-    HistoryFRResponse,
+    GetHistoryFRResponse,
     AxiosError,
     HistoryFRType[]
   >(
@@ -53,7 +53,7 @@ const Home: NextPage = () => {
       <div className="px-3 md:px-8 -mt-72 mb-12">
         <div className="container mx-auto max-w-full">
           <div className="grid grid-cols-1 xl:grid-cols-5">
-            <div className="xl:col-start-1 xl:col-end-4 px-4 mb-14">
+            <div className="xl:col-start-1 xl:col-end-4 px-4 mb-14 h-full">
               <HistoryDailyFRChart />
             </div>
             <div className="xl:col-start-4 xl:col-end-6 px-4 mb-14">

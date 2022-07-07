@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { Color } from 'typeDefs/utils/Color';
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 });
 
+//same length
 interface Props {
   data: number[];
-  colors: string[];
+  colors: Color[];
   categories: string[];
 }
 
@@ -33,7 +34,6 @@ function BarChart({ data, colors, categories }: Props) {
           },
         },
       },
-
       dataLabels: {
         enabled: true,
         position: 'top',
@@ -44,7 +44,6 @@ function BarChart({ data, colors, categories }: Props) {
           colors, // *
         },
       },
-
       xaxis: {
         categories, // *
         axisBorder: {
@@ -72,7 +71,6 @@ function BarChart({ data, colors, categories }: Props) {
           },
         },
       },
-
       states: {
         hover: {
           filter: {
@@ -85,17 +83,15 @@ function BarChart({ data, colors, categories }: Props) {
 
   return (
     <>
-      {data?.length === colors?.length &&
-        colors?.length === categories?.length && (
-          <div className="w-full">
-            <ReactApexChart
-              type="bar"
-              series={state.series}
-              options={state.options}
-              width="100%"
-            />
-          </div>
-        )}
+      <div className="w-full h-full">
+        <ReactApexChart
+          type="bar"
+          series={state.series}
+          options={state.options}
+          width="100%"
+          height="100%"
+        />
+      </div>
     </>
   );
 }

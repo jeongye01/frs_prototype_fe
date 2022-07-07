@@ -1,14 +1,11 @@
 import type { NextPage } from 'next';
-import { useEffect, useReducer, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from 'hooks/redux';
 import Table from 'components/Table/Layout';
 import useModal from 'hooks/useModal';
-import { modalName } from 'utils/importModal';
 import userListSlice from 'store/slices/userListSlice';
-import { BaseTbodyRowStyle } from 'components/Table/Layout';
 import Link from 'next/link';
-import { useQuery, QueryCache, useQueryClient, useMutation } from 'react-query';
+import { useQuery, useQueryClient, useMutation } from 'react-query';
 import Pagination from 'components/Pagination';
 import {
   GetUsersResponse,
@@ -16,20 +13,10 @@ import {
   postUseYn,
   PostUseYnParam,
   postInitPw,
-  PostInitPwParam,
 } from 'api/user';
 import { AxiosError } from 'axios';
-import { UserType } from 'typeDefs/User';
-import LoadingSpinner from 'components/Loading/Spinner';
-import {
-  Button,
-  Card,
-  CardBody,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from '@material-tailwind/react';
+
+import { Button, Card } from '@material-tailwind/react';
 import UserAddModal from 'components/Modal/Operation/UserAddModal';
 import UserEditModal from 'components/Modal/Operation/UserEditModal';
 
@@ -112,17 +99,6 @@ const Users: NextPage = () => {
 };
 
 export default Users;
-/*
-
- <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
-      <div className="px-3 md:px-8 -mt-72 mb-12">
-        <Card className=" w-fit ">
-          <CardBody className="py-4">
-            <Search curPage={curPage} setCurPage={setCurPage} />
-          </CardBody>
-        </Card>
-        <div className="mb-14" />
-*/
 
 function UserRows() {
   const queryClient = useQueryClient();
@@ -217,8 +193,8 @@ function UserRows() {
           </td>
           <td className="text-center  text-sm border border-[#f2f2f2] py-[5px]">
             <Link
-              href={`/users?esntlId=${user.esntlId}&userId=${user.userId}`}
-              as={`/users`}
+              href={`/operation/users?esntlId=${user.esntlId}&userId=${user.userId}`}
+              as={`/operation/users`}
             >
               <button
                 onClick={handleEditModalOpen}

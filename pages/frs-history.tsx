@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useAppSelector } from 'hooks/redux';
-import Search from 'components/Search';
+import Search from 'components/FRSHistorySearchBar';
 import Pagination from 'components/Pagination';
 import { useState } from 'react';
 import { Card, CardBody } from '@material-tailwind/react';

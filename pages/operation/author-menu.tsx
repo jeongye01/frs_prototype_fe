@@ -19,12 +19,9 @@ import {
   MenuHandler,
   MenuList,
   MenuItem,
-  Select,
-  Option,
 } from '@material-tailwind/react';
 
 import { nanoid } from 'nanoid';
-import Search from 'components/Search';
 import { getAuthors, GetAuthorsResponse } from 'api/user';
 
 const Users: NextPage = () => {
@@ -274,41 +271,6 @@ const Users: NextPage = () => {
 
 export default Users;
 
-/*
- <Select
-          label="권한구분"
-          className="absolute left-1/2 -translate-x-1/2 top-56 w-1/12 "
-          color="indigo"
-        >
-          {authors?.map(author => (
-            <Option key={author.authorCd}>
-              <button
-                onClick={() => {
-                  setAuthorSelected(author.authorCd);
-                  exclRefetch();
-                  inclRefetch();
-                }}
-              >
-                {author.authorNm}
-              </button>
-            </Option>
-          ))}
-        </Select>
-
-*/
-
-/*
-
- <div className="bg-light-blue-500 px-3 md:px-8 h-80" />
-      <div className="px-3 md:px-8 -mt-72 mb-12">
-        <Card className=" w-fit ">
-          <CardBody className="py-4">
-            <Search curPage={curPage} setCurPage={setCurPage} />
-          </CardBody>
-        </Card>
-        <div className="mb-14" />
-*/
-
 interface Props {
   data: AuthorMenuType[] | undefined;
   isAllChecked: boolean;
@@ -363,12 +325,3 @@ function AuthorMenuCheckBox({ isAllChecked, menu, checkedItems }: CheckProps) {
     </button>
   );
 }
-
-/*
-
-   <MenuList>
-            {authors?.map(author => (
-              <MenuItem>{author.authorNm}</MenuItem>
-            ))}
-          </MenuList>
-*/

@@ -69,7 +69,9 @@ export default function UserAddModal({ isModalOpen, modalHandler }: Props) {
         formDispatch({
           type: 'init',
         });
+
         alert('사용자 등록 완료');
+        modalHandler();
       },
       onError: () => {
         alert('사용자 등록 실패');

@@ -3,7 +3,6 @@ import React, {
   Dispatch,
   ReactNode,
   SetStateAction,
-  useEffect,
   useReducer,
 } from 'react';
 import historyFRSlice from 'store/slices/historyFRSlice';
@@ -12,9 +11,7 @@ import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 import { getHistoryFR, GetHistoryFRResponse } from 'api/history';
 import { leadingZeros } from 'utils/dateFormat';
-import LoadingSpinner from 'components/Loading/Spinner';
 import { Select, Option, Input, Button } from '@material-tailwind/react';
-import { onChange } from '@material-tailwind/react/types/components/select';
 
 export interface IForm {
   pageSize: number | null;
@@ -66,37 +63,33 @@ interface Props {
 
 function Search({ curPage, setCurPage }: Props) {
   const dispatch = useAppDispatch();
-  const { data, isLoading, isFetching, refetch } = useQuery<
-    GetHistoryFRResponse,
-    AxiosError
-  >(['history', 'historyFR'], () =>
-    getHistoryFR({
-      pageSize: 20,
-      page: curPage - 1,
-      searchDateFrom: formState.searchDateFrom,
-      searchDateTo: formState.searchDateTo,
-      resultCd:
-        ((+formState.resultCd === -1 ? null : formState.resultCd) as
-          | 1
-          | 0
-          | null) || null,
-    }),
+  const { refetch } = useQuery<GetHistoryFRResponse, AxiosError>(
+    ['history', 'historyFR'],
+    () =>
+      getHistoryFR({
+        pageSize: 20,
+        page: curPage - 1,
+        searchDateFrom: formState.searchDateFrom,
+        searchDateTo: formState.searchDateTo,
+        resultCd:
+          ((+formState.resultCd === -1 ? null : formState.resultCd) as
+            | 1
+            | 0
+            | null) || null,
+      }),
+    {
+      onSuccess: res =>
+        dispatch(historyFRSlice.actions.updateHistoryFRState(res)),
+    },
   );
 
   const [formState, formDispatch] = useReducer(formReducer, initialState);
-  useEffect(() => {
-    if (!data) return;
-    console.log(data);
-    dispatch(historyFRSlice.actions.updateHistoryFRState(data));
-  }, [data]);
+
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     refetch();
   };
 
-  useEffect(() => {
-    console.log(formState);
-  }, [formState]);
   return (
     <form onSubmit={onSubmit} className="flex space-x-4 px-4 items-center">
       <div className="flex items-center ">

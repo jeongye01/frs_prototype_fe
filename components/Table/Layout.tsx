@@ -2,8 +2,9 @@ import React from 'react';
 import { Card, CardHeader, CardBody } from '@material-tailwind/react';
 import { colors } from '@material-tailwind/react/types/generic';
 
+type Fields = string | JSX.Element;
 interface Props<T> {
-  fields: string[];
+  fields: Fields[];
   rows?: T[]; //generic으로 바꾸기
   tbodyRows?: React.ReactNode;
   tbodyTrStyle?: string;

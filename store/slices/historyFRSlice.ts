@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HistoryFRListQuery, HistoryFRResponse } from 'api/history';
+import { GetHistoryFRResponse } from 'api/history';
 import { HistoryFRType } from 'typeDefs/HistoryFR';
 
 export interface InitialState {
@@ -18,7 +18,7 @@ export const historyFRSlice = createSlice({
   reducers: {
     updateHistoryFRState: (
       state,
-      { payload }: PayloadAction<HistoryFRResponse>,
+      { payload }: PayloadAction<GetHistoryFRResponse>,
     ) => {
       state.data = payload.data.content;
       state.totalPages = +payload.data.totalPages;

@@ -26,9 +26,7 @@ export default function FRSHistoryTable() {
 }
 
 function FRSHistoryRows() {
-  const { data: historyFRData, totalPages } = useAppSelector(
-    state => state.historyFR,
-  );
+  const { data: historyFRData } = useAppSelector(state => state.historyFR);
   const baseThStyle =
     'border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-2 text-center';
   return (

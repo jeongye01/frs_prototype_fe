@@ -1,15 +1,7 @@
 import type { NextPage } from 'next';
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useReducer,
-  useState,
-} from 'react';
-import { useRouter } from 'next/router';
-import Table from 'components/Table';
-import Link from 'next/link';
-import { useQuery, QueryCache, useQueryClient, useMutation } from 'react-query';
+import { useEffect, useState } from 'react';
+import Table from 'components/Table/Layout';
+import { useQuery, useMutation } from 'react-query';
 import {
   GetAuthorMenuResponse,
   getAuthorMenuExcl,
@@ -18,8 +10,7 @@ import {
 } from 'api/author';
 import { AuthorMenuType, AuthorType } from 'typeDefs/Author';
 import { AxiosError } from 'axios';
-import { UserType } from 'typeDefs/User';
-import LoadingSpinner from 'components/Loading/Spinner';
+
 import {
   Button,
   IconButton,

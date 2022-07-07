@@ -2,16 +2,24 @@ import React from 'react';
 import { Card, CardHeader, CardBody } from '@material-tailwind/react';
 import { colors } from '@material-tailwind/react/types/generic';
 
-export const BaseTbodyRowStyle =
-  'text-center border border-[#f2f2f2] whitespace-nowrap px-6 py-[5px]';
 interface Props<T> {
   fields: string[];
   rows?: T[]; //generic으로 바꾸기
   tbodyRows?: React.ReactNode;
+  tbodyTrStyle?: string;
+  tbodyThStyle?: string;
   color: colors;
   title: string;
 }
-function Table<T>({ fields, rows, tbodyRows, color, title }: Props<T>) {
+function Table<T>({
+  fields,
+  rows,
+  tbodyRows,
+  color,
+  title,
+  tbodyThStyle,
+  tbodyTrStyle,
+}: Props<T>) {
   return (
     <Card>
       <CardHeader color={color} className=" flex items-center py-2 px-5">
@@ -42,17 +50,17 @@ function Table<T>({ fields, rows, tbodyRows, color, title }: Props<T>) {
               </tr>
             </thead>
             <tbody>
-              {tbodyRows || null}
-              {rows?.map((row: T, idx) => (
-                <tr
-                  key={idx}
-                  className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-4 text-left"
-                >
-                  {Object.values(row).map((value, i) => (
-                    <th>{value}</th>
+              {tbodyRows ?? (
+                <>
+                  {rows?.map((row: T, idx) => (
+                    <tr key={idx} className={tbodyTrStyle}>
+                      {Object.values(row).map((value, i) => (
+                        <th className={tbodyThStyle}>{value}</th>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              )) || null}
+                </>
+              )}
             </tbody>
           </table>
         </div>
@@ -61,38 +69,3 @@ function Table<T>({ fields, rows, tbodyRows, color, title }: Props<T>) {
   );
 }
 export default Table;
-
-/*
- return (
-    <table className=" w-full text-sm shadow rounded-2xl text-left text-black border-collapse border border-[#f2f2f2]  ">
-      <thead className=" text-black text-xs  uppercase bg-[#EBEBED]">
-        <tr>
-          {fields.map(field => (
-            <th
-              scope="col"
-              className=" py-2 text-center text-semibold border border-[#f2f2f2] whitespace-nowrap"
-            >
-              {field}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {tbodyRows || null}
-        {rows?.map((row: T, idx) => (
-          <tr key={idx} className="border-b  odd:bg-white even:bg-[#F9F9F9] ">
-            {Object.values(row).map((value, i) => (
-              <td className="text-center  text-sm border border-[#f2f2f2] py-[5px] ">
-                {value}
-              </td>
-            ))}
-          </tr>
-        )) || null}
-      </tbody>
-    </table>
-  );
-
-
-
-
-*/

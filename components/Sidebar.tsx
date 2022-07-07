@@ -52,10 +52,10 @@ export default function Sidebar() {
               <li className="rounded-lg mb-4">
                 <ul>
                   <li>
-                    <Link href="/history">
+                    <Link href="/frs-history">
                       <a
                         className={`flex items-center gap-4 text-sm text-gray-700 font-light text-gray-500 px-4 py-3 rounded-lg ${
-                          router.pathname === '/history' && activeClassName
+                          router.pathname === '/frs-history' && activeClassName
                         }`}
                       >
                         <svg

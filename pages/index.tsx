@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import TodayTotalFRChart from 'components/FRChart/TodayTotalFRChart';
 import HistoryDailyFRChart from 'components/FRChart/HistoryDailyFRChart';
-import Table from 'components/Table';
+import Table from 'components/Table/Layout';
 import React, { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import { HistoryFRType } from 'typeDefs/HistoryFR';
